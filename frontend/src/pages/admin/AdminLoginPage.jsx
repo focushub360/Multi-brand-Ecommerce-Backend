@@ -126,6 +126,31 @@ export default function AdminLoginPage() {
                 </div>
               )}
 
+              {/* Quick Fill Admin Credentials */}
+              <div className="p-3 rounded-2xl bg-[#EBF4EE] border border-[#1B4332]/15">
+                <div className="flex items-center justify-between mb-2">
+                  <span className="text-xs font-bold text-[#012D1D] uppercase tracking-wider flex items-center gap-1.5 font-mono">
+                    <KeyRound className="w-3.5 h-3.5 text-[#2C694E]" /> Quick Fill Demo Admin
+                  </span>
+                  <span className="text-[10px] text-neutral-500 font-medium">Click to auto-fill</span>
+                </div>
+                <button
+                  type="button"
+                  onClick={() => {
+                    setEmail('admin@grove.com');
+                    setPassword('Admin@123');
+                    setError('');
+                  }}
+                  className="w-full py-2.5 px-3 rounded-xl bg-white border border-neutral-200 hover:border-[#012D1D] hover:bg-[#012D1D]/5 text-neutral-800 text-xs font-bold transition-all text-center flex items-center justify-between cursor-pointer shadow-2xs group"
+                >
+                  <div className="flex items-center gap-2">
+                    <span className="w-2 h-2 rounded-full bg-emerald-500 group-hover:scale-125 transition-transform" />
+                    <span className="text-[#012D1D] font-extrabold">Super Admin</span>
+                  </div>
+                  <span className="text-[11px] text-neutral-500 font-mono">admin@grove.com / Admin@123</span>
+                </button>
+              </div>
+
               <form onSubmit={handleSubmit} className="space-y-4">
                 {/* Email Field */}
                 <div className="space-y-1.5">

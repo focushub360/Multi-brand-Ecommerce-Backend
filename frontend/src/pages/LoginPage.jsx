@@ -21,6 +21,7 @@ import {
   authenticateUser, 
   executePendingAction 
 } from '../utils/auth';
+import { setStoredAdmin } from '../utils/adminAuth';
 
 const CURRENT_YEAR = new Date().getFullYear();
 
@@ -67,6 +68,13 @@ export default function LoginPage() {
 
     setErrors(errs);
     return Object.keys(errs).length === 0;
+  };
+
+  const handleQuickFill = (fillEmail, fillPassword) => {
+    setEmail(fillEmail);
+    setPassword(fillPassword);
+    setErrors({});
+    setAuthError('');
   };
 
   const handleLoginSubmit = async (e) => {
@@ -131,8 +139,23 @@ export default function LoginPage() {
           navigate('/dealer/dashboard', { replace: true });
         }, 700);
       } else if (userRole === 'admin') {
-        // Strictly separate Admin authentication - redirect to /admin/login
-        setAuthError('Admin accounts must authenticate via the dedicated Admin Portal. Please use /admin/login.');
+        // Authenticate admin session in localStorage
+        setStoredAdmin({
+          id: matchedUser.id,
+          name: matchedUser.name,
+          email: matchedUser.email,
+          role: 'Super Admin',
+          token: matchedUser.token
+        });
+
+        setLoginSuccess({
+          name: matchedUser.name,
+          targetText: 'Super Admin authenticated. Redirecting to Admin Dashboard...'
+        });
+
+        setTimeout(() => {
+          navigate('/admin/dashboard', { replace: true });
+        }, 700);
       } else {
         setAuthError(`Access restricted: Unsupported role "${userRole}". Please contact GROVE support.`);
       }
@@ -247,6 +270,42 @@ export default function LoginPage() {
                     </div>
                   </div>
                 )}
+
+                {/* Quick Demo Fill Buttons for Development */}
+                <div className="mb-5 p-3 rounded-[16px] bg-[#F1F6F3] border border-[#1B4332]/15">
+                  <div className="flex items-center justify-between mb-2">
+                    <span className="text-[11px] font-bold text-[#1B4332] uppercase tracking-wider flex items-center gap-1.5">
+                      <KeyRound className="w-3.5 h-3.5" /> Quick Fill Demo Accounts
+                    </span>
+                    <span className="text-[10px] text-neutral-500 font-medium">Click to auto-fill</span>
+                  </div>
+                  <div className="grid grid-cols-3 gap-2">
+                    <button
+                      type="button"
+                      onClick={() => handleQuickFill('user1@grove.com', 'Password@123')}
+                      className="py-2 px-2.5 rounded-[10px] bg-white border border-neutral-200 hover:border-[#1B4332] hover:bg-[#1B4332]/5 text-neutral-800 text-xs font-bold transition-all text-center flex flex-col items-center justify-center cursor-pointer shadow-2xs group"
+                    >
+                      <span className="text-[#1B4332] text-[11px] font-extrabold group-hover:scale-105 transition-transform">User</span>
+                      <span className="text-[9.5px] text-neutral-500 font-mono truncate max-w-full">user1</span>
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => handleQuickFill('dealer1@grove.com', 'Password@123')}
+                      className="py-2 px-2.5 rounded-[10px] bg-white border border-neutral-200 hover:border-[#1B4332] hover:bg-[#1B4332]/5 text-neutral-800 text-xs font-bold transition-all text-center flex flex-col items-center justify-center cursor-pointer shadow-2xs group"
+                    >
+                      <span className="text-[#1B4332] text-[11px] font-extrabold group-hover:scale-105 transition-transform">Dealer</span>
+                      <span className="text-[9.5px] text-neutral-500 font-mono truncate max-w-full">dealer1</span>
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => handleQuickFill('admin@grove.com', 'Admin@123')}
+                      className="py-2 px-2.5 rounded-[10px] bg-white border border-neutral-200 hover:border-[#1B4332] hover:bg-[#1B4332]/5 text-neutral-800 text-xs font-bold transition-all text-center flex flex-col items-center justify-center cursor-pointer shadow-2xs group"
+                    >
+                      <span className="text-[#1B4332] text-[11px] font-extrabold group-hover:scale-105 transition-transform">Admin</span>
+                      <span className="text-[9.5px] text-neutral-500 font-mono truncate max-w-full">admin</span>
+                    </button>
+                  </div>
+                </div>
 
                 {/* Login Form */}
                 <form onSubmit={handleLoginSubmit} noValidate className="space-y-4">
