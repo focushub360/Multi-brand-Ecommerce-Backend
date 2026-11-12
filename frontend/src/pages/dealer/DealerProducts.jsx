@@ -54,19 +54,19 @@ export default function DealerProducts() {
     setTimeout(() => setToastMessage(''), 2500);
   };
 
-  const handleDelete = (id, name) => {
+  const handleDelete = async (id, name) => {
     if (window.confirm(`Are you sure you want to remove "${name}" from your dealer catalog?`)) {
       const activeId = getActiveDealerId();
-      const remaining = deleteDealerProduct(id, activeId);
+      const remaining = await deleteDealerProduct(id, activeId);
       setProducts(remaining);
       showToast(`Product "${name}" deleted.`);
     }
   };
 
-  const handleToggleStatus = (prod) => {
+  const handleToggleStatus = async (prod) => {
     const activeId = getActiveDealerId();
     const newStatus = prod.status === 'active' ? 'draft' : 'active';
-    const updated = updateDealerProduct(prod.id, { status: newStatus }, activeId);
+    const updated = await updateDealerProduct(prod._id || prod.id, { status: newStatus }, activeId);
     if (updated) {
       loadData();
       showToast(`Status updated to ${newStatus === 'active' ? 'Active' : 'Draft'}`);

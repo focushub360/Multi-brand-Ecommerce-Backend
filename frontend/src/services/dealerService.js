@@ -448,26 +448,33 @@ export async function fetchDealerProductById(id, dealerId) {
 }
 
 /**
- * Adds a new product scoped to the active dealer
+ * Adds a new product scoped to the active dealer and syncs to MongoDB
  */
 export async function addDealerProduct(newProd, dealerId) {
   const activeId = resolveDealerId(dealerId);
 
   const payload = {
     name: newProd.name.trim(),
-    sku: newProd.sku || `SKU-${Date.now()}`,
+    sku: newProd.sku ? newProd.sku.trim().toUpperCase() : `SKU-${Date.now()}`,
     category: newProd.category || 'Agriculture & Farming',
     subcategory: newProd.subcategory || 'General Machinery',
     brand: newProd.brand || 'GROVE Prime',
-    description: newProd.description || `${newProd.name} manufactured to premium standards.`,
+    description: (newProd.description && newProd.description.trim().length >= 2)
+      ? newProd.description.trim()
+      : `${newProd.name} manufactured to premium standards.`,
     price: Number(newProd.price || newProd.sellingPrice) || 1000,
     mrp: Number(newProd.mrp || newProd.mrpPrice || newProd.originalPrice || newProd.price) || 1200,
     gstRate: Number(newProd.gstRate) || 18,
     stock: Number(newProd.stock) || 10,
     threshold: Number(newProd.threshold) || 5,
-    status: (newProd.status || 'Active').toLowerCase() === 'active' ? 'Active' : 'Draft',
+    status: (newProd.status || 'Active').toLowerCase() === 'draft' ? 'Draft' : 'Active',
     image: newProd.image || (Array.isArray(newProd.images) && newProd.images[0]) || '/images/card-agri-clean.png',
-    specifications: newProd.specs || {
+    images: Array.isArray(newProd.images) && newProd.images.length > 0 ? newProd.images : [newProd.image || '/images/card-agri-clean.png'],
+    specs: newProd.specs || newProd.specifications || {
+      material: newProd.material || 'Heavy Industrial Grade',
+      warranty: '2-Year Direct OEM Warranty'
+    },
+    specifications: newProd.specs || newProd.specifications || {
       material: newProd.material || 'Heavy Industrial Grade',
       warranty: '2-Year Direct OEM Warranty'
     }
@@ -475,15 +482,16 @@ export async function addDealerProduct(newProd, dealerId) {
 
   try {
     const res = await productsApi.create(payload);
-    const createdServer = res?.product || res?.data || res;
+    const createdServer = res?.data || res?.product || res;
     const normalized = normalizeProduct(createdServer, activeId) || {
       ...payload,
-      id: `prod-${Date.now()}`,
+      id: String(createdServer?._id || `prod-${Date.now()}`),
+      _id: String(createdServer?._id || `prod-${Date.now()}`),
       dealerId: activeId
     };
 
     const existing = getAllStoredProducts();
-    saveAllStoredProducts([normalized, ...existing]);
+    saveAllStoredProducts([normalized, ...existing.filter((p) => p.sku !== normalized.sku)]);
     return normalized;
   } catch (err) {
     console.error('Failed to create product on backend:', err.message);

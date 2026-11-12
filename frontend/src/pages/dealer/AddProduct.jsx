@@ -22,26 +22,26 @@ const SUBCATEGORIES_BY_CATEGORY = {
   'Agriculture & Farming': [
     'Hybrid Seeds',
     'Fertilizers & Soil Nutrition',
-    'Crop Protection & Spraying',
+    'Crop Protection',
     'Irrigation & Drip Systems',
-    'Solar & Sustainable Energy',
-    'Farm Machinery & Heavy Equipment'
+    'Solar Pumps',
+    'Farm Machinery'
   ],
   'Electronics & Gadgets': [
-    'Smart Ag Tech & Sensors',
-    'Solar Pumps & Inverters',
-    'Field Surveillance Cameras',
-    'Battery Packs & Power Backup',
-    'Testing & Measuring Meters',
-    'Communication & Telemetry'
+    'Smart Sensors & IoT',
+    'Drones & Robotics',
+    'Audio & Headphones',
+    'Laptops & Computers',
+    'Wearables & Smartwatches',
+    'Keyboards & Accessories'
   ],
   'Automotive & Spare Parts': [
-    'Tractor Engine Components',
-    'Hydraulic Pumps & Cylinders',
-    'Transmission & Gearboxes',
-    'Braking & Clutch Systems',
-    'Commercial Farm Tires',
-    'Filters, Belts & Bearings'
+    'Braking Systems',
+    'Tires & Wheels',
+    'Suspension & Steering',
+    'Electrical & Battery',
+    'Engine & Drivetrain',
+    'Spares & Accessories'
   ],
   'Groceries': [
     'Organic Staples & Grains',
@@ -68,7 +68,7 @@ export default function AddProduct() {
     name: '',
     description: '',
     category: authorizedCategory,
-    subcategory: availableSubcategories[0] || 'Farm Machinery & Heavy Equipment',
+    subcategory: availableSubcategories[0] || 'Hybrid Seeds',
     sellingPrice: '',
     mrpPrice: '',
     gstRate: '18',
@@ -99,7 +99,7 @@ export default function AddProduct() {
         name: 'Smart Precision Agri Telemetry Soil Moisture & Temp Sensor Hub',
         description: 'Solar-powered IoT multi-depth soil moisture, EC salinity, and ambient temperature telemetry probe with Bluetooth 5.0 and 4G GSM cloud uplink for real-time agronomy analytics.',
         category: authorizedCategory,
-        subcategory: availableSubcategories[0] || 'Smart Ag Tech & Sensors',
+        subcategory: availableSubcategories[0] || 'Smart Sensors & IoT',
         sellingPrice: '6899',
         mrpPrice: '8500',
         gstRate: '18',
@@ -117,7 +117,7 @@ export default function AddProduct() {
         name: 'Heavy Duty Multi-Row Ceramic Clutch Plate Assembly 280mm',
         description: 'High-friction sintered ceramic commercial clutch disc with heavy-duty dual dampener springs engineered for multi-axle agricultural haulers and commercial tractors under maximum continuous load.',
         category: authorizedCategory,
-        subcategory: availableSubcategories[0] || 'Tractor Engine Components',
+        subcategory: availableSubcategories[0] || 'Braking Systems',
         sellingPrice: '4850',
         mrpPrice: '6200',
         gstRate: '18',
@@ -202,38 +202,48 @@ export default function AddProduct() {
     return Object.keys(errs).length === 0;
   };
 
-  const handleSave = (publishStatus) => {
+  const handleSave = async (publishStatus) => {
     if (!validate()) return;
     setIsSubmitting(true);
 
+    const defaultImg = formData.category.includes('Elect')
+      ? 'https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&fit=crop&w=500&q=80'
+      : formData.category.includes('Auto')
+      ? '/images/prod-brakepads.png'
+      : '/images/prod-drip.png';
+
     const productPayload = {
       name: formData.name.trim(),
-      description: formData.description.trim(),
+      description: formData.description.trim() || `${formData.name.trim()} - genuine verified equipment with standard OEM manufacturer warranty.`,
       category: formData.category,
       subcategory: formData.subcategory,
       price: Number(formData.sellingPrice),
       mrp: Number(formData.mrpPrice || formData.sellingPrice),
       originalPrice: Number(formData.mrpPrice || formData.sellingPrice),
       discount: discountPercent,
-      gstRate: Number(formData.gstRate),
+      gstRate: Number(formData.gstRate) || 18,
       sku: formData.sku.trim().toUpperCase(),
       stock: Number(formData.stock) || 0,
       threshold: Number(formData.threshold) || 10,
-      status: publishStatus,
+      status: publishStatus === 'draft' ? 'Draft' : 'Active',
       specs: {
-        material: formData.material,
-        pipeSize: formData.pipeSize,
-        flowRate: formData.flowRate
+        material: formData.material || 'Commercial Grade',
+        pipeSize: formData.pipeSize || 'Standard Specification',
+        flowRate: formData.flowRate || 'Standard Rating'
       },
-      image: formData.images[0] || '/images/card-agri-clean.png',
-      images: formData.images.length > 0 ? formData.images : ['/images/card-agri-clean.png']
+      image: formData.images[0] || defaultImg,
+      images: formData.images.length > 0 ? formData.images : [defaultImg]
     };
 
-    setTimeout(() => {
-      addDealerProduct(productPayload, getActiveDealerId());
-      setIsSubmitting(false);
+    try {
+      await addDealerProduct(productPayload, getActiveDealerId());
       navigate('/dealer/products');
-    }, 400);
+    } catch (err) {
+      console.warn('Backend product creation notice:', err.message);
+      navigate('/dealer/products');
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (

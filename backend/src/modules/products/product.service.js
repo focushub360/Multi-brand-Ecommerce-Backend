@@ -75,7 +75,7 @@ export class ProductService {
       status: data.status || 'Active',
       image: data.image,
       images: data.images?.length ? data.images : [data.image],
-      specs: data.specs || {},
+      specs: data.specs || data.specifications || {},
       highlights: data.highlights || [],
       warranty: data.warranty || 'Standard 1 Year Warranty'
     });
