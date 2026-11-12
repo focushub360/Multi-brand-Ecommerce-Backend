@@ -368,11 +368,40 @@ export function addRegisteredUser(newUser) {
   } catch {}
 }
 
+export const DEFAULT_DEMO_ACCOUNTS = [
+  {
+    id: 'CUST-DEMO-01',
+    name: 'Customer Demo',
+    email: 'user1@grove.com',
+    password: 'Password@123',
+    role: 'customer',
+    phone: '+91 98765 43210'
+  },
+  {
+    id: 'DLR-DEMO-01',
+    name: 'Apex Machinery (dealer1)',
+    email: 'dealer1@grove.com',
+    password: 'Password@123',
+    role: 'dealer',
+    dealerId: 'DEALER_001',
+    phone: '+91 98220 11223'
+  },
+  {
+    id: 'ADM-DEMO-01',
+    name: 'Platform Super Admin',
+    email: 'admin@grove.com',
+    password: 'Admin@123',
+    role: 'admin',
+    phone: '+91 80000 12345'
+  }
+];
+
 /**
- * Returns all user records across users.json seed and registered demo users.
+ * Returns all user records across demo accounts and registered demo users.
  */
 export function getAllUsers() {
-  return getRegisteredUsers();
+  const registered = getRegisteredUsers();
+  return [...DEFAULT_DEMO_ACCOUNTS, ...registered];
 }
 
 /**

@@ -418,14 +418,14 @@ export default function LoginPage() {
                       onClick={() => fillDemoCredentials('customer')}
                       className="font-bold text-[#1B4332] hover:underline bg-[#EBF4EE] px-2.5 py-1 rounded-full text-[11px] cursor-pointer"
                     >
-                      Customer (Harish)
+                      Customer (user1)
                     </button>
                     <button
                       type="button"
                       onClick={() => fillDemoCredentials('dealer')}
                       className="font-bold text-[#1B4332] hover:underline bg-[#EBF4EE] px-2.5 py-1 rounded-full text-[11px] cursor-pointer"
                     >
-                      Dealer (Demo)
+                      Dealer (dealer1)
                     </button>
                   </div>
                 </div>

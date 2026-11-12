@@ -2,31 +2,18 @@
  * ==============================================================================
  * GROVE Multi-Brand E-Commerce Platform – Database Seed Script
  * ==============================================================================
- * Reads raw JSON seed files from `../frontend/src/data/` and seeds the MongoDB
- * database with realistic, interconnected, relational records across all modules:
- *
- * 1. Categories & Subcategories (Agriculture, Electronics, Automotive, Groceries)
- * 2. Platform Users (Super Admins, Dealers, Customers with hashed passwords)
- * 3. Customer Delivery Addresses
- * 4. Certified Dealers (KYC documents, banking, warehouses, geo-locations)
- * 5. Full Product Catalog (Admin + Agriculture + Groceries products)
- * 6. Warehouse Inventory & Audit Ledger (Transactions)
- * 7. Regional Dealer Hubs & Delivery Locations (GeoJSON 2dsphere points)
- * 8. Customer Orders & Discrete Dealer Sub-Orders
- * 9. Financial Payments & Escrow Ledger
- * 10. Merchant Settlement Batches
- * 11. Customer & Dealer Support Complaints / Threads
- * 12. System Admin Settings & Governance
- * 13. Security Audit Logs
+ * Clears the existing database and seeds:
+ * 1. Exactly 3 demo accounts: user1, dealer1, admin
+ * 2. Exactly 5 products per category: Agriculture, Electronics, Automotive (15 total)
+ * 3. 4 Categories: Agriculture, Electronics, Automotive, Groceries
+ * 4. 1 Dealer entity linked to dealer1 (DEALER_001)
+ * 5. 15 Inventory records matching the products
+ * 6. 1 Default delivery address for user1
+ * 7. 1 Dealer location hub for DEALER_001
+ * 8. System Admin settings and initial audit log
  * ==============================================================================
  */
 
-import fs from 'fs';
-import path from 'path';
-import { fileURLToPath } from 'url';
-import mongoose from 'mongoose';
-
-import { env } from './src/config/env.js';
 import { connectDB, disconnectDB } from './src/config/db.js';
 import { ROLES } from './src/constants/roles.js';
 import { DEALER_STATUS } from './src/constants/dealerStatus.js';
@@ -49,935 +36,647 @@ import { AuditLog } from './src/modules/admin/auditLog.model.js';
 import { Cart } from './src/modules/cart/cart.model.js';
 import { Wishlist } from './src/modules/wishlist/wishlist.model.js';
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
-const DATA_DIR = path.resolve(__dirname, '../frontend/src/data');
+async function seedDatabase() {
+  console.log('🚀 Starting GROVE Database Seed Process...');
+  await connectDB();
 
-/**
- * Safely read and parse a JSON file from the frontend data directory
- */
-const readJsonFile = (filename) => {
-  const fullPath = path.join(DATA_DIR, filename);
-  if (!fs.existsSync(fullPath)) {
-    console.warn(`⚠️ Warning: Seed file ${filename} not found at ${fullPath}`);
-    return null;
-  }
-  return JSON.parse(fs.readFileSync(fullPath, 'utf-8'));
-};
+  // 1. Clear ALL collections
+  console.log('🧹 Clearing existing database collections...');
+  await Promise.all([
+    User.deleteMany({}),
+    Dealer.deleteMany({}),
+    Category.deleteMany({}),
+    Product.deleteMany({}),
+    Inventory.deleteMany({}),
+    InventoryTransaction.deleteMany({}),
+    Address.deleteMany({}),
+    DealerLocation.deleteMany({}),
+    Order.deleteMany({}),
+    DealerOrder.deleteMany({}),
+    Payment.deleteMany({}),
+    Settlement.deleteMany({}),
+    Complaint.deleteMany({}),
+    AdminSettings.deleteMany({}),
+    AuditLog.deleteMany({}),
+    Cart.deleteMany({}),
+    Wishlist.deleteMany({})
+  ]);
+  console.log('✅ All existing collections cleared successfully.\n');
 
-/**
- * Safely parse date or return fallback
- */
-const safeDate = (val, fallback = new Date()) => {
-  if (!val || val === '—' || val === '-' || typeof val !== 'string') return fallback;
-  if (/^\d{1,2}:\d{2}\s*(AM|PM)$/i.test(val.trim())) {
-    const today = new Date().toISOString().split('T')[0];
-    const parsed = new Date(`${today} ${val.trim()}`);
-    return isNaN(parsed.getTime()) ? fallback : parsed;
-  }
-  const parsed = new Date(val);
-  return isNaN(parsed.getTime()) ? fallback : parsed;
-};
-
-/**
- * City coordinate map for GeoJSON Point creation [longitude, latitude]
- */
-const CITY_COORDINATES = {
-  Pune: [73.8567, 18.5204],
-  Solapur: [75.9064, 17.6599],
-  Nashik: [73.7898, 19.9975],
-  Nagpur: [79.0882, 21.1458],
-  Ludhiana: [75.8573, 30.901],
-  Indore: [75.8577, 22.7196],
-  Hyderabad: [78.4867, 17.385],
-  Baramati: [74.5815, 18.1517],
-  Kolhapur: [74.2433, 16.705],
-  Amravati: [77.7523, 20.932],
-  Jalgaon: [75.5626, 21.0077],
-  Ratnagiri: [73.3000, 16.9902]
-};
-
-const getCoordinates = (city) => {
-  return CITY_COORDINATES[city] || [73.8567, 18.5204];
-};
-
-/**
- * Main Database Seeder Function
- */
-export const seedDatabase = async () => {
-  console.log('\n================================================================');
-  console.log('🌱 STARTING GROVE DATABASE SEEDING PROCESS');
-  console.log(`📁 Source directory: ${DATA_DIR}`);
-  console.log('================================================================\n');
-
-  try {
-    await connectDB();
-
-    // --------------------------------------------------------------------------
-    // STEP 0: Clean existing collections
-    // --------------------------------------------------------------------------
-    console.log('🧹 Purging existing collections to ensure idempotent seeding...');
-    await Promise.all([
-      Category.deleteMany({}),
-      User.deleteMany({}),
-      Dealer.deleteMany({}),
-      Product.deleteMany({}),
-      Inventory.deleteMany({}),
-      InventoryTransaction.deleteMany({}),
-      DealerLocation.deleteMany({}),
-      Address.deleteMany({}),
-      Order.deleteMany({}),
-      DealerOrder.deleteMany({}),
-      Payment.deleteMany({}),
-      Settlement.deleteMany({}),
-      Complaint.deleteMany({}),
-      AdminSettings.deleteMany({}),
-      AuditLog.deleteMany({}),
-      Cart.deleteMany({}),
-      Wishlist.deleteMany({})
-    ]);
-    console.log('✅ Collections purged successfully.\n');
-
-    // --------------------------------------------------------------------------
-    // STEP 1: Seed Categories & Subcategories
-    // --------------------------------------------------------------------------
-    console.log('📦 Step 1: Seeding Categories and Subcategories...');
-    const rawCategories = readJsonFile('adminCategories.json') || [];
-
-    // Ensure Groceries & Farm Produce category exists
-    const fullCategoriesList = [...rawCategories];
-    const hasGroceries = fullCategoriesList.some((c) => c.slug === 'groceries');
-    if (!hasGroceries) {
-      fullCategoriesList.push({
-        id: 'cat-groc',
-        name: 'Groceries & Farm Produce',
-        slug: 'groceries',
-        description: 'Direct farm harvests, certified organic staples, cold-pressed edible oils, pulses, and spices.',
-        icon: 'ShoppingBag',
-        commissionRate: 5.0,
-        status: 'Active',
-        subcategories: [
-          { name: 'Fresh Fruits & Vegetables', slug: 'fresh-fruits-vegetables', status: 'Active' },
-          { name: 'Grains, Pulses & Millets', slug: 'grains-pulses-millets', status: 'Active' },
-          { name: 'Organic Cold-Pressed Oils', slug: 'organic-cold-pressed-oils', status: 'Active' },
-          { name: 'Spices, Herbs & Seasonings', slug: 'spices-herbs-seasonings', status: 'Active' }
-        ]
-      });
+  // 2. Seed Categories
+  console.log('🌱 Seeding Categories...');
+  const categories = await Category.create([
+    {
+      name: 'Agriculture & Farming',
+      slug: 'agriculture',
+      description: 'Machinery, irrigation, tillage equipment, and agronomy solutions.',
+      icon: 'Sprout',
+      commissionRate: 5.0,
+      status: 'Active',
+      subcategories: [
+        { name: 'Tractors & Heavy Machinery', slug: 'tractors-machinery', description: 'Utility and heavy tractors' },
+        { name: 'Micro-Irrigation & Tubing', slug: 'micro-irrigation', description: 'Drip, sprinklers, and pipes' },
+        { name: 'Tillage & Soil Preparation', slug: 'tillage-equipment', description: 'Cultivators and plows' },
+        { name: 'Crop Protection & Spraying', slug: 'crop-protection', description: 'Sprayers and misters' },
+        { name: 'Solar & Sustainable Energy', slug: 'solar-energy', description: 'Solar pumps and generators' }
+      ]
+    },
+    {
+      name: 'Electronics & Gadgets',
+      slug: 'electronics',
+      description: 'Industrial electronics, IoT telemetry, sensors, and computing hardware.',
+      icon: 'Smartphone',
+      commissionRate: 7.0,
+      status: 'Active',
+      subcategories: [
+        { name: 'Wearables & Tracking', slug: 'wearables-tracking', description: 'Smartwatches and GPS tags' },
+        { name: 'Audio & Field Gear', slug: 'audio-field-gear', description: 'Industrial noise-cancelling gear' },
+        { name: 'Computer Peripherals', slug: 'computer-peripherals', description: 'Dustproof keyboards and mice' },
+        { name: 'Rugged Computing', slug: 'rugged-computing', description: 'Field laptops and tablets' },
+        { name: 'Power & Energy', slug: 'power-energy', description: 'Solar chargers and inverters' }
+      ]
+    },
+    {
+      name: 'Automotive & Spare Parts',
+      slug: 'automotive',
+      description: 'OEM parts, heavy vehicle braking, filtration, and all-terrain tires.',
+      icon: 'Cog',
+      commissionRate: 6.0,
+      status: 'Active',
+      subcategories: [
+        { name: 'Braking Systems', slug: 'braking-systems', description: 'Brake pads, rotors, and hydraulics' },
+        { name: 'Engine Filtration', slug: 'engine-filtration', description: 'Oil, fuel, and air filters' },
+        { name: 'Suspension & Steering', slug: 'suspension-steering', description: 'Shock absorbers and springs' },
+        { name: 'Tires & Rims', slug: 'tires-rims', description: 'Commercial tractor and truck tires' }
+      ]
+    },
+    {
+      name: 'Groceries',
+      slug: 'groceries',
+      description: 'Daily pantry essentials, fresh produce, and organic farm goods.',
+      icon: 'ShoppingBasket',
+      commissionRate: 4.0,
+      status: 'Active',
+      subcategories: [
+        { name: 'Daily Essentials', slug: 'daily-essentials', description: 'Grains, oils, and pulses' },
+        { name: 'Organic Produce', slug: 'organic-produce', description: 'Farm fresh fruits and vegetables' }
+      ]
     }
+  ]);
 
-    const categoryMap = new Map(); // slug / name -> Category Doc
-    for (const cat of fullCategoriesList) {
-      const createdCat = await Category.create({
-        name: cat.name.trim(),
-        slug: cat.slug.toLowerCase().trim(),
-        description: cat.description || '',
-        icon: cat.icon || 'Package',
-        commissionRate: Number(cat.commissionRate) || 5.0,
-        status: cat.status === 'Active' ? 'Active' : 'Inactive',
-        subcategories: (cat.subcategories || []).map((sub) => ({
-          name: sub.name.trim(),
-          slug: sub.slug.toLowerCase().trim(),
-          description: sub.description || '',
-          status: sub.status === 'Inactive' ? 'Inactive' : 'Active'
-        }))
-      });
-      categoryMap.set(createdCat.slug, createdCat);
-      categoryMap.set(createdCat.name.toLowerCase(), createdCat);
+  const agriCat = categories.find((c) => c.slug === 'agriculture');
+  const elecCat = categories.find((c) => c.slug === 'electronics');
+  const autoCat = categories.find((c) => c.slug === 'automotive');
+
+  console.log(`✅ Seeded ${categories.length} categories.\n`);
+
+  // 3. Seed Exactly 3 Demo Accounts (user1, dealer1, admin)
+  console.log('👤 Seeding 3 Demo Accounts (user1, dealer1, admin)...');
+  const [user1, dealer1, admin] = await User.create([
+    {
+      name: 'User One',
+      email: 'user1@grove.com',
+      password: 'Password@123',
+      role: ROLES.USER,
+      phone: '+91 98765 43210',
+      status: 'ACTIVE',
+      isEmailVerified: true
+    },
+    {
+      name: 'Dealer One',
+      email: 'dealer1@grove.com',
+      password: 'Password@123',
+      role: ROLES.DEALER,
+      phone: '+91 98220 12345',
+      status: 'ACTIVE',
+      isEmailVerified: true
+    },
+    {
+      name: 'Super Admin',
+      email: 'admin@grove.com',
+      password: 'Admin@123',
+      role: ROLES.SUPER_ADMIN,
+      phone: '+91 99999 00000',
+      status: 'ACTIVE',
+      isEmailVerified: true
     }
-    console.log(`✅ Seeded ${fullCategoriesList.length} categories with subcategories.`);
+  ]);
 
-    // --------------------------------------------------------------------------
-    // STEP 2: Seed Users (Super Admin, Ops, Dealers, Customers)
-    // --------------------------------------------------------------------------
-    console.log('\n👥 Step 2: Seeding System Users (Admins, Dealers, Customers)...');
-    const rawUsers = readJsonFile('users.json') || [];
-    const rawAdminUsers = readJsonFile('adminUsers.json') || [];
-    const rawCustomers = readJsonFile('adminCustomers.json') || [];
-    const rawDealers = readJsonFile('adminDealers.json') || [];
+  console.log('✅ Created 3 accounts:');
+  console.log('   - Customer: user1@grove.com    (Password@123)');
+  console.log('   - Dealer:   dealer1@grove.com  (Password@123)');
+  console.log('   - Admin:    admin@grove.com    (Admin@123)\n');
 
-    const userMap = new Map(); // email -> User Doc
-
-    // 2.1 Super Admins
-    const adminAccounts = [
-      {
-        name: env.ADMIN_NAME || 'GROVE Super Admin',
-        email: (env.ADMIN_EMAIL || 'admin@grove.com').toLowerCase(),
-        password: env.ADMIN_PASSWORD || 'Admin@123',
-        role: ROLES.SUPER_ADMIN,
-        phone: '+91 98200 99100',
-        avatar: 'GA',
-        status: 'ACTIVE',
-        isEmailVerified: true
-      },
-      {
-        name: 'Priya Sharma',
-        email: 'ops@grove.com',
-        password: 'Admin@123',
-        role: ROLES.SUPER_ADMIN,
-        phone: '+91 98200 99101',
-        avatar: 'PS',
-        status: 'ACTIVE',
-        isEmailVerified: true
-      }
-    ];
-
-    for (const adm of adminAccounts) {
-      if (!userMap.has(adm.email)) {
-        const u = await User.create(adm);
-        userMap.set(adm.email, u);
-      }
+  // 4. Seed Dealer Profile for dealer1
+  console.log('🏢 Seeding Dealer Profile for dealer1 (DEALER_001)...');
+  const dealerEntity = await Dealer.create({
+    user: dealer1._id,
+    dealerCode: 'DEALER_001',
+    businessName: 'Apex Agri-Tech & Machinery',
+    businessType: 'Authorized Dealer',
+    primaryCategory: agriCat._id,
+    primaryCategoryName: agriCat.name,
+    ownerName: dealer1.name,
+    officialEmail: dealer1.email,
+    phone: dealer1.phone,
+    gstin: '27AABCA1234F1Z5',
+    pan: 'AABCA1234F',
+    businessAddress: {
+      address: 'Plot 42, Sanaswadi Industrial Area, Pune-Nagar Road',
+      city: 'Pune',
+      state: 'Maharashtra',
+      pincode: '412208'
+    },
+    warehouseAddress: 'Plot 42, Sanaswadi Industrial Area, Pune-Nagar Road, Pune - 412208',
+    location: {
+      type: 'Point',
+      coordinates: [73.8567, 18.5204]
+    },
+    status: DEALER_STATUS.APPROVED,
+    tier: 'Gold Tier',
+    commissionRate: 5.0,
+    bankDetails: {
+      accountName: 'Apex Agri-Tech & Machinery',
+      accountNumber: '987654321098',
+      ifsc: 'SBIN0001234',
+      bankName: 'State Bank of India'
+    },
+    kycDocuments: [
+      { name: 'GSTIN Registration Certificate', url: 'https://grove.internal/docs/gstin.pdf', status: 'Verified' },
+      { name: 'Business License', url: 'https://grove.internal/docs/license.pdf', status: 'Verified' }
+    ],
+    storeSettings: {
+      tagline: 'Leading Agricultural Equipment & Industrial Hardware',
+      description: 'Certified dealer for agricultural machinery, precision irrigation, electronics telemetry, and commercial automotive spares.',
+      operatingHours: 'Mon - Sat: 08:30 AM - 07:30 PM',
+      isOpen: true,
+      fulfillmentSLA: 99.5
     }
+  });
 
-    // 2.2 Dealers from adminDealers.json
-    for (const d of rawDealers) {
-      const email = d.email.toLowerCase().trim();
-      if (!userMap.has(email)) {
-        const u = await User.create({
-          name: d.contactPerson || d.businessName,
-          email,
-          password: 'Grove@123',
-          role: ROLES.DEALER,
-          phone: d.phone || '+91 98201 44219',
-          avatar: d.businessName.substring(0, 2).toUpperCase(),
-          status: d.status === 'Suspended' ? 'SUSPENDED' : 'ACTIVE',
-          isEmailVerified: true
-        });
-        userMap.set(email, u);
-      }
+  console.log(`✅ Created Dealer profile: ${dealerEntity.businessName} (${dealerEntity.dealerCode})\n`);
+
+  // 5. Seed Exactly 5 Products per Category (15 Total)
+  console.log('📦 Seeding Products (5 Agriculture, 5 Electronics, 5 Automotive)...');
+
+  const rawProducts = [
+    // --- Agriculture (5 products) ---
+    {
+      name: 'Heavy Duty 45HP Utility Farm Tractor',
+      sku: 'SKU-AG-01',
+      slug: 'heavy-duty-farm-tractor-ag-01',
+      category: agriCat._id,
+      categoryName: agriCat.name,
+      subcategory: 'Tractors & Heavy Machinery',
+      brand: 'GROVE AgriMaster',
+      description: 'Commercial 45HP dual-clutch utility tractor with advanced 8F+2R transmission, high ground clearance, and power steering for rigorous farming operations.',
+      price: 585000,
+      mrp: 620000,
+      discount: 5,
+      stock: 15,
+      image: '/images/prod-tractor.png',
+      images: ['/images/prod-tractor.png', '/images/prod-cultivator.png'],
+      rating: 4.8,
+      reviewCount: 42,
+      specs: { 'Horsepower': '45 HP', 'Cylinders': '3 Cylinders', 'Lifting Capacity': '1500 kg', 'Fuel Tank': '50 Liters' },
+      highlights: ['45 HP Fuel-Efficient Diesel Engine', 'Dual Clutch & Power Steering', '1500 kg Hydraulic Lift Capacity', '1 Year Comprehensive Warranty']
+    },
+    {
+      name: 'Precision Micro-Drip Irrigation System (1 Acre)',
+      sku: 'SKU-AG-02',
+      slug: 'precision-micro-drip-irrigation-ag-02',
+      category: agriCat._id,
+      categoryName: agriCat.name,
+      subcategory: 'Micro-Irrigation & Tubing',
+      brand: 'DripAqua',
+      description: 'Complete agricultural drip irrigation kit covering 1 acre with pressure-compensating drippers, durable 16mm mainline tubing, disc filter, and venturi injector.',
+      price: 4200,
+      mrp: 5500,
+      discount: 23,
+      stock: 45,
+      image: '/images/prod-drip.png',
+      images: ['/images/prod-drip.png'],
+      rating: 4.7,
+      reviewCount: 68,
+      specs: { 'Coverage': '1 Acre', 'Tubing Size': '16 mm', 'Dripper Spacing': '40 cm', 'Operating Pressure': '1.0 - 2.5 bar' },
+      highlights: ['Up to 70% Water Saving', 'Anti-Clogging Pressure Compensating Emitters', 'UV-Stabilized Virgin Polymer', 'Includes Venturi Fertilizer Injector']
+    },
+    {
+      name: 'Heavy-Duty Multi-Row Rotary Cultivator',
+      sku: 'SKU-AG-03',
+      slug: 'heavy-duty-rotary-cultivator-ag-03',
+      category: agriCat._id,
+      categoryName: agriCat.name,
+      subcategory: 'Tillage & Soil Preparation',
+      brand: 'AgriPower',
+      description: 'Heavy-duty tractor mounted rotary tiller designed for fine seedbed preparation in dry and wet soils with heat-treated boronic steel blades.',
+      price: 34500,
+      mrp: 39000,
+      discount: 11,
+      stock: 18,
+      image: '/images/prod-cultivator.png',
+      images: ['/images/prod-cultivator.png'],
+      rating: 4.6,
+      reviewCount: 31,
+      specs: { 'Working Width': '5 Feet', 'Blades Count': '36 Blades', 'Tractor Power Required': '35-45 HP', 'Drive Type': 'Gear Drive' },
+      highlights: ['High-Tensile Boron Steel L-Type Blades', 'Heavy Duty Sealed Gearbox', 'Adjustable Depth Skids', 'Vibration Dampened Side Shields']
+    },
+    {
+      name: 'Battery-Operated High-Pressure Backpack Sprayer 16L',
+      sku: 'SKU-AG-04',
+      slug: 'battery-backpack-sprayer-ag-04',
+      category: agriCat._id,
+      categoryName: agriCat.name,
+      subcategory: 'Crop Protection & Spraying',
+      brand: 'KisanShield',
+      description: '16-Liter rechargeable knapsack sprayer with dual diaphragm pump, pressure regulator, and telescopic brass lance for uniform pest control.',
+      price: 2850,
+      mrp: 3600,
+      discount: 20,
+      stock: 60,
+      image: '/images/prod-sprayer.png',
+      images: ['/images/prod-sprayer.png'],
+      rating: 4.5,
+      reviewCount: 54,
+      specs: { 'Tank Capacity': '16 Liters', 'Battery': '12V 8Ah Lead Acid', 'Working Pressure': '0.15 - 0.40 Mpa', 'Discharge Rate': '3.1 L/min' },
+      highlights: ['Up to 6 Hours Continuous Operation', 'Extendable Brass Spray Lance', 'Ergonomic Padded Shoulder Straps', 'Dual Nozzle Set Included']
+    },
+    {
+      name: 'Solar Irrigation Water Pumping System 5HP',
+      sku: 'SKU-AG-05',
+      slug: 'solar-irrigation-pumping-system-ag-05',
+      category: agriCat._id,
+      categoryName: agriCat.name,
+      subcategory: 'Solar & Sustainable Energy',
+      brand: 'SolarAgro',
+      description: 'Submersible 5HP stainless steel solar water pump with MPPT solar pump controller, automated dry-run protection, and high discharge head.',
+      price: 68000,
+      mrp: 79000,
+      discount: 13,
+      stock: 20,
+      image: '/images/prod-solar.png',
+      images: ['/images/prod-solar.png'],
+      rating: 4.9,
+      reviewCount: 27,
+      specs: { 'Motor Power': '5 HP / 3.7 kW', 'Max Head': '90 Meters', 'Max Flow Rate': '18,000 L/Hour', 'Controller': 'Advanced MPPT Variable Frequency' },
+      highlights: ['Zero Recurring Electricity Cost', 'Grade 304 Stainless Steel Construction', 'Integrated Dry-Run & Lightning Protection', 'Remote Telemetry Monitoring Compatible']
+    },
+
+    // --- Electronics (5 products) ---
+    {
+      name: 'GROVE Field Rugged Smartwatch with GPS & Sensor Hub',
+      sku: 'SKU-EL-01',
+      slug: 'grove-field-rugged-smartwatch-el-01',
+      category: elecCat._id,
+      categoryName: elecCat.name,
+      subcategory: 'Wearables & Tracking',
+      brand: 'TechField',
+      description: 'MIL-STD-810H rated outdoor smartwatch with dual-band GPS, barometer, optical pulse oximeter, and 14-day ultra-long battery life.',
+      price: 4299,
+      mrp: 5999,
+      discount: 28,
+      stock: 40,
+      image: '/images/prod-smartwatch.png',
+      images: ['/images/prod-smartwatch.png'],
+      rating: 4.7,
+      reviewCount: 88,
+      specs: { 'Display': '1.43 inch AMOLED Sapphire', 'Water Resistance': '5 ATM / 50M', 'Battery Life': 'Up to 14 Days', 'Sensors': 'Dual GPS, Altimeter, Barometer, SpO2' },
+      highlights: ['Military-Grade Shock & Dust Resistance', 'Ultra-Bright 1000 nits Outdoor Display', 'Real-Time Field Telemetry Tracking', 'Bluetooth 5.3 Calling Enabled']
+    },
+    {
+      name: 'Industrial Wireless Noise-Cancelling Communications Headset',
+      sku: 'SKU-EL-02',
+      slug: 'industrial-wireless-headset-el-02',
+      category: elecCat._id,
+      categoryName: elecCat.name,
+      subcategory: 'Audio & Field Gear',
+      brand: 'AcoustiMax',
+      description: 'Heavy-duty wireless over-ear headset with active noise cancellation up to 35dB, boom mic with environmental noise suppression, and 40h battery.',
+      price: 2999,
+      mrp: 4499,
+      discount: 33,
+      stock: 35,
+      image: '/images/prod-headphones.png',
+      images: ['/images/prod-headphones.png'],
+      rating: 4.6,
+      reviewCount: 46,
+      specs: { 'Noise Cancellation': 'Hybrid Active ANC (up to 35dB)', 'Battery': '800mAh (40 Hours)', 'Connectivity': 'Bluetooth 5.2 + 3.5mm Aux', 'Weight': '260 g' },
+      highlights: ['Engine & Machinery Noise Filtering', 'All-Day Memory Foam Ear Cushions', 'Detachable Noise-Cancelling Boom Mic', 'Foldable Heavy-Duty Headband']
+    },
+    {
+      name: 'Dustproof Mechanical Industrial Control Keyboard',
+      sku: 'SKU-EL-03',
+      slug: 'dustproof-mechanical-keyboard-el-03',
+      category: elecCat._id,
+      categoryName: elecCat.name,
+      subcategory: 'Computer Peripherals',
+      brand: 'K-Tek',
+      description: 'IP65-rated sealed mechanical keyboard engineered for industrial workstations, warehouses, and harsh field environments.',
+      price: 3499,
+      mrp: 4999,
+      discount: 30,
+      stock: 25,
+      image: '/images/prod-keyboard.png',
+      images: ['/images/prod-keyboard.png'],
+      rating: 4.5,
+      reviewCount: 39,
+      specs: { 'Switch Type': 'Dustproof Sealed Optical Switches', 'Ingress Protection': 'IP65 Dust & Water Resistant', 'Chassis': 'Anodized Aircraft Aluminum', 'Keycaps': 'Double-Shot PBT' },
+      highlights: ['Sealed Internal Membrane Shield', '50 Million Keystroke Durability', 'Oil and Solvent Resistant Keycaps', 'Integrated Braided USB-C Cable']
+    },
+    {
+      name: 'Rugged All-Weather Telemetry Field Laptop 14-inch',
+      sku: 'SKU-EL-04',
+      slug: 'rugged-telemetry-field-laptop-el-04',
+      category: elecCat._id,
+      categoryName: elecCat.name,
+      subcategory: 'Rugged Computing',
+      brand: 'ToughPro',
+      description: 'Full-ruggedized 14-inch outdoor laptop with drop-resistant chassis, glove-touch outdoor sunlight readable screen, and hot-swappable dual batteries.',
+      price: 48999,
+      mrp: 58000,
+      discount: 15,
+      stock: 14,
+      image: '/images/prod-laptop.png',
+      images: ['/images/prod-laptop.png'],
+      rating: 4.9,
+      reviewCount: 19,
+      specs: { 'Processor': 'Intel Core i5 12th Gen', 'RAM': '16 GB DDR4', 'Storage': '512 GB NVMe SSD', 'Drop Spec': '1.8 Meter Shockproof Drop Rating' },
+      highlights: ['Sunlight-Readable 1200 Nits Display', 'Glove-Operable Touchscreen', 'Dual Hot-Swappable 12-Hour Batteries', 'Dedicated RS232 Serial & GPS Ports']
+    },
+    {
+      name: 'High-Efficiency Monocrystalline Solar Charger 100W',
+      sku: 'SKU-EL-05',
+      slug: 'monocrystalline-solar-charger-el-05',
+      category: elecCat._id,
+      categoryName: elecCat.name,
+      subcategory: 'Power & Energy',
+      brand: 'VoltGreen',
+      description: 'Foldable 100W solar panel charger with integrated QC3.0 USB-A and 65W USB-C PD outputs for field charging laptops, drones, and telemetry equipment.',
+      price: 6499,
+      mrp: 8200,
+      discount: 20,
+      stock: 50,
+      image: '/images/prod-solar.png',
+      images: ['/images/prod-solar.png'],
+      rating: 4.8,
+      reviewCount: 62,
+      specs: { 'Wattage': '100W Peak', 'Cell Type': 'Grade-A Monocrystalline (23.5% Efficiency)', 'Outputs': 'USB-C PD 65W, USB-A QC 3.0, DC 18V', 'Folded Dimensions': '42 x 38 x 4 cm' },
+      highlights: ['High-Conversion Monocrystalline Cells', 'Direct Laptop & Drone USB-PD Fast Charging', 'Waterproof ETFE Surface Coating', 'Magnetic Fold-Up Carry Handle']
+    },
+
+    // --- Automotive (5 products) ---
+    {
+      name: 'Semi-Metallic Heavy Duty Commercial Brake Pads',
+      sku: 'SKU-AU-01',
+      slug: 'semi-metallic-commercial-brake-pads-au-01',
+      category: autoCat._id,
+      categoryName: autoCat.name,
+      subcategory: 'Braking Systems',
+      brand: 'Bremco',
+      description: 'High-friction semi-metallic front brake pad set for light commercial trucks, tractors, and agricultural haulers with low-dust thermal slots.',
+      price: 1850,
+      mrp: 2400,
+      discount: 22,
+      stock: 50,
+      image: '/images/prod-brakepads.png',
+      images: ['/images/prod-brakepads.png'],
+      rating: 4.7,
+      reviewCount: 74,
+      specs: { 'Material': 'Semi-Metallic Carbon Composite', 'Operating Temp': '-40°C to +650°C', 'Wear Indicator': 'Acoustic Wear Sensor', 'Axle Placement': 'Front Axle' },
+      highlights: ['Extended Rotor Life Formulation', 'Fade-Resistant Heavy Load Braking', 'Dual Chamfered Noise Damping Slots', 'Includes Hardware Installation Clips']
+    },
+    {
+      name: 'Heavy Duty Tractor & Truck Oil Filter',
+      sku: 'SKU-AU-02',
+      slug: 'heavy-duty-tractor-oil-filter-au-02',
+      category: autoCat._id,
+      categoryName: autoCat.name,
+      subcategory: 'Engine Filtration',
+      brand: 'FleetFilter',
+      description: 'Spin-on heavy engine oil filter featuring synthetic micro-glass media that captures 99% of contaminants down to 20 microns.',
+      price: 680,
+      mrp: 950,
+      discount: 28,
+      stock: 120,
+      image: '/images/prod-oilfilter-raw.png',
+      images: ['/images/prod-oilfilter-raw.png'],
+      rating: 4.8,
+      reviewCount: 110,
+      specs: { 'Thread Size': '1-12 UNF-2B', 'Micron Rating': '20 Microns @ 99%', 'Burst Pressure': '350 PSI', 'Gasket Type': 'Nitrile Rubber Seal' },
+      highlights: ['Heavy-Gauge Steel Canister Housing', 'Silicone Anti-Drainback Valve', 'Prevents Cold-Start Engine Wear', 'Recommended for 500-Hour Service Intervals']
+    },
+    {
+      name: 'Dual-Tube Heavy Vehicle Hydraulic Shock Absorber',
+      sku: 'SKU-AU-03',
+      slug: 'dual-tube-hydraulic-shock-absorber-au-03',
+      category: autoCat._id,
+      categoryName: autoCat.name,
+      subcategory: 'Suspension & Steering',
+      brand: 'RideControl',
+      description: 'Commercial-grade twin-tube hydraulic shock absorber with multi-lip piston seal and all-weather hydraulic fluid for rough terrain damping.',
+      price: 3400,
+      mrp: 4600,
+      discount: 26,
+      stock: 32,
+      image: '/images/prod-shockabsorber.png',
+      images: ['/images/prod-shockabsorber.png'],
+      rating: 4.6,
+      reviewCount: 29,
+      specs: { 'Extended Length': '540 mm', 'Collapsed Length': '345 mm', 'Bore Diameter': '45 mm', 'Mounting': 'Eye-to-Eye Poly Bushing' },
+      highlights: ['Nitro-Carburized Heavy Piston Rod', 'Twin-Tube High Heat Dissipation Design', 'Prevents Axle Hop & Load Sway', 'Polyurethane Long-Life Bushings Included']
+    },
+    {
+      name: 'All-Terrain Commercial Agricultural Radial Rear Tire',
+      sku: 'SKU-AU-04',
+      slug: 'all-terrain-radial-rear-tire-au-04',
+      category: autoCat._id,
+      categoryName: autoCat.name,
+      subcategory: 'Tires & Rims',
+      brand: 'ApolloTread',
+      description: 'Deep-lug agricultural drive wheel tire engineered with dual-angle lug geometry for superior field traction and reduced soil compaction.',
+      price: 22500,
+      mrp: 27000,
+      discount: 16,
+      stock: 20,
+      image: '/images/prod-tyre.png',
+      images: ['/images/prod-tyre.png'],
+      rating: 4.9,
+      reviewCount: 45,
+      specs: { 'Size': '13.6 - 28', 'PR (Ply Rating)': '12 Ply', 'Load Index': '128 A8', 'Tread Depth': '38 mm' },
+      highlights: ['Self-Cleaning Mud-Shedding Lug Design', 'Puncture-Resistant Heavy Sidewall Plies', 'Even Footprint Minimizes Soil Compaction', 'High Roadability & Wear Resistance']
+    },
+    {
+      name: 'Heavy Vehicle Multi-Leaf Spring Suspension Pack',
+      sku: 'SKU-AU-05',
+      slug: 'heavy-vehicle-multi-leaf-spring-au-05',
+      category: autoCat._id,
+      categoryName: autoCat.name,
+      subcategory: 'Suspension & Steering',
+      brand: 'SuspensionMaster',
+      description: 'Heavy-duty parabolic 9-leaf spring assembly fabricated from heat-treated manganese spring steel for commercial transport trailers.',
+      price: 8200,
+      mrp: 10500,
+      discount: 21,
+      stock: 16,
+      image: '/images/prod-shockabsorber.png',
+      images: ['/images/prod-shockabsorber.png'],
+      rating: 4.5,
+      reviewCount: 23,
+      specs: { 'Leaves Count': '9 Leaves', 'Leaf Width': '75 mm', 'Payload Rating': '3,500 kg per Pack', 'Material': 'Grade 55Si7 Manganese Steel' },
+      highlights: ['Shot-Peened & Anti-Corrosion Zinc Primed', 'High Fatigue Resistance Under Max Payloads', 'Includes Center Pin & U-Bolt Clamping Kit', 'OEM Fitment for Commercial Utility Trailers']
     }
+  ];
 
-    // 2.3 Customers from users.json and adminCustomers.json
-    for (const u of rawUsers) {
-      const email = u.email.toLowerCase().trim();
-      if (!userMap.has(email)) {
-        const role = u.role === 'admin' ? ROLES.SUPER_ADMIN : u.role === 'dealer' ? ROLES.DEALER : ROLES.USER;
-        const createdU = await User.create({
-          name: u.name,
-          email,
-          password: u.password || 'Grove@123',
-          role,
-          phone: '+91 98200 44102',
-          avatar: u.name.substring(0, 2).toUpperCase(),
-          status: 'ACTIVE',
-          isEmailVerified: true
-        });
-        userMap.set(email, createdU);
-      }
+  // Enrich products with dealer metadata
+  const productsToInsert = rawProducts.map((p) => ({
+    ...p,
+    dealer: dealerEntity._id,
+    dealerCode: dealerEntity.dealerCode,
+    dealerName: dealerEntity.businessName,
+    threshold: 10,
+    status: 'Active',
+    deliveryInfo: {
+      standardDays: '2 - 4 Business Days',
+      shippingFee: 'FREE Express Delivery',
+      dispatchTime: 'Dispatched within 24 Hours'
     }
+  }));
 
-    for (const c of rawCustomers) {
-      const email = c.email.toLowerCase().trim();
-      if (!userMap.has(email)) {
-        const createdC = await User.create({
-          name: c.contactPerson || c.name,
-          email,
-          password: 'Grove@123',
-          role: ROLES.USER,
-          phone: c.phone || '+91 98201 44219',
-          avatar: (c.contactPerson || c.name).substring(0, 2).toUpperCase(),
-          status: 'ACTIVE',
-          isEmailVerified: true
-        });
-        userMap.set(email, createdC);
-      }
+  const createdProducts = await Product.create(productsToInsert);
+  console.log(`✅ Seeded ${createdProducts.length} products across 3 categories.\n`);
+
+  // 6. Seed Warehouse Inventory Records & Initial Stock Ledger
+  console.log('📊 Seeding Warehouse Inventory Records...');
+  const inventoryDocs = createdProducts.map((prod) => ({
+    product: prod._id,
+    dealer: dealerEntity._id,
+    sku: prod.sku,
+    currentStock: prod.stock,
+    reservedStock: 0,
+    threshold: prod.threshold || 10,
+    locationBay: 'Bay A-01',
+    status: 'In Stock'
+  }));
+
+  const createdInventory = await Inventory.create(inventoryDocs);
+
+  const transactions = createdInventory.map((inv) => ({
+    product: inv.product,
+    dealer: inv.dealer,
+    type: 'PURCHASE_RESTOCK',
+    quantityChange: inv.currentStock,
+    balanceAfter: inv.currentStock,
+    reason: 'Initial Seed Inbound Balance',
+    performedBy: admin._id
+  }));
+
+  await InventoryTransaction.create(transactions);
+  console.log(`✅ Seeded ${createdInventory.length} inventory records and audit transactions.\n`);
+
+  // 7. Seed Default Delivery Address for user1
+  console.log('📍 Seeding Default Delivery Address for user1...');
+  await Address.create({
+    user: user1._id,
+    name: user1.name,
+    mobile: '9876543210',
+    pincode: '411016',
+    house: 'Flat 402, Green Meadows Apartment',
+    street: 'Model Colony, Shivajinagar',
+    landmark: 'Near Symbiosis College',
+    city: 'Pune',
+    state: 'Maharashtra',
+    type: 'Home',
+    isDefault: true,
+    coordinates: {
+      lat: 18.5362,
+      lng: 73.8340
     }
+  });
+  console.log('✅ Seeded delivery address for user1.\n');
 
-    console.log(`✅ Seeded ${userMap.size} user accounts with hashed bcrypt passwords.`);
-
-    // --------------------------------------------------------------------------
-    // STEP 3: Seed Customer Delivery Addresses
-    // --------------------------------------------------------------------------
-    console.log('\n🏡 Step 3: Seeding Customer Delivery Addresses...');
-    let addressCount = 0;
-    for (const c of rawCustomers) {
-      const u = userMap.get(c.email.toLowerCase().trim());
-      if (u && u.role === ROLES.USER) {
-        const coords = getCoordinates(c.city);
-        const pincodeMatch = (c.address || '').match(/\b\d{6}\b/) || ['411001'];
-        await Address.create({
-          user: u._id,
-          name: c.contactPerson || c.name,
-          mobile: (c.phone || '+91 98201 44219').replace(/[^0-9]/g, '').slice(-10),
-          pincode: pincodeMatch[0],
-          house: 'Plot / Farm No. 12',
-          street: c.address || 'Industrial MIDC Road',
-          landmark: 'Near Krishi Vigyan Kendra',
-          city: c.city || 'Pune',
-          state: c.state || 'Maharashtra',
-          type: 'Work',
-          isDefault: true,
-          coordinates: {
-            lat: coords[1],
-            lng: coords[0]
-          }
-        });
-        addressCount++;
-      }
+  // 8. Seed Regional Dealer Hub for DEALER_001
+  console.log('🚚 Seeding Regional Logistics Depot for DEALER_001...');
+  await DealerLocation.create({
+    hubCode: 'HUB-PUN-01',
+    dealer: dealerEntity._id,
+    dealerName: dealerEntity.businessName,
+    hubType: 'Regional Spares & Logistics Depot',
+    city: 'Pune',
+    state: 'Maharashtra',
+    pincode: '411001',
+    address: 'Plot 42, Sanaswadi Industrial Logistics Complex',
+    contactPhone: dealer1.phone,
+    capacityTons: 250,
+    serviceRadiusKm: 150,
+    activePinCodesCount: 48,
+    status: 'Operational',
+    location: {
+      type: 'Point',
+      coordinates: [73.8567, 18.5204]
     }
-    console.log(`✅ Seeded ${addressCount} default customer addresses.`);
+  });
+  console.log('✅ Seeded logistics depot.\n');
 
-    // --------------------------------------------------------------------------
-    // STEP 4: Seed Dealers & KYC Profiles
-    // --------------------------------------------------------------------------
-    console.log('\n🏢 Step 4: Seeding Certified Dealers & KYC Records...');
-    const dealerMap = new Map(); // dealerId (e.g. 'DEALER_001') -> Dealer Doc
+  // 9. Seed System Admin Settings & Audit Log
+  console.log('⚙️ Seeding Admin Platform Settings & Audit Log...');
+  await AdminSettings.create({
+    general: {
+      marketplaceName: 'GROVE Agritech & Commercial Marketplace',
+      supportEmail: 'operations@grove.com',
+      supportPhone: '+91 80000 12345',
+      defaultCurrency: 'INR (₹)',
+      maintenanceMode: false
+    },
+    commission: {
+      defaultCommissionRate: 5.0,
+      minPayoutThreshold: 10000,
+      escrowHoldPeriodDays: 3,
+      taxTcsRate: 1.0
+    },
+    notifications: {
+      emailOnNewKyc: true,
+      emailOnLowStock: true,
+      emailDailySummary: true
+    },
+    updatedBy: admin._id
+  });
 
-    const agriCategory = categoryMap.get('agriculture-farming') || fullCategoriesList[0];
-    const elecCategory = categoryMap.get('electronics-gadgets') || fullCategoriesList[1];
-    const autoCategory = categoryMap.get('automotive-spare-parts') || fullCategoriesList[2];
-    const grocCategory = categoryMap.get('groceries') || fullCategoriesList[3];
+  await AuditLog.create({
+    logId: 'LOG-INIT-001',
+    action: 'PLATFORM_BOOTSTRAP_SEED',
+    actor: admin._id,
+    actorRole: 'SUPER_ADMIN',
+    targetEntity: 'System',
+    targetId: 'SEED_INIT',
+    details: 'Database initialized with demo accounts (user1, dealer1, admin) and 15 catalog products.',
+    ipAddress: '127.0.0.1'
+  });
+  console.log('✅ Seeded Admin Settings and Audit Log.\n');
 
-    // Assign categories to dealers
-    const dealerCategoryAllocation = {
-      DEALER_001: agriCategory,
-      DEALER_002: agriCategory,
-      DEALER_003: agriCategory,
-      DEALER_004: autoCategory,
-      DEALER_005: agriCategory,
-      DEALER_006: agriCategory,
-      DEALER_007: elecCategory,
-      DEALER_008: autoCategory,
-      DEALER_009: grocCategory,
-      DEALER_010: autoCategory,
-      DEALER_011: agriCategory,
-      DEALER_012: grocCategory
-    };
+  console.log('==============================================================');
+  console.log('🎉 SEEDING COMPLETE! Summary of Seeded Data:');
+  console.log('==============================================================');
+  console.log(`• Categories:    ${categories.length} (Agriculture, Electronics, Automotive, Groceries)`);
+  console.log(`• Accounts:      3 Demo Accounts`);
+  console.log(`  1. Customer:   user1@grove.com   / Password@123`);
+  console.log(`  2. Dealer:     dealer1@grove.com / Password@123`);
+  console.log(`  3. Admin:      admin@grove.com   / Admin@123`);
+  console.log(`• Dealers:       1 Verified Dealer (Apex Agri-Tech & Machinery)`);
+  console.log(`• Products:      15 Total Products (5 per category)`);
+  console.log(`  - Agriculture: 5 products (SKU-AG-01 to SKU-AG-05)`);
+  console.log(`  - Electronics: 5 products (SKU-EL-01 to SKU-EL-05)`);
+  console.log(`  - Automotive:  5 products (SKU-AU-01 to SKU-AU-05)`);
+  console.log(`• Inventories:   15 Active Stock Records`);
+  console.log(`• Delivery Hubs: 1 Operational Logistics Hub`);
+  console.log(`• Addresses:     1 Default Customer Address`);
+  console.log('==============================================================\n');
 
-    for (const d of rawDealers) {
-      const u = userMap.get(d.email.toLowerCase().trim());
-      if (!u) continue;
-
-      let dealerStatus = DEALER_STATUS.PENDING;
-      if (d.status === 'Active') dealerStatus = DEALER_STATUS.APPROVED;
-      else if (d.status === 'Suspended') dealerStatus = DEALER_STATUS.SUSPENDED;
-      else if (d.status === 'Rejected') dealerStatus = DEALER_STATUS.REJECTED;
-
-      const primaryCat = dealerCategoryAllocation[d.id] || agriCategory;
-      const coords = getCoordinates(d.city);
-
-      const createdDealer = await Dealer.create({
-        user: u._id,
-        dealerCode: d.id,
-        businessName: d.businessName,
-        businessType: 'Authorized Dealer',
-        primaryCategory: primaryCat._id,
-        primaryCategoryName: primaryCat.name,
-        ownerName: d.contactPerson,
-        officialEmail: d.email.toLowerCase().trim(),
-        phone: d.phone,
-        gstin: d.gstin,
-        pan: d.pan || d.gstin.substring(2, 12),
-        businessAddress: {
-          address: d.warehouseAddress || `${d.city} Industrial Zone`,
-          city: d.city,
-          state: d.state,
-          pincode: d.pincode
-        },
-        warehouseAddress: d.warehouseAddress || `${d.city} Hub A, Bay 10`,
-        location: {
-          type: 'Point',
-          coordinates: coords
-        },
-        status: dealerStatus,
-        tier: d.tier || 'Silver Tier',
-        commissionRate: Number(d.commissionRate) || 5.0,
-        payoutHold: Boolean(d.payoutHold),
-        bankDetails: {
-          accountName: d.bankDetails?.accountName || d.businessName,
-          accountNumber: d.bankDetails?.accountNumber || '912020045582910',
-          ifsc: d.bankDetails?.ifsc || 'HDFC0001248',
-          bankName: d.bankDetails?.bankName || 'HDFC Bank',
-          upiId: `${d.id.toLowerCase()}@okhdfcbank`
-        },
-        kycDocuments: (d.kycDocuments || []).map((k) => ({
-          name: k.name,
-          url: `https://storage.grove.com/kyc/${d.id.toLowerCase()}_${k.name.toLowerCase().replace(/[^a-z0-9]+/g, '_')}.pdf`,
-          status: k.status === 'Verified' ? 'Verified' : 'Under Review',
-          uploadedAt: safeDate(k.uploadDate)
-        })),
-        storeSettings: {
-          tagline: 'Authorized regional hub delivering industrial-grade machinery & equipment.',
-          description: `${d.businessName} is a certified GROVE regional channel partner maintaining high-availability inventory.`,
-          operatingHours: 'Mon - Sat: 08:30 AM - 07:30 PM',
-          isOpen: true,
-          fulfillmentSLA: 99.0
-        }
-      });
-
-      dealerMap.set(d.id, createdDealer);
-    }
-    console.log(`✅ Seeded ${dealerMap.size} dealers with full business and banking profiles.`);
-
-    // --------------------------------------------------------------------------
-    // STEP 5: Seed Products (Admin + Agriculture + Groceries)
-    // --------------------------------------------------------------------------
-    console.log('\n🚜 Step 5: Seeding Multi-Brand Catalog Products...');
-    const rawAdminProducts = readJsonFile('adminProducts.json') || [];
-    const rawAgriProducts = readJsonFile('agricultureProducts.json') || [];
-
-    const productMap = new Map(); // prod.id or sku -> Product Doc
-    const productList = [];
-
-    // 5.1 Admin Catalog Products
-    for (const p of rawAdminProducts) {
-      const dealer = dealerMap.get(p.dealerId) || dealerMap.get('DEALER_001');
-      const cat =
-        categoryMap.get(p.category.toLowerCase()) ||
-        categoryMap.get(p.category.toLowerCase().replace(/ & /g, '-').replace(/\s+/g, '-')) ||
-        agriCategory;
-
-      const price = Number(p.price);
-      const mrp = Number(p.mrp || price);
-      const discount = mrp > price ? Math.round(((mrp - price) / mrp) * 100) : 0;
-      const slug = `${p.name.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '')}-${p.id.toLowerCase()}`;
-
-      const prod = await Product.create({
-        dealer: dealer._id,
-        dealerCode: dealer.dealerCode,
-        dealerName: dealer.businessName,
-        name: p.name.trim(),
-        slug,
-        sku: p.sku.toUpperCase().trim(),
-        category: cat._id,
-        categoryName: cat.name,
-        subcategory: p.subcategory || 'General Equipment',
-        brand: p.name.split(' ')[0] || 'GROVE Prime',
-        description: p.description,
-        price,
-        mrp,
-        discount,
-        stock: Number(p.stock) || 50,
-        threshold: Number(p.threshold) || 10,
-        status: p.status === 'Active' ? 'Active' : 'Draft',
-        image: p.image,
-        images: [p.image],
-        rating: Number(p.rating) || 4.5,
-        reviewCount: Math.floor(15 + Math.random() * 85),
-        totalSales: Number(p.totalSales) || 50,
-        warranty: '2 Years Comprehensive Manufacturer Warranty',
-        highlights: [
-          'Heavy-duty industrial build engineered for maximum operational uptime',
-          'Certified for commercial durability under extreme temperature & duty cycles',
-          'Direct OEM technical service and quick replacement warranty support'
-        ]
-      });
-
-      productMap.set(p.id, prod);
-      productMap.set(p.sku.toUpperCase(), prod);
-      productList.push(prod);
-    }
-
-    // 5.2 Agriculture In-Depth Catalog Products (from agricultureProducts.json)
-    const fallbackDealer = dealerMap.get('DEALER_001') || Array.from(dealerMap.values())[0];
-    for (const ag of rawAgriProducts) {
-      const sku = `AGR-IN-${ag.id.toUpperCase()}`;
-      if (productMap.has(sku)) continue;
-
-      const price = Number(ag.price) || 25000;
-      const mrp = Number(ag.originalPrice) || price;
-      const discount = mrp > price ? Math.round(((mrp - price) / mrp) * 100) : 0;
-      const slug = `${ag.slug || ag.name.toLowerCase().replace(/[^a-z0-9]+/g, '-')}-${ag.id}`;
-
-      const prod = await Product.create({
-        dealer: fallbackDealer._id,
-        dealerCode: fallbackDealer.dealerCode,
-        dealerName: fallbackDealer.businessName,
-        name: ag.name.trim(),
-        slug,
-        sku,
-        category: agriCategory._id,
-        categoryName: agriCategory.name,
-        subcategory: ag.specifications?.Subcategory || 'Tractors & Heavy Machinery',
-        brand: ag.brand || 'GROVE TerraForce',
-        description: ag.description || 'Premium commercial agricultural machinery.',
-        price,
-        mrp,
-        discount,
-        stock: 35,
-        threshold: 5,
-        status: 'Active',
-        image: ag.image,
-        images: ag.images && ag.images.length > 0 ? ag.images : [ag.image],
-        rating: Number(ag.rating) || 4.8,
-        reviewCount: Number(ag.reviewCount) || 120,
-        totalSales: 80,
-        specs: ag.specifications || {},
-        highlights: ag.highlights || [
-          'Engineered for maximum fuel efficiency and heavy implements',
-          'Heavy cast-iron chassis and rugged differential gears'
-        ],
-        warranty: ag.warranty || '3 Years Manufacturer Warranty'
-      });
-
-      productMap.set(ag.id, prod);
-      productMap.set(sku, prod);
-      productList.push(prod);
-    }
-
-    // 5.3 Groceries Seed Products
-    const groceriesDealer = dealerMap.get('DEALER_009') || fallbackDealer;
-    const grocerySeeds = [
-      {
-        name: 'Certified Organic Sona Masoori Rice (25kg)',
-        sku: 'GROC-RICE-SONA-25KG',
-        subcategory: 'Grains, Pulses & Millets',
-        price: 2450,
-        mrp: 2999,
-        image: 'https://images.unsplash.com/photo-1586201375761-83865001e31c?auto=format&fit=crop&w=800&q=80',
-        description: 'Single-origin aged organic Sona Masoori unpolished aromatic rice sourced directly from certified farmer producer groups.'
-      },
-      {
-        name: 'Wood-Pressed Cold Virgin Groundnut Oil (5L)',
-        sku: 'GROC-OIL-GND-5L',
-        subcategory: 'Organic Cold-Pressed Oils',
-        price: 1850,
-        mrp: 2200,
-        image: 'https://images.unsplash.com/photo-1474979266404-7eaacbcd87c5?auto=format&fit=crop&w=800&q=80',
-        description: 'Pure traditional kolhu wood-pressed unrefined groundnut cooking oil with zero preservatives and natural antioxidants.'
-      },
-      {
-        name: 'Export Grade Salem Turmeric Whole Finger (5kg)',
-        sku: 'GROC-SPICE-TURM-5KG',
-        subcategory: 'Spices, Herbs & Seasonings',
-        price: 950,
-        mrp: 1250,
-        image: 'https://images.unsplash.com/photo-1615485290382-441e4d049cb5?auto=format&fit=crop&w=800&q=80',
-        description: 'High-curcumin (5.2%) sun-dried raw Salem turmeric finger harvest directly from certified organic farms.'
-      }
-    ];
-
-    for (const g of grocerySeeds) {
-      const slug = g.name.toLowerCase().replace(/[^a-z0-9]+/g, '-');
-      const prod = await Product.create({
-        dealer: groceriesDealer._id,
-        dealerCode: groceriesDealer.dealerCode,
-        dealerName: groceriesDealer.businessName,
-        name: g.name,
-        slug,
-        sku: g.sku,
-        category: grocCategory._id,
-        categoryName: grocCategory.name,
-        subcategory: g.subcategory,
-        brand: 'GROVE Organics',
-        description: g.description,
-        price: g.price,
-        mrp: g.mrp,
-        discount: Math.round(((g.mrp - g.price) / g.mrp) * 100),
-        stock: 120,
-        threshold: 20,
-        status: 'Active',
-        image: g.image,
-        images: [g.image],
-        rating: 4.9,
-        reviewCount: 42,
-        totalSales: 160,
-        warranty: 'Freshness Guarantee & Farm Origin Verified'
-      });
-      productMap.set(g.sku, prod);
-      productList.push(prod);
-    }
-
-    console.log(`✅ Seeded ${productList.length} products with complete specs and pricing.`);
-
-    // --------------------------------------------------------------------------
-    // STEP 6: Seed Warehouse Inventory & Audit Ledger
-    // --------------------------------------------------------------------------
-    console.log('\n📊 Step 6: Initializing Inventory Balances and Audit Ledger...');
-    const adminUser = userMap.get('admin@grove.com');
-
-    for (const prod of productList) {
-      await Inventory.create({
-        product: prod._id,
-        dealer: prod.dealer,
-        sku: prod.sku,
-        currentStock: prod.stock,
-        reservedStock: 0,
-        threshold: prod.threshold,
-        locationBay: `Bay-${prod.sku.slice(-4)}`,
-        status: prod.stock > prod.threshold ? 'In Stock' : prod.stock > 0 ? 'Low Stock' : 'Out of Stock'
-      });
-
-      await InventoryTransaction.create({
-        product: prod._id,
-        dealer: prod.dealer,
-        type: 'PURCHASE_RESTOCK',
-        quantityChange: prod.stock,
-        balanceAfter: prod.stock,
-        referenceId: `RESTOCK-${prod.sku}`,
-        reason: 'Initial master warehouse stock onboarding from raw seed data',
-        performedBy: adminUser._id
-      });
-    }
-    console.log(`✅ Created ${productList.length} Inventory items & audit ledger transactions.`);
-
-    // --------------------------------------------------------------------------
-    // STEP 7: Seed Regional Hubs & Dealer Locations (GeoJSON 2dsphere)
-    // --------------------------------------------------------------------------
-    console.log('\n📍 Step 7: Seeding Dealer Regional Hubs & Service Areas...');
-    const rawLocations = readJsonFile('adminLocations.json') || [];
-
-    for (const loc of rawLocations) {
-      const dealer = dealerMap.get(loc.dealerId) || fallbackDealer;
-      const coords = getCoordinates(loc.city);
-
-      await DealerLocation.create({
-        hubCode: loc.hubCode,
-        dealer: dealer._id,
-        dealerName: loc.dealerName || dealer.businessName,
-        hubType: loc.hubType || 'Regional Logistics Hub',
-        city: loc.city,
-        state: loc.state,
-        pincode: loc.pincode,
-        address: loc.address,
-        contactPhone: loc.contactPhone,
-        capacityTons: loc.capacityTons || 250,
-        serviceRadiusKm: loc.serviceRadiusKm || 120,
-        activePincodes: [
-          loc.pincode,
-          String(Number(loc.pincode) + 1),
-          String(Number(loc.pincode) + 2),
-          String(Number(loc.pincode) + 3)
-        ],
-        location: {
-          type: 'Point',
-          coordinates: coords
-        },
-        status: loc.status === 'Operational' ? 'Operational' : 'Maintenance'
-      });
-    }
-    console.log(`✅ Seeded ${rawLocations.length} dealer hubs with GeoJSON 2dsphere indexing.`);
-
-    // --------------------------------------------------------------------------
-    // STEP 8: Seed Customer Orders & Discrete Dealer Sub-Orders
-    // --------------------------------------------------------------------------
-    console.log('\n🛍️ Step 8: Seeding Orders and Split Dealer Sub-Orders...');
-    const rawOrders = readJsonFile('adminOrders.json') || [];
-    const orderMap = new Map(); // order.id -> Order Doc
-
-    for (const ord of rawOrders) {
-      const customerEmail = ord.customer.email.toLowerCase().trim();
-      const customerUser = userMap.get(customerEmail) || userMap.get('farmer@grove.com');
-      const dealer = dealerMap.get(ord.dealerId) || fallbackDealer;
-
-      // Map order items to real products
-      const orderItems = [];
-      let calculatedItemsTotal = 0;
-
-      for (const item of ord.items) {
-        const prod =
-          productMap.get(item.id) ||
-          productMap.get(item.sku) ||
-          productList[0];
-
-        const itemQty = Number(item.quantity) || 1;
-        const itemPrice = Number(item.price) || prod.price;
-        const itemSubtotal = itemPrice * itemQty;
-        calculatedItemsTotal += itemSubtotal;
-
-        orderItems.push({
-          product: prod._id,
-          name: prod.name,
-          sku: prod.sku,
-          price: itemPrice,
-          mrp: prod.mrp,
-          quantity: itemQty,
-          category: prod.categoryName,
-          dealer: dealer._id,
-          dealerCode: dealer.dealerCode,
-          dealerName: dealer.businessName,
-          image: prod.image,
-          subtotal: itemSubtotal
-        });
-      }
-
-      const commissionRate = dealer.commissionRate || 5.0;
-      const commissionAmount = Math.round((calculatedItemsTotal * commissionRate) / 100);
-      const netSettlement = calculatedItemsTotal - commissionAmount;
-
-      const orderDoc = await Order.create({
-        orderNumber: ord.id,
-        customer: customerUser._id,
-        customerSnapshot: {
-          name: ord.customer.name,
-          email: ord.customer.email,
-          phone: ord.customer.phone
-        },
-        shippingAddress: {
-          name: ord.customer.contactPerson || ord.customer.name,
-          mobile: ord.customer.phone.replace(/[^0-9]/g, '').slice(-10),
-          pincode: (ord.customer.address.match(/\b\d{6}\b/) || ['411001'])[0],
-          house: 'Plot / Farm No. 42',
-          street: ord.customer.address,
-          landmark: 'Industrial Area Phase 2',
-          city: ord.customer.city,
-          state: ord.customer.state,
-          type: 'Work'
-        },
-        items: orderItems,
-        dealers: [dealer._id],
-        pricing: {
-          itemsTotal: calculatedItemsTotal,
-          discount: 0,
-          deliveryFee: 0,
-          tax: Math.round(calculatedItemsTotal * 0.05),
-          total: calculatedItemsTotal
-        },
-        payment: {
-          method: ord.paymentMethod.toLowerCase().includes('upi')
-            ? 'upi'
-            : ord.paymentMethod.toLowerCase().includes('card')
-            ? 'card'
-            : 'netbanking',
-          methodLabel: ord.paymentMethod,
-          status: ord.paymentStatus === 'Paid' ? 'Completed' : 'Pending',
-          transactionId: `TXN-${ord.id.replace('GRV-', '')}`,
-          paidAt: safeDate(ord.date)
-        },
-        orderStatus: ord.orderStatus || 'Placed',
-        timeline: [
-          {
-            status: 'Placed',
-            title: 'Order Placed by Customer',
-            note: 'Payment received via payment gateway.',
-            timestamp: safeDate(ord.date)
-          }
-        ]
-      });
-
-      // Create DealerOrder
-      const dealerOrderDoc = await DealerOrder.create({
-        parentOrder: orderDoc._id,
-        parentOrderNumber: orderDoc.orderNumber,
-        dealer: dealer._id,
-        dealerCode: dealer.dealerCode,
-        customer: customerUser._id,
-        customerSnapshot: {
-          name: ord.customer.name,
-          city: ord.customer.city,
-          state: ord.customer.state,
-          phone: ord.customer.phone,
-          address: ord.customer.address
-        },
-        items: orderItems.map((i) => ({
-          product: i.product,
-          name: i.name,
-          sku: i.sku,
-          price: i.price,
-          quantity: i.quantity,
-          subtotal: i.subtotal,
-          image: i.image
-        })),
-        subtotal: calculatedItemsTotal,
-        commissionRate,
-        commissionAmount,
-        netSettlementAmount: netSettlement,
-        orderStatus: ord.orderStatus || 'Placed',
-        paymentStatus: ord.paymentStatus === 'Paid' ? 'Paid' : 'Pending',
-        fulfillmentPartner: ord.carrier || 'Delhivery Cargo Express',
-        trackingNumber: ord.trackingNumber || `DLH-${Math.floor(100000 + Math.random() * 900000)}`,
-        estimatedDelivery: '3 - 5 Business Days',
-        payoutStatus: ord.paymentStatus === 'Paid' ? 'Escrow Held' : 'Pending Escrow',
-        timeline: [
-          {
-            status: ord.orderStatus || 'Placed',
-            title: `Order confirmed by ${dealer.businessName}`,
-            note: 'Package queued at dispatch sorting station.',
-            timestamp: safeDate(ord.date)
-          }
-        ]
-      });
-
-      orderDoc.dealerOrders.push(dealerOrderDoc._id);
-      await orderDoc.save();
-
-      orderMap.set(ord.id, orderDoc);
-    }
-    console.log(`✅ Seeded ${orderMap.size} master orders and linked DealerOrders.`);
-
-    // --------------------------------------------------------------------------
-    // STEP 9: Seed Financial Transactions & Settlements
-    // --------------------------------------------------------------------------
-    console.log('\n💳 Step 9: Seeding Financial Payments and Escrow Settlements...');
-    const rawPayments = readJsonFile('adminPayments.json') || {};
-    const rawTransactions = rawPayments.transactions || [];
-    const rawSettlements = rawPayments.dealerSettlements || [];
-
-    for (const txn of rawTransactions) {
-      const order = orderMap.get(txn.orderId) || Array.from(orderMap.values())[0];
-      const method = txn.paymentMethod.toLowerCase().includes('upi')
-        ? 'upi'
-        : txn.paymentMethod.toLowerCase().includes('card')
-        ? 'card'
-        : 'netbanking';
-
-      await Payment.create({
-        transactionId: txn.id,
-        order: order._id,
-        orderNumber: order.orderNumber,
-        customer: order.customer,
-        customerName: txn.customer,
-        amount: txn.amount,
-        currency: 'INR',
-        paymentMethod: method,
-        status: txn.status.toUpperCase() === 'FAILED' ? 'FAILED' : 'COMPLETED',
-        escrowStatus: txn.escrowStatus === 'Void' ? 'Refunded' : txn.escrowStatus || 'Escrow Held',
-        paidAt: safeDate(txn.date)
-      });
-    }
-
-    for (const st of rawSettlements) {
-      const dealer = dealerMap.get(st.dealerId) || fallbackDealer;
-      let settlementStatus = 'HELD';
-      if (st.status === 'Settled') settlementStatus = 'SETTLED';
-      else if (st.status === 'Pending Clearance') settlementStatus = 'PROCESSING';
-
-      await Settlement.create({
-        settlementId: st.id,
-        dealer: dealer._id,
-        dealerName: dealer.businessName,
-        cycle: 'October 2024 - Cycle 2',
-        grossAmount: st.grossSales,
-        commissionDeducted: st.commissionDeducted,
-        taxDeducted: Math.round(st.grossSales * 0.01),
-        netPayout: st.netPayout,
-        bankRef: `UTR-HDFC-${Math.floor(100000000 + Math.random() * 900000000)}`,
-        status: settlementStatus,
-        settledAt: st.payoutDate !== 'Pending KYC' ? safeDate(st.payoutDate) : null
-      });
-    }
-    console.log(`✅ Seeded ${rawTransactions.length} payments & ${rawSettlements.length} settlement batches.`);
-
-    // --------------------------------------------------------------------------
-    // STEP 10: Seed Customer & Dealer Support Tickets
-    // --------------------------------------------------------------------------
-    console.log('\n🎧 Step 10: Seeding Customer Support & Dealer Desk Tickets...');
-    const rawSupport = readJsonFile('adminSupport.json') || [];
-
-    for (const sup of rawSupport) {
-      const requester = userMap.get(sup.requesterEmail.toLowerCase().trim()) || adminUser;
-      const dealer = sup.concernedDealer ? dealerMap.get('DEALER_002') || fallbackDealer : null;
-
-      // Category mapper
-      let cat = 'General';
-      if (sup.category === 'Logistics & Courier') cat = 'Logistics & Courier';
-      else if (sup.category === 'Billing & Tax') cat = 'Billing & Tax';
-      else if (sup.category === 'Merchant Onboarding') cat = 'Account & KYC';
-      else if (sup.category === 'Transit Claims') cat = 'Logistics & Courier';
-
-      await Complaint.create({
-        ticketId: sup.id,
-        ticketType: sup.ticketType === 'dealer' ? 'dealer' : 'customer',
-        requester: requester._id,
-        requesterName: sup.requesterName,
-        requesterEmail: sup.requesterEmail,
-        requesterRole: sup.requesterRole,
-        concernedDealer: dealer ? dealer._id : null,
-        concernedDealerName: sup.concernedDealer || '',
-        subject: sup.subject,
-        category: cat,
-        priority: sup.priority === 'Normal' ? 'Medium' : sup.priority,
-        status: sup.status,
-        messages: (sup.messages || []).map((m) => ({
-          sender: requester._id,
-          senderName: m.sender,
-          senderRole: m.senderRole === 'admin' ? 'admin' : m.senderRole === 'dealer' ? 'dealer' : 'customer',
-          text: m.text,
-          timestamp: safeDate(m.timestamp)
-        })),
-        internalNotes: (sup.internalNotes || []).map((note) => ({
-          author: adminUser._id,
-          note,
-          timestamp: safeDate(sup.createdAt)
-        }))
-      });
-    }
-    console.log(`✅ Seeded ${rawSupport.length} customer and dealer support complaints.`);
-
-    // --------------------------------------------------------------------------
-    // STEP 11: Seed Platform Admin Settings & Policy Config
-    // --------------------------------------------------------------------------
-    console.log('\n⚙️ Step 11: Seeding Platform Governance & Admin Settings...');
-    const rawSettings = readJsonFile('adminSettings.json') || {};
-
-    await AdminSettings.create({
-      general: {
-        marketplaceName: rawSettings.general?.marketplaceName || 'GROVE Agritech & Commercial Marketplace',
-        supportEmail: rawSettings.general?.supportEmail || 'operations@grove.com',
-        supportPhone: rawSettings.general?.supportPhone || '+91 80000 12345',
-        defaultCurrency: 'INR (₹)',
-        maintenanceMode: false
-      },
-      commission: {
-        defaultCommissionRate: rawSettings.commission?.defaultCommissionRate || 5.0,
-        minPayoutThreshold: rawSettings.commission?.minPayoutThreshold || 10000,
-        escrowHoldPeriodDays: rawSettings.commission?.escrowHoldPeriodDays || 3,
-        taxTcsRate: rawSettings.commission?.taxTcsRate || 1.0
-      },
-      notifications: {
-        emailOnNewKyc: true,
-        emailOnLowStock: true,
-        emailDailySummary: true
-      },
-      updatedBy: adminUser._id
-    });
-    console.log('✅ Seeded master platform admin settings.');
-
-    // --------------------------------------------------------------------------
-    // STEP 12: Seed Security Audit Logs
-    // --------------------------------------------------------------------------
-    console.log('\n🛡️ Step 12: Seeding Security and Regulatory Audit Logs...');
-    const rawReports = readJsonFile('adminReports.json') || {};
-    const rawAuditLogs = rawReports.auditLogs || [];
-
-    for (const log of rawAuditLogs) {
-      await AuditLog.create({
-        logId: log.id,
-        action: log.action,
-        actor: adminUser._id,
-        actorRole: log.role || 'Super Admin',
-        targetEntity: log.module,
-        targetId: log.id,
-        details: log.details,
-        ipAddress: '192.168.1.100',
-        userAgent: 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) Chrome/120.0'
-      });
-    }
-    console.log(`✅ Seeded ${rawAuditLogs.length} security audit log records.`);
-
-    // --------------------------------------------------------------------------
-    // SUMMARY
-    // --------------------------------------------------------------------------
-    console.log('\n================================================================');
-    console.log('🎉 GROVE DATABASE SEEDING COMPLETED SUCCESSFULLY!');
-    console.log('================================================================');
-    console.table([
-      { Collection: 'Categories', Count: fullCategoriesList.length },
-      { Collection: 'Users', Count: userMap.size },
-      { Collection: 'Customer Addresses', Count: addressCount },
-      { Collection: 'Dealers', Count: dealerMap.size },
-      { Collection: 'Products', Count: productList.length },
-      { Collection: 'Inventory Items', Count: productList.length },
-      { Collection: 'Inventory Transactions', Count: productList.length },
-      { Collection: 'Dealer Hub Locations', Count: rawLocations.length },
-      { Collection: 'Master Orders', Count: orderMap.size },
-      { Collection: 'Dealer Orders', Count: orderMap.size },
-      { Collection: 'Payments', Count: rawTransactions.length },
-      { Collection: 'Settlements', Count: rawSettlements.length },
-      { Collection: 'Support Complaints', Count: rawSupport.length },
-      { Collection: 'Audit Logs', Count: rawAuditLogs.length }
-    ]);
-    console.log('================================================================\n');
-  } catch (error) {
-    console.error('\n❌ SEEDING FAILED WITH ERROR:');
-    console.error(error);
-    process.exit(1);
-  } finally {
-    await disconnectDB();
-  }
-};
-
-// Execute if run directly from command line
-if (process.argv[1] === fileURLToPath(import.meta.url)) {
-  seedDatabase();
+  await disconnectDB();
+  process.exit(0);
 }
 
+seedDatabase().catch(async (err) => {
+  console.error('❌ Database seed process failed with error:', err);
+  await disconnectDB();
+  process.exit(1);
+});
