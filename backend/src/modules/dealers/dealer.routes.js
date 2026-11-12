@@ -19,19 +19,6 @@ router.post(
 );
 
 /**
- * Public & Admin Dealer Listing
- * GET /api/v1/dealers
- */
-router.get('/', dealerController.getAllDealers);
-router.get('/:id', dealerController.getDealerById);
-router.patch(
-  '/:id/status',
-  authenticate,
-  authorize(ROLES.SUPER_ADMIN),
-  dealerController.toggleDealerStatus
-);
-
-/**
  * Get Authenticated Dealer Profile
  * GET /api/v1/dealers/profile
  */
@@ -53,6 +40,19 @@ router.put(
   requireApprovedDealer,
   validate(dealerStoreSettingsSchema),
   dealerController.updateStoreSettings
+);
+
+/**
+ * Public & Admin Dealer Listing
+ * GET /api/v1/dealers
+ */
+router.get('/', dealerController.getAllDealers);
+router.get('/:id', dealerController.getDealerById);
+router.patch(
+  '/:id/status',
+  authenticate,
+  authorize(ROLES.SUPER_ADMIN),
+  dealerController.toggleDealerStatus
 );
 
 export default router;

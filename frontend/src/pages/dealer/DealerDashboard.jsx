@@ -287,64 +287,72 @@ export default function DealerDashboard() {
                     </tr>
                   </thead>
                   <tbody className="divide-y divide-neutral-100">
-                    {recentOrders.map((order) => {
-                      const customerInitials = order.customer.name
-                        .split(' ')
-                        .map((w) => w[0])
-                        .join('')
-                        .slice(0, 2)
-                        .toUpperCase();
+                    {recentOrders.length === 0 ? (
+                      <tr>
+                        <td colSpan={5} className="py-8 text-center text-neutral-500 font-medium">
+                          No customer purchase orders found in database.
+                        </td>
+                      </tr>
+                    ) : (
+                      recentOrders.map((order) => {
+                        const customerInitials = (order.customer?.name || 'Customer')
+                          .split(' ')
+                          .map((w) => w[0])
+                          .join('')
+                          .slice(0, 2)
+                          .toUpperCase();
 
-                      return (
-                        <tr key={order.id} className="hover:bg-[#EDF6ED]/60 transition-colors">
-                          <td className="py-3 px-3">
-                            <span className="font-mono font-bold text-[#012D1D]">#{order.id}</span>
-                            <div className="text-[10px] text-[#717973] font-mono mt-0.5">
-                              {order.placedAt.split(',')[0]}
-                            </div>
-                          </td>
-                          <td className="py-3 px-3">
-                            <div className="flex items-center gap-2">
-                              <div className="w-7 h-7 rounded-full bg-neutral-100 flex items-center justify-center font-bold text-[#151D18] text-[10px] shrink-0">
-                                {customerInitials}
+                        return (
+                          <tr key={order.id} className="hover:bg-[#EDF6ED]/60 transition-colors">
+                            <td className="py-3 px-3">
+                              <span className="font-mono font-bold text-[#012D1D]">#{order.id}</span>
+                              <div className="text-[10px] text-[#717973] font-mono mt-0.5">
+                                {(order.placedAt || '').split(',')[0]}
                               </div>
-                              <div className="flex flex-col min-w-0">
-                                <span className="font-bold text-[#151D18] truncate max-w-[140px]">
-                                  {order.customer.name}
-                                </span>
-                                <span className="text-[10px] text-[#717973] truncate">
-                                  {order.customer.city}, {order.customer.state}
-                                </span>
+                            </td>
+                            <td className="py-3 px-3">
+                              <div className="flex items-center gap-2">
+                                <div className="w-7 h-7 rounded-full bg-neutral-100 flex items-center justify-center font-bold text-[#151D18] text-[10px] shrink-0">
+                                  {customerInitials}
+                                </div>
+                                <div className="flex flex-col min-w-0">
+                                  <span className="font-bold text-[#151D18] truncate max-w-[140px]">
+                                    {order.customer?.name || 'Customer'}
+                                  </span>
+                                  <span className="text-[10px] text-[#717973] truncate">
+                                    {order.customer?.city || 'Pune'}, {order.customer?.state || 'MH'}
+                                  </span>
+                                </div>
                               </div>
-                            </div>
-                          </td>
-                          <td className="py-3 px-3 font-mono font-bold text-[#151D18]">
-                            ₹{order.amount.toLocaleString('en-IN')}
-                          </td>
-                          <td className="py-3 px-3">
-                            <span className={`inline-flex items-center px-2 py-0.5 rounded-full font-mono text-[10px] font-bold ${
-                              order.orderStatus === 'Placed'
-                                ? 'bg-[#AEEECB] text-[#0E5138]'
-                                : order.orderStatus === 'Processing'
-                                ? 'bg-amber-100 text-amber-800'
-                                : order.orderStatus === 'Shipped'
-                                ? 'bg-blue-100 text-blue-800'
-                                : 'bg-neutral-100 text-neutral-700'
-                            }`}>
-                              {order.orderStatus}
-                            </span>
-                          </td>
-                          <td className="py-3 px-3 text-right">
-                            <Link
-                              to={`/dealer/orders/${order.id}`}
-                              className="font-bold text-[#2C694E] hover:text-[#012D1D] hover:underline"
-                            >
-                              View
-                            </Link>
-                          </td>
-                        </tr>
-                      );
-                    })}
+                            </td>
+                            <td className="py-3 px-3 font-mono font-bold text-[#151D18]">
+                              ₹{(order.amount || 0).toLocaleString('en-IN')}
+                            </td>
+                            <td className="py-3 px-3">
+                              <span className={`inline-flex items-center px-2 py-0.5 rounded-full font-mono text-[10px] font-bold ${
+                                order.orderStatus === 'Placed'
+                                  ? 'bg-[#AEEECB] text-[#0E5138]'
+                                  : order.orderStatus === 'Processing'
+                                  ? 'bg-amber-100 text-amber-800'
+                                  : order.orderStatus === 'Shipped'
+                                  ? 'bg-blue-100 text-blue-800'
+                                  : 'bg-neutral-100 text-neutral-700'
+                              }`}>
+                                {order.orderStatus}
+                              </span>
+                            </td>
+                            <td className="py-3 px-3 text-right">
+                              <Link
+                                to={`/dealer/orders/${order.id}`}
+                                className="font-bold text-[#2C694E] hover:text-[#012D1D] hover:underline"
+                              >
+                                View
+                              </Link>
+                            </td>
+                          </tr>
+                        );
+                      })
+                    )}
                   </tbody>
                 </table>
               </div>
@@ -366,39 +374,45 @@ export default function DealerDashboard() {
               </div>
 
               <div className="flex flex-col gap-2.5">
-                {lowStockItems.map((item) => (
-                  <div 
-                    key={item.id} 
-                    className="flex items-center justify-between p-2.5 rounded-xl bg-[#EDF6ED]/70 hover:bg-[#EDF6ED] transition-colors"
-                  >
-                    <div className="flex items-center gap-2.5 min-w-0">
-                      <img 
-                        src={item.image} 
-                        alt={item.name} 
-                        className="w-10 h-10 rounded-lg object-cover bg-white border border-[#C1C8C2]/40 shrink-0" 
-                      />
-                      <div className="flex flex-col min-w-0">
-                        <span className="text-xs font-semibold text-[#151D18] truncate max-w-[130px]">
-                          {item.name}
+                {lowStockItems.length === 0 ? (
+                  <div className="py-6 text-center text-xs text-[#717973] font-medium bg-[#EDF6ED]/40 rounded-xl border border-[#C1C8C2]/30">
+                    All inventory levels are healthy. No items below critical threshold.
+                  </div>
+                ) : (
+                  lowStockItems.map((item) => (
+                    <div 
+                      key={item.id} 
+                      className="flex items-center justify-between p-2.5 rounded-xl bg-[#EDF6ED]/70 hover:bg-[#EDF6ED] transition-colors"
+                    >
+                      <div className="flex items-center gap-2.5 min-w-0">
+                        <img 
+                          src={item.image} 
+                          alt={item.name} 
+                          className="w-10 h-10 rounded-lg object-cover bg-white border border-[#C1C8C2]/40 shrink-0" 
+                        />
+                        <div className="flex flex-col min-w-0">
+                          <span className="text-xs font-semibold text-[#151D18] truncate max-w-[130px]">
+                            {item.name}
+                          </span>
+                          <span className="text-[10px] font-mono text-[#717973]">
+                            SKU: {item.sku}
+                          </span>
+                        </div>
+                      </div>
+                      <div className="flex flex-col items-end gap-1 shrink-0 ml-2">
+                        <span className="px-2 py-0.5 rounded-md bg-red-100 text-red-700 font-mono text-[10px] font-bold">
+                          {item.stock} units left
                         </span>
-                        <span className="text-[10px] font-mono text-[#717973]">
-                          SKU: {item.sku}
-                        </span>
+                        <Link 
+                          to="/dealer/inventory"
+                          className="text-[#2C694E] text-[11px] font-bold hover:underline"
+                        >
+                          Restock
+                        </Link>
                       </div>
                     </div>
-                    <div className="flex flex-col items-end gap-1 shrink-0 ml-2">
-                      <span className="px-2 py-0.5 rounded-md bg-red-100 text-red-700 font-mono text-[10px] font-bold">
-                        {item.stock} units left
-                      </span>
-                      <Link 
-                        to="/dealer/inventory"
-                        className="text-[#2C694E] text-[11px] font-bold hover:underline"
-                      >
-                        Restock
-                      </Link>
-                    </div>
-                  </div>
-                ))}
+                  ))
+                )}
               </div>
             </div>
 

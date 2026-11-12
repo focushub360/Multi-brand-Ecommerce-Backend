@@ -70,9 +70,9 @@ export default function DealerOrders() {
       // Search query
       if (searchQuery.trim()) {
         const query = searchQuery.toLowerCase();
-        const matchesId = order.id.toLowerCase().includes(query);
-        const matchesProduct = order.product?.name?.toLowerCase().includes(query);
-        const matchesCustomer = order.customer?.name?.toLowerCase().includes(query) || order.customer?.city?.toLowerCase().includes(query);
+        const matchesId = (order.id || '').toLowerCase().includes(query) || (order.orderNumber || '').toLowerCase().includes(query);
+        const matchesProduct = (order.product?.name || '').toLowerCase().includes(query) || (order.items || []).some(i => (i.name || '').toLowerCase().includes(query));
+        const matchesCustomer = (order.customer?.name || '').toLowerCase().includes(query) || (order.customer?.city || '').toLowerCase().includes(query);
         if (!matchesId && !matchesProduct && !matchesCustomer) {
           return false;
         }

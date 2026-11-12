@@ -246,6 +246,8 @@ export default function App() {
         />
 
         {/* Protected Dealer Portal Routes */}
+        <Route path="/dealer" element={<Navigate to="/dealer/dashboard" replace />} />
+        <Route path="/dealer/" element={<Navigate to="/dealer/dashboard" replace />} />
         <Route 
           path="/dealer/dashboard" 
           element={

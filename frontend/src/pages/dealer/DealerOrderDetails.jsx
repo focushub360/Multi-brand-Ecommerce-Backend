@@ -19,7 +19,7 @@ import {
   Building2
 } from 'lucide-react';
 import DealerLayout from '../../components/dealer/DealerLayout';
-import { getDealerOrderById, updateDealerOrderStatus } from '../../services/dealerService';
+import { getDealerOrderById, fetchDealerOrderById, updateDealerOrderStatus } from '../../services/dealerService';
 import { getActiveDealerId } from '../../utils/auth';
 
 export default function DealerOrderDetails() {
@@ -31,15 +31,28 @@ export default function DealerOrderDetails() {
   const [toastMessage, setToastMessage] = useState('');
 
   useEffect(() => {
+    let isMounted = true;
     const activeId = getActiveDealerId();
     const found = getDealerOrderById(activeId, id);
     if (found) {
       setOrder(found);
       setNotFound(false);
-    } else {
-      setOrder(null);
-      setNotFound(true);
     }
+
+    fetchDealerOrderById(id, activeId).then((live) => {
+      if (!isMounted) return;
+      if (live) {
+        setOrder(live);
+        setNotFound(false);
+      } else if (!found) {
+        setNotFound(true);
+      }
+    }).catch(() => {
+      if (!isMounted) return;
+      if (!found) setNotFound(true);
+    });
+
+    return () => { isMounted = false; };
   }, [id]);
 
   if (notFound) {

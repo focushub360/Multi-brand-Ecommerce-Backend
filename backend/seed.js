@@ -1407,7 +1407,7 @@ async function seedDatabase() {
 
   // 7. Seed Default Delivery Address for user1
   console.log('📍 Seeding Default Delivery Address for user1...');
-  await Address.create({
+  const userAddress = await Address.create({
     user: user1._id,
     name: user1.name,
     mobile: '9876543210',
@@ -1449,7 +1449,230 @@ async function seedDatabase() {
   });
   console.log('✅ Seeded logistics depot.\n');
 
-  // 9. Seed System Admin Settings & Audit Log
+  // 9. Seed Real Customer Orders & Dealer Suborders
+  console.log('🛍️ Seeding Customer Orders and Dealer Suborders...');
+  const orderSeeds = [
+    {
+      orderNumber: 'ORD-7821',
+      sku: 'SKU-AG-10',
+      quantity: 1,
+      orderStatus: 'Delivered',
+      paymentMethod: 'upi',
+      paymentStatus: 'Completed',
+      daysAgo: 10,
+      trackingNumber: 'DEL-AG-882190'
+    },
+    {
+      orderNumber: 'ORD-7822',
+      sku: 'SKU-AG-01',
+      quantity: 2,
+      orderStatus: 'Shipped',
+      paymentMethod: 'card',
+      paymentStatus: 'Completed',
+      daysAgo: 4,
+      trackingNumber: 'DEL-AG-993182'
+    },
+    {
+      orderNumber: 'ORD-7823',
+      sku: 'SKU-EL-01',
+      quantity: 1,
+      orderStatus: 'Processing',
+      paymentMethod: 'netbanking',
+      paymentStatus: 'Completed',
+      daysAgo: 2,
+      trackingNumber: 'DEL-EL-440192'
+    },
+    {
+      orderNumber: 'ORD-7824',
+      sku: 'SKU-AU-04',
+      quantity: 2,
+      orderStatus: 'Placed',
+      paymentMethod: 'cod',
+      paymentStatus: 'Pending',
+      daysAgo: 0,
+      trackingNumber: ''
+    },
+    {
+      orderNumber: 'ORD-7825',
+      sku: 'SKU-AG-07',
+      quantity: 1,
+      orderStatus: 'Delivered',
+      paymentMethod: 'upi',
+      paymentStatus: 'Completed',
+      daysAgo: 18,
+      trackingNumber: 'DEL-AG-110294'
+    }
+  ];
+
+  for (const s of orderSeeds) {
+    const prod = createdProducts.find((p) => p.sku === s.sku);
+    if (!prod) continue;
+
+    const subtotal = prod.price * s.quantity;
+    const createdAt = new Date(Date.now() - s.daysAgo * 24 * 60 * 60 * 1000);
+    const commissionRate = 5.0;
+    const commissionAmount = Math.round((subtotal * commissionRate) / 100);
+    const netSettlementAmount = subtotal - commissionAmount;
+
+    const masterOrder = await Order.create({
+      orderNumber: s.orderNumber,
+      customer: user1._id,
+      customerSnapshot: {
+        name: user1.name,
+        email: user1.email,
+        phone: user1.phone
+      },
+      shippingAddress: {
+        name: userAddress.name,
+        mobile: userAddress.mobile,
+        pincode: userAddress.pincode,
+        house: userAddress.house,
+        street: userAddress.street,
+        landmark: userAddress.landmark,
+        city: userAddress.city,
+        state: userAddress.state,
+        type: userAddress.type
+      },
+      items: [
+        {
+          product: prod._id,
+          name: prod.name,
+          sku: prod.sku,
+          price: prod.price,
+          mrp: prod.mrp,
+          quantity: s.quantity,
+          category: prod.categoryName,
+          dealer: dealerEntity._id,
+          dealerCode: dealerEntity.dealerCode,
+          dealerName: dealerEntity.businessName,
+          image: prod.image,
+          subtotal
+        }
+      ],
+      dealers: [dealerEntity._id],
+      pricing: {
+        itemsTotal: subtotal,
+        discount: 0,
+        deliveryFee: 0,
+        tax: Math.round(subtotal * 0.18),
+        total: subtotal + Math.round(subtotal * 0.18)
+      },
+      payment: {
+        method: s.paymentMethod,
+        methodLabel: s.paymentMethod.toUpperCase(),
+        status: s.paymentStatus
+      },
+      orderStatus: s.orderStatus,
+      timeline: [
+        {
+          status: 'Placed',
+          title: 'Order Confirmed',
+          note: 'Customer order placed successfully.',
+          timestamp: createdAt
+        },
+        ...(s.orderStatus === 'Shipped' || s.orderStatus === 'Delivered'
+          ? [
+              {
+                status: 'Shipped',
+                title: 'Dispatched from Warehouse',
+                note: `Carrier tracking: ${s.trackingNumber}`,
+                timestamp: new Date(createdAt.getTime() + 24 * 3600000)
+              }
+            ]
+          : []),
+        ...(s.orderStatus === 'Delivered'
+          ? [
+              {
+                status: 'Delivered',
+                title: 'Order Delivered',
+                note: 'Package signed and delivered to customer.',
+                timestamp: new Date(createdAt.getTime() + 72 * 3600000)
+              }
+            ]
+          : [])
+      ],
+      createdAt,
+      updatedAt: createdAt
+    });
+
+    const dealerOrder = await DealerOrder.create({
+      parentOrder: masterOrder._id,
+      parentOrderNumber: masterOrder.orderNumber,
+      dealer: dealerEntity._id,
+      dealerCode: dealerEntity.dealerCode,
+      customer: user1._id,
+      customerSnapshot: {
+        name: user1.name,
+        city: userAddress.city,
+        state: userAddress.state,
+        phone: user1.phone,
+        address: `${userAddress.house}, ${userAddress.street}, ${userAddress.city} - ${userAddress.pincode}`
+      },
+      items: [
+        {
+          product: prod._id,
+          name: prod.name,
+          sku: prod.sku,
+          price: prod.price,
+          quantity: s.quantity,
+          subtotal,
+          image: prod.image
+        }
+      ],
+      subtotal,
+      commissionRate,
+      commissionAmount,
+      netSettlementAmount,
+      orderStatus: s.orderStatus,
+      paymentStatus: s.paymentStatus === 'Completed' ? 'Paid' : 'Pending',
+      fulfillmentPartner: 'Delhivery Cargo Express',
+      trackingNumber: s.trackingNumber,
+      estimatedDelivery: '3 - 5 Business Days',
+      payoutStatus: s.orderStatus === 'Delivered' ? 'Settled' : s.orderStatus === 'Shipped' ? 'Released' : 'Escrow Held',
+      timeline: masterOrder.timeline,
+      createdAt,
+      updatedAt: createdAt
+    });
+
+    masterOrder.dealerOrders = [dealerOrder._id];
+    await masterOrder.save();
+
+    await Payment.create({
+      transactionId: `TXN-ORD-${s.orderNumber}-${Math.floor(1000 + Math.random() * 9000)}`,
+      order: masterOrder._id,
+      orderNumber: masterOrder.orderNumber,
+      customer: user1._id,
+      customerName: user1.name,
+      amount: masterOrder.pricing.total,
+      currency: 'INR',
+      paymentMethod: s.paymentMethod,
+      status: s.paymentStatus === 'Completed' ? 'COMPLETED' : 'PENDING',
+      escrowStatus: s.orderStatus === 'Delivered' ? 'Released' : 'Escrow Held',
+      paidAt: s.paymentStatus === 'Completed' ? createdAt : null
+    });
+
+    if (s.orderStatus === 'Delivered') {
+      await Settlement.create({
+        settlementId: `SETTL-${s.orderNumber}`,
+        dealer: dealerEntity._id,
+        dealerName: dealerEntity.businessName,
+        cycle: 'Weekly Standard Payout',
+        grossAmount: subtotal,
+        commissionDeducted: commissionAmount,
+        taxDeducted: Math.round(subtotal * 0.01),
+        netPayout: netSettlementAmount - Math.round(subtotal * 0.01),
+        bankRef: `NEFT${Math.floor(100000000 + Math.random() * 900000000)}`,
+        status: 'SETTLED',
+        dealerOrders: [dealerOrder._id],
+        settledAt: new Date(createdAt.getTime() + 96 * 3600000)
+      });
+    }
+
+    await Product.findByIdAndUpdate(prod._id, { $inc: { totalSales: s.quantity } });
+  }
+  console.log(`✅ Seeded ${orderSeeds.length} customer orders and dealer suborders.\n`);
+
+  // 10. Seed System Admin Settings & Audit Log
   console.log('⚙️ Seeding Admin Platform Settings & Audit Log...');
   await AdminSettings.create({
     general: {

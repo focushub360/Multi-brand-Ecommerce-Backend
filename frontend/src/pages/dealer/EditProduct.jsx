@@ -11,7 +11,7 @@ import {
   AlertCircle 
 } from 'lucide-react';
 import DealerLayout from '../../components/dealer/DealerLayout';
-import { getDealerProductById, updateDealerProduct, deleteDealerProduct } from '../../services/dealerService';
+import { getDealerProductById, fetchDealerProductById, updateDealerProduct, deleteDealerProduct } from '../../services/dealerService';
 import { getActiveDealerId } from '../../utils/auth';
 
 export default function EditProduct() {
@@ -24,32 +24,46 @@ export default function EditProduct() {
   const [errors, setErrors] = useState({});
   const [isSaving, setIsSaving] = useState(false);
 
+  const populateForm = (found) => {
+    setProduct(found);
+    setFormData({
+      name: found.name || '',
+      description: found.description || '',
+      category: found.category || 'Agriculture & Farming',
+      subcategory: found.subcategory || 'Micro-Irrigation & Tubing',
+      sellingPrice: found.price || 0,
+      mrpPrice: found.mrp || found.originalPrice || found.price || 0,
+      gstRate: String(found.gstRate || '12'),
+      sku: found.sku || '',
+      stock: found.stock || 0,
+      threshold: found.threshold || 10,
+      status: found.status || 'active',
+      material: found.specs?.material || '',
+      pipeSize: found.specs?.pipeSize || '',
+      flowRate: found.specs?.flowRate || '',
+      images: found.images && found.images.length > 0 ? found.images : [found.image || '/images/card-agri-clean.png']
+    });
+  };
+
   useEffect(() => {
     document.title = 'Edit Product | GROVE Dealer Portal';
     window.scrollTo(0, 0);
 
+    let isMounted = true;
     const activeId = getActiveDealerId();
     const found = getDealerProductById(activeId, id);
     if (found) {
-      setProduct(found);
-      setFormData({
-        name: found.name || '',
-        description: found.description || '',
-        category: found.category || 'Agriculture & Farming',
-        subcategory: found.subcategory || 'Micro-Irrigation & Tubing',
-        sellingPrice: found.price || 0,
-        mrpPrice: found.mrp || found.originalPrice || found.price || 0,
-        gstRate: String(found.gstRate || '12'),
-        sku: found.sku || '',
-        stock: found.stock || 0,
-        threshold: found.threshold || 10,
-        status: found.status || 'active',
-        material: found.specs?.material || '',
-        pipeSize: found.specs?.pipeSize || '',
-        flowRate: found.specs?.flowRate || '',
-        images: found.images && found.images.length > 0 ? found.images : [found.image || '/images/card-agri-clean.png']
-      });
+      populateForm(found);
     }
+
+    fetchDealerProductById(id, activeId).then((live) => {
+      if (!isMounted) return;
+      if (live) {
+        populateForm(live);
+      }
+    }).catch(() => {});
+
+    return () => { isMounted = false; };
   }, [id]);
 
   if (!formData && !product) {

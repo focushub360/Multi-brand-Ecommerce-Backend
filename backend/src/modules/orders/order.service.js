@@ -402,7 +402,13 @@ export class OrderService {
    * Get Dealer Suborder Details
    */
   static async getDealerSubOrderById(dealerId, subOrderId) {
-    const order = await DealerOrder.findOne({ _id: subOrderId, dealer: dealerId }).lean();
+    const query = { dealer: dealerId };
+    if (String(subOrderId).match(/^[0-9a-fA-F]{24}$/)) {
+      query._id = subOrderId;
+    } else {
+      query.parentOrderNumber = subOrderId;
+    }
+    const order = await DealerOrder.findOne(query).lean();
     if (!order) throw ApiError.notFound('Suborder not found for your dealership.');
     return order;
   }
@@ -411,7 +417,13 @@ export class OrderService {
    * Update Dealer Fulfillment Status
    */
   static async updateDealerFulfillmentStatus(dealerId, subOrderId, data) {
-    const subOrder = await DealerOrder.findOne({ _id: subOrderId, dealer: dealerId });
+    const query = { dealer: dealerId };
+    if (String(subOrderId).match(/^[0-9a-fA-F]{24}$/)) {
+      query._id = subOrderId;
+    } else {
+      query.parentOrderNumber = subOrderId;
+    }
+    const subOrder = await DealerOrder.findOne(query);
     if (!subOrder) throw ApiError.notFound('Suborder not found.');
 
     const oldStatus = subOrder.orderStatus;
