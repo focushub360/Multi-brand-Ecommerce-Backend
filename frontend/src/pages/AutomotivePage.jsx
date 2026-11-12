@@ -283,7 +283,7 @@ export default function AutomotivePage() {
             <div className="flex-1 w-full min-w-0">
               {/* Toolbar: Heading, Counts, Mobile Toggle & Sort */}
               <AutomotiveProductToolbar
-                totalProducts={AUTOMOTIVE_PRODUCTS.length}
+                totalProducts={productsList.length}
                 filteredCount={filteredAndSortedProducts.length}
                 startItem={startItem}
                 endItem={endItem}

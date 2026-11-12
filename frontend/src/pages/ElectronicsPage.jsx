@@ -283,7 +283,7 @@ export default function ElectronicsPage() {
             <div className="flex-1 w-full min-w-0">
               {/* Toolbar: Heading, Counts, Mobile Toggle & Sort */}
               <ElectronicsProductToolbar
-                totalProducts={ELECTRONICS_PRODUCTS.length}
+                totalProducts={productsList.length}
                 filteredCount={filteredAndSortedProducts.length}
                 startItem={startItem}
                 endItem={endItem}

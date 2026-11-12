@@ -253,7 +253,7 @@ export default function AgriculturePage() {
             <div className="flex-1 w-full min-w-0">
               {/* Toolbar: Heading, Counts, Mobile Toggle & Sort */}
               <AgricultureProductToolbar
-                totalProducts={agricultureData.length}
+                totalProducts={productsList.length}
                 filteredCount={filteredAndSortedProducts.length}
                 startItem={startItem}
                 endItem={endItem}
