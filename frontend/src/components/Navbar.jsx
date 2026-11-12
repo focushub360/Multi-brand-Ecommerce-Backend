@@ -89,7 +89,7 @@ export default function Navbar({ darkText = false }) {
     : 'HP';
 
   return (
-    <header className="w-full relative z-30">
+    <header className="w-full relative z-[100]">
       <nav 
         aria-label="Main Navigation" 
         className="w-full bg-transparent pt-4 sm:pt-6 pb-3 sm:pb-4 px-4 sm:px-6 md:px-10 lg:px-16 max-w-[1440px] mx-auto flex items-center justify-between"
@@ -167,7 +167,7 @@ export default function Navbar({ darkText = false }) {
               </button>
 
               {accountDropdownOpen && (
-                <div className="absolute right-0 mt-2 w-64 bg-white rounded-[18px] shadow-2xl border border-neutral-200/90 py-2 z-50 animate-in fade-in slide-in-from-top-2 duration-150 text-neutral-900">
+                <div className="absolute right-0 mt-2 w-64 bg-white rounded-[18px] shadow-2xl border border-neutral-200/90 py-2 z-[9999] animate-in fade-in slide-in-from-top-2 duration-150 text-neutral-900">
                   {/* Account Header */}
                   <div className="px-4 py-2.5 border-b border-neutral-100">
                     <div className="flex items-center gap-2 mb-1">

@@ -231,7 +231,7 @@ export default function BecomeDealerPage() {
     <main className="min-h-screen bg-[#F8FAF5] text-neutral-900 flex flex-col justify-between font-sans selection:bg-[#1B4332] selection:text-white">
       <div>
         {/* Reused GROVE Navbar with dark text */}
-        <div className="border-b border-neutral-200/70 bg-white/80 backdrop-blur-xs sticky top-0 z-30">
+        <div className="border-b border-neutral-200/70 bg-white/80 backdrop-blur-xs sticky top-0 z-50">
           <Navbar darkText={true} />
         </div>
 

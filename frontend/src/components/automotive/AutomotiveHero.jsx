@@ -17,9 +17,9 @@ export default function AutomotiveHero({ onScrollToCatalog }) {
   };
 
   return (
-    <header className="relative bg-[#FAF6F5] text-neutral-900 border-b border-neutral-200/70 overflow-hidden">
+    <header className="relative bg-[#FAF6F5] text-neutral-900 border-b border-neutral-200/70">
       {/* Reused GROVE Navbar with darkText variant */}
-      <div className="border-b border-neutral-200/60 bg-white/75 backdrop-blur-xs">
+      <div className="relative z-50 border-b border-neutral-200/60 bg-white/75 backdrop-blur-xs">
         <Navbar darkText={true} />
       </div>
 

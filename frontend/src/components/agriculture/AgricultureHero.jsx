@@ -18,9 +18,9 @@ export default function AgricultureHero({ onScrollToCatalog }) {
   };
 
   return (
-    <header className="relative bg-[#F8FAF5] text-neutral-900 border-b border-neutral-200/70 overflow-hidden">
+    <header className="relative bg-[#F8FAF5] text-neutral-900 border-b border-neutral-200/70">
       {/* Reused GROVE Navbar with darkText variant for clean light background */}
-      <div className="border-b border-neutral-200/60 bg-white/70 backdrop-blur-xs">
+      <div className="relative z-50 border-b border-neutral-200/60 bg-white/70 backdrop-blur-xs">
         <Navbar darkText={true} />
       </div>
 
