@@ -51,6 +51,7 @@ export default function ElectronicsPage() {
             category: p.subcategory || p.categoryName || 'Electronics',
             inStock: (p.stock !== undefined ? p.stock > 0 : true) && p.inStock !== false,
             seller: p.seller || { name: p.dealerName || 'Apex Machinery & Equipment' },
+            stockStatus: p.stockStatus || (p.stock > 10 ? 'In Stock' : p.stock > 0 ? 'Limited Stock' : 'Out of Stock'),
             images: p.images?.length > 0 ? p.images : [p.image]
           }));
           setProductsList(normalized);

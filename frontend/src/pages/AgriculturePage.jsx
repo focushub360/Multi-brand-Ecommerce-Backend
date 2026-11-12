@@ -50,6 +50,7 @@ export default function AgriculturePage() {
             category: p.subcategory || p.categoryName || 'Agriculture',
             inStock: (p.stock !== undefined ? p.stock > 0 : true) && p.inStock !== false,
             seller: p.seller || { name: p.dealerName || 'GROVE Authorized Dealer' },
+            stockStatus: p.stockStatus || (p.stock > 10 ? 'In Stock' : p.stock > 0 ? 'Limited Stock' : 'Out of Stock'),
             images: p.images?.length > 0 ? p.images : [p.image]
           }));
           setProductsList(normalized);
