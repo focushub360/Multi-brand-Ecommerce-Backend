@@ -135,6 +135,7 @@ async function seedDatabase() {
   const agriCat = categories.find((c) => c.slug === 'agriculture');
   const elecCat = categories.find((c) => c.slug === 'electronics');
   const autoCat = categories.find((c) => c.slug === 'automotive');
+  const grocCat = categories.find((c) => c.slug === 'groceries');
 
   console.log(`✅ Seeded ${categories.length} categories.\n`);
 
@@ -335,7 +336,63 @@ async function seedDatabase() {
       fulfillmentSLA: 99.2
     }
   });
-  console.log(`✅ Created Dealer profile: ${dealer3Entity.businessName} (${dealer3Entity.dealerCode})\n`);
+  console.log(`✅ Created Dealer profile: ${dealer3Entity.businessName} (${dealer3Entity.dealerCode})`);
+
+  const dealer4User = await User.create({
+    name: 'FreshHarvest Organic Lead',
+    email: 'dealer4@grove.com',
+    phone: '9822098765',
+    password: 'Password@123',
+    role: ROLES.DEALER,
+    status: 'ACTIVE',
+    isEmailVerified: true
+  });
+
+  const dealer4Entity = await Dealer.create({
+    user: dealer4User._id,
+    dealerCode: 'DEALER_004',
+    businessName: 'FreshHarvest Organic Farm Groceries',
+    businessType: 'Authorized Dealer',
+    primaryCategory: grocCat._id,
+    primaryCategoryName: grocCat.name,
+    ownerName: dealer4User.name,
+    officialEmail: dealer4User.email,
+    phone: dealer4User.phone,
+    gstin: '27GHIJK9012K1Z3',
+    pan: 'GHIJK9012K',
+    businessAddress: {
+      address: 'Shop 12, APMC Market Yard, Gultekdi',
+      city: 'Pune',
+      state: 'Maharashtra',
+      pincode: '411037'
+    },
+    warehouseAddress: 'Shop 12, APMC Market Yard, Gultekdi, Pune - 411037',
+    location: {
+      type: 'Point',
+      coordinates: [73.8687, 18.4901]
+    },
+    status: DEALER_STATUS.APPROVED,
+    tier: 'Silver Tier',
+    commissionRate: 4.0,
+    bankDetails: {
+      accountName: 'FreshHarvest Organic Groceries',
+      accountNumber: '987654321101',
+      ifsc: 'KKBK0001234',
+      bankName: 'Kotak Mahindra Bank'
+    },
+    kycDocuments: [
+      { name: 'GSTIN Registration Certificate', url: 'https://grove.internal/docs/gstin-gr.pdf', status: 'Verified' },
+      { name: 'FSSAI Food License', url: 'https://grove.internal/docs/fssai-gr.pdf', status: 'Verified' }
+    ],
+    storeSettings: {
+      tagline: 'Farm-Fresh Organic Staples & Pantry Goods',
+      description: 'Authorized local cooperative dealer supplying certified organic grains, cold-pressed oils, and seasonal farm harvests.',
+      operatingHours: 'Mon - Sun: 07:00 AM - 09:00 PM',
+      isOpen: true,
+      fulfillmentSLA: 99.4
+    }
+  });
+  console.log(`✅ Created Dealer profile: ${dealer4Entity.businessName} (${dealer4Entity.dealerCode})\n`);
 
   // 5. Seed Catalog Products (JSON format: exactly 3 products per subcategory, 18 per category, 54 total)
   console.log('📦 Seeding Products (18 Agriculture, 18 Electronics, 18 Automotive)...');
@@ -1869,11 +1926,14 @@ async function seedDatabase() {
   console.log('🎉 SEEDING COMPLETE! Summary of Seeded Data:');
   console.log('==============================================================');
   console.log(`• Categories:    ${categories.length} (Agriculture, Electronics, Automotive, Groceries)`);
-  console.log(`• Accounts:      3 Demo Accounts`);
-  console.log(`  1. Customer:   user1@grove.com   / Password@123`);
-  console.log(`  2. Dealer:     dealer1@grove.com / Password@123`);
-  console.log(`  3. Admin:      admin@grove.com   / Admin@123`);
-  console.log(`• Dealers:       1 Verified Dealer (${dealerEntity.businessName})`);
+  console.log(`• Accounts:`);
+  console.log(`  - Customer:               user1@grove.com   / Password@123`);
+  console.log(`  - Super Admin:            admin@grove.com   / Admin@123`);
+  console.log(`  - Dealer 1 (Agriculture): dealer1@grove.com / Password@123 (DEALER_001)`);
+  console.log(`  - Dealer 2 (Electronics): dealer2@grove.com / Password@123 (DEALER_002)`);
+  console.log(`  - Dealer 3 (Automotive):  dealer3@grove.com / Password@123 (DEALER_003)`);
+  console.log(`  - Dealer 4 (Groceries):   dealer4@grove.com / Password@123 (DEALER_004)`);
+  console.log(`• Dealers:       4 Verified Category Dealers`);
   console.log(`• Products:      ${createdProducts.length} Total Products (18 per category, 3 per subcategory)`);
   console.log(`  - Agriculture: 18 products (SKU-AG-01 to SKU-AG-18)`);
   console.log(`  - Electronics: 18 products (SKU-EL-01 to SKU-EL-18)`);

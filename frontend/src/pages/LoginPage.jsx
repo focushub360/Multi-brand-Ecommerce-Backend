@@ -12,7 +12,11 @@ import {
   KeyRound,
   ArrowRight,
   ShieldCheck,
-  UserCheck
+  UserCheck,
+  Sprout,
+  Smartphone,
+  Cog,
+  Store
 } from 'lucide-react';
 import CategoryShowcase from '../components/auth/CategoryShowcase';
 import { 
@@ -126,7 +130,13 @@ export default function LoginPage() {
           name: matchedUser.name,
           email: matchedUser.email,
           role: 'dealer',
-          dealerId: matchedUser.dealerId || (matchedUser.email?.toLowerCase().includes('hub') ? 'DEALER_002' : 'DEALER_001'),
+          dealerId: matchedUser.dealerId || (
+            matchedUser.email?.toLowerCase().includes('dealer2') ? 'DEALER_002' :
+            matchedUser.email?.toLowerCase().includes('dealer3') ? 'DEALER_003' :
+            matchedUser.email?.toLowerCase().includes('dealer4') ? 'DEALER_004' :
+            'DEALER_001'
+          ),
+          primaryCategory: matchedUser.primaryCategory,
           token: matchedUser.token
         });
 
@@ -272,38 +282,91 @@ export default function LoginPage() {
                 )}
 
                 {/* Quick Demo Fill Buttons for Development */}
-                <div className="mb-5 p-3 rounded-[16px] bg-[#F1F6F3] border border-[#1B4332]/15">
-                  <div className="flex items-center justify-between mb-2">
-                    <span className="text-[11px] font-bold text-[#1B4332] uppercase tracking-wider flex items-center gap-1.5">
-                      <KeyRound className="w-3.5 h-3.5" /> Quick Fill Demo Accounts
+                <div className="mb-5 p-3.5 rounded-[18px] bg-[#F1F6F3] border border-[#1B4332]/15 shadow-2xs">
+                  <div className="flex items-center justify-between mb-2.5">
+                    <span className="text-[11px] font-bold text-[#1B4332] uppercase tracking-wider flex items-center gap-1.5 font-mono">
+                      <KeyRound className="w-3.5 h-3.5 text-[#2C694E]" /> Quick Fill Demo Accounts
                     </span>
                     <span className="text-[10px] text-neutral-500 font-medium">Click to auto-fill</span>
                   </div>
-                  <div className="grid grid-cols-3 gap-2">
+
+                  {/* Customer and Super Admin Row */}
+                  <div className="grid grid-cols-2 gap-2 mb-2.5">
                     <button
                       type="button"
                       onClick={() => handleQuickFill('user1@grove.com', 'Password@123')}
-                      className="py-2 px-2.5 rounded-[10px] bg-white border border-neutral-200 hover:border-[#1B4332] hover:bg-[#1B4332]/5 text-neutral-800 text-xs font-bold transition-all text-center flex flex-col items-center justify-center cursor-pointer shadow-2xs group"
+                      className="py-1.5 px-2.5 rounded-[10px] bg-white border border-neutral-200 hover:border-[#1B4332] hover:bg-[#1B4332]/5 text-neutral-800 transition-all flex items-center justify-between cursor-pointer shadow-2xs group"
                     >
-                      <span className="text-[#1B4332] text-[11px] font-extrabold group-hover:scale-105 transition-transform">User</span>
-                      <span className="text-[9.5px] text-neutral-500 font-mono truncate max-w-full">user1</span>
+                      <div className="flex items-center gap-1.5">
+                        <span className="w-1.5 h-1.5 rounded-full bg-emerald-600 group-hover:scale-125 transition-transform" />
+                        <span className="text-[#1B4332] text-xs font-extrabold">Customer</span>
+                      </div>
+                      <span className="text-[10px] text-neutral-500 font-mono truncate">user1@grove.com</span>
                     </button>
-                    <button
-                      type="button"
-                      onClick={() => handleQuickFill('dealer1@grove.com', 'Password@123')}
-                      className="py-2 px-2.5 rounded-[10px] bg-white border border-neutral-200 hover:border-[#1B4332] hover:bg-[#1B4332]/5 text-neutral-800 text-xs font-bold transition-all text-center flex flex-col items-center justify-center cursor-pointer shadow-2xs group"
-                    >
-                      <span className="text-[#1B4332] text-[11px] font-extrabold group-hover:scale-105 transition-transform">Dealer</span>
-                      <span className="text-[9.5px] text-neutral-500 font-mono truncate max-w-full">dealer1</span>
-                    </button>
+
                     <button
                       type="button"
                       onClick={() => handleQuickFill('admin@grove.com', 'Admin@123')}
-                      className="py-2 px-2.5 rounded-[10px] bg-white border border-neutral-200 hover:border-[#1B4332] hover:bg-[#1B4332]/5 text-neutral-800 text-xs font-bold transition-all text-center flex flex-col items-center justify-center cursor-pointer shadow-2xs group"
+                      className="py-1.5 px-2.5 rounded-[10px] bg-white border border-neutral-200 hover:border-[#1B4332] hover:bg-[#1B4332]/5 text-neutral-800 transition-all flex items-center justify-between cursor-pointer shadow-2xs group"
                     >
-                      <span className="text-[#1B4332] text-[11px] font-extrabold group-hover:scale-105 transition-transform">Admin</span>
-                      <span className="text-[9.5px] text-neutral-500 font-mono truncate max-w-full">admin</span>
+                      <div className="flex items-center gap-1.5">
+                        <span className="w-1.5 h-1.5 rounded-full bg-purple-600 group-hover:scale-125 transition-transform" />
+                        <span className="text-[#1B4332] text-xs font-extrabold">Admin</span>
+                      </div>
+                      <span className="text-[10px] text-neutral-500 font-mono truncate">admin@grove.com</span>
                     </button>
+                  </div>
+
+                  {/* Category-Specific Dealers */}
+                  <div className="pt-2 border-t border-[#1B4332]/10">
+                    <div className="text-[10px] uppercase tracking-wider text-neutral-600 font-bold mb-1.5 flex items-center gap-1">
+                      <Store className="w-3 h-3 text-[#1B4332]" />
+                      <span>Category Dealers (Auto-Fills Category Lock):</span>
+                    </div>
+
+                    <div className="grid grid-cols-3 gap-2">
+                      <button
+                        type="button"
+                        onClick={() => handleQuickFill('dealer1@grove.com', 'Password@123')}
+                        className="py-2 px-1.5 rounded-[10px] bg-white border border-emerald-300 hover:border-[#1B4332] hover:bg-emerald-50/70 text-neutral-800 transition-all text-center flex flex-col items-center justify-center cursor-pointer shadow-2xs group"
+                        title="Dealer 1: Agriculture & Farming"
+                      >
+                        <div className="flex items-center gap-1 mb-0.5">
+                          <Sprout className="w-3.5 h-3.5 text-emerald-600 group-hover:scale-110 transition-transform" />
+                          <span className="text-[#1B4332] text-[11px] font-extrabold">Dealer 1</span>
+                        </div>
+                        <span className="text-[9.5px] text-emerald-800 font-bold">Agri</span>
+                        <span className="text-[8.5px] text-neutral-400 font-mono truncate max-w-full">dealer1@grove.com</span>
+                      </button>
+
+                      <button
+                        type="button"
+                        onClick={() => handleQuickFill('dealer2@grove.com', 'Password@123')}
+                        className="py-2 px-1.5 rounded-[10px] bg-white border border-blue-300 hover:border-blue-700 hover:bg-blue-50/70 text-neutral-800 transition-all text-center flex flex-col items-center justify-center cursor-pointer shadow-2xs group"
+                        title="Dealer 2: Electronics & Gadgets"
+                      >
+                        <div className="flex items-center gap-1 mb-0.5">
+                          <Smartphone className="w-3.5 h-3.5 text-blue-600 group-hover:scale-110 transition-transform" />
+                          <span className="text-blue-900 text-[11px] font-extrabold">Dealer 2</span>
+                        </div>
+                        <span className="text-[9.5px] text-blue-800 font-bold">Electronics</span>
+                        <span className="text-[8.5px] text-neutral-400 font-mono truncate max-w-full">dealer2@grove.com</span>
+                      </button>
+
+                      <button
+                        type="button"
+                        onClick={() => handleQuickFill('dealer3@grove.com', 'Password@123')}
+                        className="py-2 px-1.5 rounded-[10px] bg-white border border-rose-300 hover:border-rose-700 hover:bg-rose-50/70 text-neutral-800 transition-all text-center flex flex-col items-center justify-center cursor-pointer shadow-2xs group"
+                        title="Dealer 3: Automotive & Spare Parts"
+                      >
+                        <div className="flex items-center gap-1 mb-0.5">
+                          <Cog className="w-3.5 h-3.5 text-rose-600 group-hover:scale-110 transition-transform" />
+                          <span className="text-rose-900 text-[11px] font-extrabold">Dealer 3</span>
+                        </div>
+                        <span className="text-[9.5px] text-rose-800 font-bold">Automotive</span>
+                        <span className="text-[8.5px] text-neutral-400 font-mono truncate max-w-full">dealer3@grove.com</span>
+                      </button>
+                    </div>
                   </div>
                 </div>
 

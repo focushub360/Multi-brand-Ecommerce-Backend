@@ -125,8 +125,12 @@ export function setStoredDealer(dealer) {
   try {
     if (!dealer) return;
     const lowerEmail = (dealer.email || '').toLowerCase();
-    const resolvedDealerId = dealer.dealerId || dealer.id || (
-      (lowerEmail.includes('hub') || lowerEmail.includes('kisan')) ? 'DEALER_002' : 'DEALER_001'
+    const resolvedDealerId = dealer.dealerId || (
+      lowerEmail.includes('dealer2') ? 'DEALER_002' :
+      lowerEmail.includes('dealer3') ? 'DEALER_003' :
+      lowerEmail.includes('dealer4') ? 'DEALER_004' :
+      (lowerEmail.includes('hub') || lowerEmail.includes('kisan')) ? 'DEALER_002' :
+      'DEALER_001'
     );
 
     const sanitized = {
@@ -135,6 +139,7 @@ export function setStoredDealer(dealer) {
       email: dealer.email,
       role: 'dealer',
       dealerId: resolvedDealerId,
+      primaryCategory: dealer.primaryCategory || null,
       token: dealer.token
     };
 
@@ -384,7 +389,13 @@ export async function authenticateUser(email, password) {
         name: backendUser.name,
         email: backendUser.email,
         role,
-        dealerId: backendUser.dealerCode || (role === 'dealer' ? 'DEALER_001' : undefined),
+        dealerId: apiRes.dealer?.dealerCode || backendUser.dealerCode || (role === 'dealer' ? (
+          backendUser.email?.includes('dealer2') ? 'DEALER_002' :
+          backendUser.email?.includes('dealer3') ? 'DEALER_003' :
+          backendUser.email?.includes('dealer4') ? 'DEALER_004' :
+          'DEALER_001'
+        ) : undefined),
+        primaryCategory: apiRes.dealer?.primaryCategoryName || null,
         token: apiRes.accessToken
       };
 
