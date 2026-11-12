@@ -141,7 +141,7 @@ export default function AgriculturePage() {
     }
 
     return result;
-  }, [selectedCategory, priceRange, stockFilter, minRating, searchQuery, sortBy]);
+  }, [productsList, selectedCategory, priceRange, stockFilter, minRating, searchQuery, sortBy]);
 
   // Derive pagination bounds
   const totalPages = Math.ceil(filteredAndSortedProducts.length / PAGE_SIZE) || 1;

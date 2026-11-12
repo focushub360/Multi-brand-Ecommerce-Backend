@@ -162,7 +162,7 @@ export default function ElectronicsPage() {
     }
 
     return result;
-  }, [selectedCategory, selectedBrand, priceRange, stockFilter, minRating, searchQuery, sortBy]);
+  }, [productsList, selectedCategory, selectedBrand, priceRange, stockFilter, minRating, searchQuery, sortBy]);
 
   // Derive pagination bounds
   const totalPages = Math.ceil(filteredAndSortedProducts.length / PAGE_SIZE) || 1;
