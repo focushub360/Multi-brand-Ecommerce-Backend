@@ -1826,6 +1826,7 @@ async function seedDatabase() {
         customer: user1._id,
         customerSnapshot: {
           name: user1.name,
+          email: user1.email,
           city: userAddress.city,
           state: userAddress.state,
           phone: user1.phone,

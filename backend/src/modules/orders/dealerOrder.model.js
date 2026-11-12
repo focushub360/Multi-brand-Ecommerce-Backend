@@ -36,6 +36,7 @@ const dealerOrderSchema = new Schema(
     },
     customerSnapshot: {
       name: { type: String, required: true },
+      email: { type: String, default: '' },
       city: { type: String, required: true },
       state: { type: String, required: true },
       phone: { type: String, required: true },
@@ -47,9 +48,13 @@ const dealerOrderSchema = new Schema(
         name: { type: String, required: true },
         sku: { type: String, required: true },
         price: { type: Number, required: true },
+        mrp: { type: Number },
         quantity: { type: Number, required: true },
         subtotal: { type: Number, required: true },
-        image: { type: String }
+        category: { type: String, default: '' },
+        subcategory: { type: String, default: '' },
+        image: { type: String },
+        grade: { type: String, default: 'Commercial Grade' }
       }
     ],
     subtotal: { type: Number, required: true },

@@ -190,7 +190,7 @@ export default function DealerOrderDetails() {
                 <span>{order.orderStatus} {order.orderStatus === 'Placed' && '(Confirmed)'}</span>
               </span>
               <span className="text-xs text-[#717973] sm:border-l sm:border-[#C1C8C2]/60 sm:pl-3">
-                Placed on {order.placedAt || 'Oct 24, 2024, 09:15 AM'}
+                Placed on {order.placedAt || 'Recently'}
               </span>
             </div>
 
@@ -228,7 +228,7 @@ export default function DealerOrderDetails() {
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 pb-3 border-b border-[#C1C8C2]/30">
             <span className="text-base font-bold text-[#151D18]">Delivery Status</span>
             <span className="text-xs font-semibold text-[#2C694E] bg-[#EDF6ED] px-3 py-1 rounded-full w-fit">
-              Estimated Delivery: {order.estimatedDelivery || 'Saturday, Oct 26'}
+              Estimated Delivery: {order.estimatedDelivery || order.estDeliveryDateFormatted || '3 - 5 Business Days'}
             </span>
           </div>
 
@@ -255,7 +255,9 @@ export default function DealerOrderDetails() {
                   </div>
                   <div>
                     <span className="text-xs sm:text-sm font-bold text-[#151D18] block">Ordered</span>
-                    <span className="text-[11px] font-mono text-[#717973]">Oct 24, 09:15 AM</span>
+                    <span className="text-[11px] font-mono text-[#717973]">
+                      {order.orderedDateFormatted || (order.placedAt ? order.placedAt.split(',')[0] : 'Confirmed')}
+                    </span>
                   </div>
                 </div>
 
@@ -282,7 +284,11 @@ export default function DealerOrderDetails() {
                     }`}>
                       Shipped
                     </span>
-                    <span className="text-[11px] font-mono text-[#2C694E] font-medium">Est. Oct 25</span>
+                    <span className="text-[11px] font-mono text-[#2C694E] font-medium">
+                      {order.orderStatus === 'Shipped' || order.orderStatus === 'Delivered'
+                        ? (order.shippedDateFormatted ? `Shipped ${order.shippedDateFormatted}` : 'Dispatched')
+                        : (order.shippedDateFormatted ? `Est. ${order.shippedDateFormatted}` : 'In Prep')}
+                    </span>
                   </div>
                 </div>
 
@@ -309,7 +315,9 @@ export default function DealerOrderDetails() {
                     }`}>
                       Out for Delivery
                     </span>
-                    <span className="text-[11px] font-mono text-[#717973]">Upcoming</span>
+                    <span className="text-[11px] font-mono text-[#717973]">
+                      {order.orderStatus === 'Delivered' ? 'Completed' : order.orderStatus === 'Shipped' ? 'In Transit' : 'Upcoming'}
+                    </span>
                   </div>
                 </div>
 
@@ -330,7 +338,11 @@ export default function DealerOrderDetails() {
                     }`}>
                       Delivered
                     </span>
-                    <span className="text-[11px] font-mono text-[#717973]">Expected Oct 26</span>
+                    <span className="text-[11px] font-mono text-[#717973]">
+                      {order.orderStatus === 'Delivered'
+                        ? 'Delivered'
+                        : (order.estDeliveryDateFormatted ? `Expected ${order.estDeliveryDateFormatted}` : '3 - 5 Days')}
+                    </span>
                   </div>
                 </div>
               </div>
@@ -356,7 +368,7 @@ export default function DealerOrderDetails() {
                 <div className="flex items-center gap-2">
                   <span className="font-bold text-sm text-[#151D18]">Items in this Order</span>
                   <span className="px-2 py-0.5 rounded-full bg-[#E7F0E8] text-[#151D18] font-mono text-xs font-semibold">
-                    {order.product?.quantity || 1} Item
+                    {order.items?.length || 1} {order.items?.length === 1 ? 'Item' : 'Items'}
                   </span>
                 </div>
                 <span className="text-xs font-semibold text-[#2C694E]">
@@ -364,42 +376,46 @@ export default function DealerOrderDetails() {
                 </span>
               </div>
 
-              <div className="p-5 sm:p-6 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-                <div className="flex items-start gap-4 min-w-0">
-                  <img
-                    src={order.product?.image || '/images/prod-drip.png'}
-                    alt={order.product?.name || 'Product'}
-                    className="w-20 h-20 rounded-xl object-cover shrink-0 bg-neutral-100 border border-[#C1C8C2]/40"
-                    onError={(e) => {
-                      e.target.src = 'https://images.unsplash.com/photo-1592417817098-8f3d6910985b?auto=format&fit=crop&w=800&q=80';
-                    }}
-                  />
-                  <div className="flex flex-col min-w-0">
-                    <span className="text-base sm:text-lg font-bold text-[#151D18] leading-tight">
-                      {order.product?.name || 'HydroHarvest Drip Irrigation Master Kit'}
-                    </span>
-                    <span className="text-xs text-[#717973] mt-1 font-mono">
-                      SKU: {order.product?.sku || 'AG-DRP-801'} • {order.product?.category || 'Agriculture & Micro-tubing'}
-                    </span>
-                    <div className="flex items-center gap-2 mt-3">
-                      <span className="text-xs font-medium text-[#151D18] bg-[#EDF6ED] px-2.5 py-1 rounded-lg">
-                        Qty: {order.product?.quantity || 1}
+              <div className="divide-y divide-[#C1C8C2]/30">
+                {(order.items && order.items.length > 0 ? order.items : [order.product]).map((item, idx) => (
+                  <div key={item.sku || idx} className="p-5 sm:p-6 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                    <div className="flex items-start gap-4 min-w-0">
+                      <img
+                        src={item.image || '/images/prod-drip.png'}
+                        alt={item.name || 'Product'}
+                        className="w-20 h-20 rounded-xl object-cover shrink-0 bg-neutral-100 border border-[#C1C8C2]/40"
+                        onError={(e) => {
+                          e.target.src = 'https://images.unsplash.com/photo-1592417817098-8f3d6910985b?auto=format&fit=crop&w=800&q=80';
+                        }}
+                      />
+                      <div className="flex flex-col min-w-0">
+                        <span className="text-base sm:text-lg font-bold text-[#151D18] leading-tight">
+                          {item.name}
+                        </span>
+                        <span className="text-xs text-[#717973] mt-1 font-mono">
+                          {item.sku ? `SKU: ${item.sku}` : ''}{item.category ? ` • ${item.category}` : ''}
+                        </span>
+                        <div className="flex items-center gap-2 mt-3">
+                          <span className="text-xs font-medium text-[#151D18] bg-[#EDF6ED] px-2.5 py-1 rounded-lg">
+                            Qty: {item.quantity || 1}
+                          </span>
+                          <span className="text-xs font-semibold text-[#0E5138] bg-[#AEEECB]/40 px-2.5 py-1 rounded-lg">
+                            {item.grade || 'Commercial Grade'}
+                          </span>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div className="flex sm:flex-col items-baseline sm:items-end justify-between sm:justify-center shrink-0 pt-2 sm:pt-0 border-t sm:border-t-0 border-[#C1C8C2]/30">
+                      <span className="text-xl sm:text-2xl font-bold text-[#151D18] font-mono">
+                        {formatPrice(item.subtotal || item.price * (item.quantity || 1))}
                       </span>
-                      <span className="text-xs font-semibold text-[#0E5138] bg-[#AEEECB]/40 px-2.5 py-1 rounded-lg">
-                        {order.product?.grade || 'Commercial Grade'}
+                      <span className="text-[11px] text-[#717973]">
+                        Inclusive of all taxes
                       </span>
                     </div>
                   </div>
-                </div>
-
-                <div className="flex sm:flex-col items-baseline sm:items-end justify-between sm:justify-center shrink-0 pt-2 sm:pt-0 border-t sm:border-t-0 border-[#C1C8C2]/30">
-                  <span className="text-xl sm:text-2xl font-bold text-[#151D18] font-mono">
-                    {formatPrice(order.amount)}
-                  </span>
-                  <span className="text-[11px] text-[#717973]">
-                    Inclusive of all taxes
-                  </span>
-                </div>
+                ))}
               </div>
             </div>
 
@@ -411,15 +427,15 @@ export default function DealerOrderDetails() {
               </div>
               <div className="flex flex-col gap-1">
                 <span className="font-bold text-sm sm:text-base text-[#151D18]">
-                  {order.customer?.name || 'Vikram Singh (Kisan Bhoomi FPO)'}
+                  {order.customer?.name || 'Valued Customer'}
                 </span>
                 <p className="text-xs sm:text-sm text-[#414844] leading-relaxed mt-0.5">
-                  {order.customer?.address || 'Plot 42, Sector 18, MIDC Industrial Area, Pune, Maharashtra 411026'}
+                  {order.customer?.address || 'Direct Dispatch Address'}
                 </p>
                 <div className="flex flex-wrap items-center gap-4 mt-3 pt-3 border-t border-[#C1C8C2]/30 text-xs sm:text-sm text-[#414844]">
                   <div className="flex items-center gap-2">
                     <Phone className="w-4 h-4 text-[#717973]" />
-                    <span className="font-medium text-[#151D18]">Phone: {order.customer?.phone || '+91 98201 44219'}</span>
+                    <span className="font-medium text-[#151D18]">Phone: {order.customer?.phone || '—'}</span>
                   </div>
                   {order.customer?.email && (
                     <div className="flex items-center gap-2">

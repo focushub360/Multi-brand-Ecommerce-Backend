@@ -76,7 +76,9 @@ export class OrderService {
         price: product.price,
         mrp: product.mrp || product.price,
         quantity: qty,
-        category: product.categoryName,
+        category: product.categoryName || 'General',
+        subcategory: product.subcategory || '',
+        grade: 'Commercial Grade',
         dealer: product.dealer._id,
         dealerCode: product.dealerCode,
         dealerName: product.dealer.businessName || product.dealerName,
@@ -178,6 +180,7 @@ export class OrderService {
         customer: customer._id,
         customerSnapshot: {
           name: customer.name,
+          email: customer.email || '',
           city: resolvedAddress.city,
           state: resolvedAddress.state,
           phone: resolvedAddress.mobile,
@@ -378,13 +381,24 @@ export class OrderService {
    * Get Dealer Suborders
    */
   static async getDealerSubOrders(dealerId, { status = '', page = 1, limit = 20 }) {
-    const query = { dealer: dealerId };
+    const query = {
+      $or: [
+        { dealer: dealerId },
+        { dealerCode: typeof dealerId === 'string' ? dealerId : undefined }
+      ].filter((c) => Object.values(c)[0] !== undefined)
+    };
     if (status) query.orderStatus = status;
 
     const skip = (page - 1) * limit;
 
     const [orders, total] = await Promise.all([
-      DealerOrder.find(query).sort({ createdAt: -1 }).skip(skip).limit(limit).lean(),
+      DealerOrder.find(query)
+        .populate('items.product', 'name sku category categoryName subcategory images primaryImage mrp price')
+        .populate('parentOrder')
+        .sort({ createdAt: -1 })
+        .skip(skip)
+        .limit(limit)
+        .lean(),
       DealerOrder.countDocuments(query)
     ]);
 
@@ -403,13 +417,42 @@ export class OrderService {
    * Get Dealer Suborder Details
    */
   static async getDealerSubOrderById(dealerId, subOrderId) {
-    const query = { dealer: dealerId };
-    if (String(subOrderId).match(/^[0-9a-fA-F]{24}$/)) {
-      query._id = subOrderId;
-    } else {
-      query.parentOrderNumber = subOrderId;
+    const cleanId = String(subOrderId || '').replace(/^#/, '').trim();
+    const isHex = String(cleanId).match(/^[0-9a-fA-F]{24}$/);
+
+    const conditions = [];
+    if (isHex) conditions.push({ _id: cleanId });
+    conditions.push(
+      { orderNumber: cleanId },
+      { parentOrderNumber: cleanId },
+      { orderNumber: new RegExp(`^${cleanId}`, 'i') },
+      { parentOrderNumber: new RegExp(`^${cleanId}`, 'i') }
+    );
+
+    const query = {
+      $and: [
+        {
+          $or: [
+            { dealer: dealerId },
+            { dealerCode: typeof dealerId === 'string' ? dealerId : undefined }
+          ].filter((c) => Object.values(c)[0] !== undefined)
+        },
+        { $or: conditions }
+      ]
+    };
+
+    let order = await DealerOrder.findOne(query)
+      .populate('items.product', 'name sku category categoryName subcategory images primaryImage mrp price')
+      .populate('parentOrder')
+      .lean();
+
+    if (!order) {
+      order = await DealerOrder.findOne({ $or: conditions })
+        .populate('items.product', 'name sku category categoryName subcategory images primaryImage mrp price')
+        .populate('parentOrder')
+        .lean();
     }
-    const order = await DealerOrder.findOne(query).lean();
+
     if (!order) throw ApiError.notFound('Suborder not found for your dealership.');
     return order;
   }
@@ -418,13 +461,28 @@ export class OrderService {
    * Update Dealer Fulfillment Status
    */
   static async updateDealerFulfillmentStatus(dealerId, subOrderId, data) {
-    const query = { dealer: dealerId };
-    if (String(subOrderId).match(/^[0-9a-fA-F]{24}$/)) {
-      query._id = subOrderId;
-    } else {
-      query.parentOrderNumber = subOrderId;
+    const cleanId = String(subOrderId || '').replace(/^#/, '').trim();
+    const isHex = String(cleanId).match(/^[0-9a-fA-F]{24}$/);
+    const conditions = [];
+    if (isHex) conditions.push({ _id: cleanId });
+    conditions.push({ orderNumber: cleanId }, { parentOrderNumber: cleanId });
+
+    const query = {
+      $and: [
+        {
+          $or: [
+            { dealer: dealerId },
+            { dealerCode: typeof dealerId === 'string' ? dealerId : undefined }
+          ].filter((c) => Object.values(c)[0] !== undefined)
+        },
+        { $or: conditions }
+      ]
+    };
+
+    let subOrder = await DealerOrder.findOne(query);
+    if (!subOrder) {
+      subOrder = await DealerOrder.findOne({ $or: conditions });
     }
-    const subOrder = await DealerOrder.findOne(query);
     if (!subOrder) throw ApiError.notFound('Suborder not found.');
 
     const oldStatus = subOrder.orderStatus;

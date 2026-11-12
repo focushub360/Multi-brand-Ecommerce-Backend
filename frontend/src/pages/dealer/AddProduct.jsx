@@ -85,6 +85,76 @@ export default function AddProduct() {
   const [specsOpen, setSpecsOpen] = useState(true);
   const [errors, setErrors] = useState({});
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [quickFillSuccess, setQuickFillSuccess] = useState(false);
+
+  const handleQuickFill = () => {
+    const isAgri = authorizedCategory.includes('Agri');
+    const isElec = authorizedCategory.includes('Elect');
+    const isAuto = authorizedCategory.includes('Auto');
+    const rand = Math.floor(1000 + Math.random() * 9000);
+
+    let sampleData;
+    if (isElec) {
+      sampleData = {
+        name: 'Smart Precision Agri Telemetry Soil Moisture & Temp Sensor Hub',
+        description: 'Solar-powered IoT multi-depth soil moisture, EC salinity, and ambient temperature telemetry probe with Bluetooth 5.0 and 4G GSM cloud uplink for real-time agronomy analytics.',
+        category: authorizedCategory,
+        subcategory: availableSubcategories[0] || 'Smart Ag Tech & Sensors',
+        sellingPrice: '6899',
+        mrpPrice: '8500',
+        gstRate: '18',
+        sku: `SKU-EL-TEST-${rand}`,
+        stock: '25',
+        threshold: '5',
+        status: 'active',
+        material: 'Weatherproof Anodized Stainless Steel & UV-Stabilized ABS',
+        pipeSize: '300 mm Probe Depth',
+        flowRate: 'RS485 Modbus RTU / 4G GSM',
+        images: ['https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&fit=crop&w=500&q=80']
+      };
+    } else if (isAuto) {
+      sampleData = {
+        name: 'Heavy Duty Multi-Row Ceramic Clutch Plate Assembly 280mm',
+        description: 'High-friction sintered ceramic commercial clutch disc with heavy-duty dual dampener springs engineered for multi-axle agricultural haulers and commercial tractors under maximum continuous load.',
+        category: authorizedCategory,
+        subcategory: availableSubcategories[0] || 'Tractor Engine Components',
+        sellingPrice: '4850',
+        mrpPrice: '6200',
+        gstRate: '18',
+        sku: `SKU-AU-TEST-${rand}`,
+        stock: '30',
+        threshold: '8',
+        status: 'active',
+        material: 'Sintered Ceramic & Forged Manganese Alloy',
+        pipeSize: '280 mm Diameter, 10 Splines',
+        flowRate: 'Max Torque 750 Nm',
+        images: ['https://images.unsplash.com/photo-1486006920555-c77dce18193b?auto=format&fit=crop&w=500&q=80']
+      };
+    } else {
+      sampleData = {
+        name: 'TurboHarvest Pressure-Compensating Drip Irrigation Lateral Kit (16mm, 400m)',
+        description: 'Commercial grade UV-stabilized virgin LLDPE drip irrigation lateral tubing with integrated 2.0 LPH non-draining pressure compensating emitters spaced at 40cm intervals for row crops and orchards.',
+        category: authorizedCategory,
+        subcategory: availableSubcategories[3] || availableSubcategories[0] || 'Irrigation & Drip Systems',
+        sellingPrice: '3499',
+        mrpPrice: '4200',
+        gstRate: '18',
+        sku: `SKU-AG-TEST-${rand}`,
+        stock: '40',
+        threshold: '10',
+        status: 'active',
+        material: '100% Virgin LLDPE Polymer',
+        pipeSize: '16 mm Outer Diameter',
+        flowRate: '2.0 LPH per Emitter (0.8 - 3.5 Bar)',
+        images: ['/images/prod-drip.png']
+      };
+    }
+
+    setFormData(sampleData);
+    setErrors({});
+    setQuickFillSuccess(true);
+    setTimeout(() => setQuickFillSuccess(false), 3000);
+  };
 
   const calculateDiscount = () => {
     const sp = parseFloat(formData.sellingPrice) || 0;
@@ -168,7 +238,15 @@ export default function AddProduct() {
 
   return (
     <DealerLayout>
-      <div className="flex flex-col w-full gap-6">
+      <div className="flex flex-col w-full gap-6 relative">
+        {/* Quick Fill Success Toast */}
+        {quickFillSuccess && (
+          <div className="fixed top-20 right-6 z-50 bg-[#012D1D] text-white px-4 py-2.5 rounded-xl shadow-lg flex items-center gap-2 text-xs font-semibold animate-fade-in border border-[#AEEECB]/40">
+            <Sparkles className="w-4 h-4 text-[#AEEECB]" />
+            <span>Test product fields autofilled for {formData.category}!</span>
+          </div>
+        )}
+
         {/* Top Action & Nav Bar */}
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
           <div className="flex flex-col gap-1">
@@ -189,7 +267,19 @@ export default function AddProduct() {
             </div>
           </div>
 
-          <div className="flex items-center gap-2 self-start md:self-auto">
+          <div className="flex flex-wrap items-center gap-2 self-start md:self-auto">
+            {/* Quick Fill Test Product Button */}
+            <button
+              type="button"
+              onClick={handleQuickFill}
+              className="h-10 px-3.5 rounded-xl bg-[#EDF6ED] border border-[#2C694E]/40 text-[#012D1D] hover:bg-[#AEEECB]/50 font-bold text-xs shadow-2xs active:scale-95 transition-all flex items-center gap-1.5 cursor-pointer"
+              title="Autofill realistic test product data for your locked category"
+            >
+              <Sparkles className="w-4 h-4 text-[#2C694E]" />
+              <span className="hidden sm:inline">Quick Fill Test Product</span>
+              <span className="sm:hidden">Quick Fill</span>
+            </button>
+
             <button
               type="button"
               disabled={isSubmitting}

@@ -73,36 +73,78 @@ function normalizeOrder(o, dealerId) {
   const createdAt = o.createdAt ? new Date(o.createdAt) : new Date();
 
   const customerSnapshot = o.customerSnapshot || {};
-  const shippingAddress = o.shippingAddress || {};
+  const shippingAddress = o.shippingAddress || o.parentOrder?.shippingAddress || {};
 
   const customer = {
     name: customerSnapshot.name || shippingAddress.name || 'Valued Customer',
-    email: customerSnapshot.email || '',
+    email: customerSnapshot.email || o.customer?.email || shippingAddress.email || '',
     phone: customerSnapshot.phone || shippingAddress.mobile || '—',
-    address: customerSnapshot.address || `${shippingAddress.house || ''} ${shippingAddress.street || ''}`.trim() || 'Direct Dispatch Address',
+    address: customerSnapshot.address || `${shippingAddress.house || ''} ${shippingAddress.street || ''} ${shippingAddress.city || ''} ${shippingAddress.pincode || ''}`.trim() || 'Direct Dispatch Address',
     city: customerSnapshot.city || shippingAddress.city || 'Pune',
     state: customerSnapshot.state || shippingAddress.state || 'Maharashtra',
     pincode: shippingAddress.pincode || ''
   };
 
   const rawItems = Array.isArray(o.items) && o.items.length > 0 ? o.items : [];
-  const items = rawItems.map((item) => ({
-    name: item.name || 'Catalog Item',
-    sku: item.sku || '',
-    price: Number(item.price || 0),
-    mrp: Number(item.mrp || item.price || 0),
-    quantity: Number(item.quantity || 1),
-    subtotal: Number(item.subtotal || (item.price * (item.quantity || 1))),
-    image: item.image || '/images/card-agri-clean.png'
-  }));
+  const items = rawItems.map((item) => {
+    const prodCategory =
+      item.category ||
+      item.categoryName ||
+      item.product?.categoryName ||
+      item.product?.category?.name ||
+      item.subcategory ||
+      item.product?.subcategory ||
+      (o.dealerCode === 'DEALER_002' ? 'Electronics & Gadgets' : o.dealerCode === 'DEALER_003' ? 'Automotive & Spare Parts' : 'Agriculture & Farming');
+
+    return {
+      name: item.name || item.product?.name || 'Catalog Item',
+      sku: item.sku || item.product?.sku || '',
+      category: prodCategory,
+      subcategory: item.subcategory || item.product?.subcategory || '',
+      price: Number(item.price || item.product?.price || 0),
+      mrp: Number(item.mrp || item.product?.mrp || item.price || 0),
+      quantity: Number(item.quantity || 1),
+      subtotal: Number(item.subtotal || ((item.price || 0) * (item.quantity || 1))),
+      image: item.image || item.product?.primaryImage || (Array.isArray(item.product?.images) && item.product.images[0]) || item.product?.image || '/images/card-agri-clean.png',
+      grade: item.grade || 'Commercial Grade'
+    };
+  });
 
   const primaryProduct = items[0] || {
     name: 'Industrial Equipment',
     sku: 'SKU-001',
+    category: 'Commercial Supplies',
     price: subtotal,
     quantity: 1,
     subtotal
   };
+
+  // Derive realistic stepper dates relative to createdAt
+  const orderTimeStr = createdAt.toLocaleDateString('en-IN', {
+    month: 'short',
+    day: 'numeric'
+  }) + ', ' + createdAt.toLocaleTimeString('en-IN', {
+    hour: '2-digit',
+    minute: '2-digit',
+    hour12: true
+  });
+
+  const shippedDate = new Date(createdAt.getTime() + 1 * 24 * 60 * 60 * 1000);
+  const shippedDateStr = shippedDate.toLocaleDateString('en-IN', {
+    month: 'short',
+    day: 'numeric'
+  });
+
+  const estDeliveryDate = new Date(createdAt.getTime() + 3 * 24 * 60 * 60 * 1000);
+  const estDeliveryDateStr = estDeliveryDate.toLocaleDateString('en-IN', {
+    weekday: 'short',
+    month: 'short',
+    day: 'numeric'
+  });
+
+  const payment = o.parentOrder?.payment || o.payment || {};
+  const transactionId = payment.transactionId || o.transactionId || `TXN-${id}-${createdAt.getTime().toString().slice(-4)}`;
+  const paymentMethod = payment.methodLabel || payment.method || o.paymentMethod || 'UPI / Online';
 
   return {
     id,
@@ -121,24 +163,28 @@ function normalizeOrder(o, dealerId) {
     commissionAmount,
     netPayout,
     orderStatus: o.orderStatus || 'Placed',
-    paymentStatus: o.paymentStatus || 'Paid',
-    paymentMethod: o.payment?.method || o.paymentMethod || 'UPI / Online',
-    transactionId: o.transactionId || `TXN-${id}-${createdAt.getTime().toString().slice(-4)}`,
-    fulfillmentPartner: o.fulfillmentPartner || 'Delhivery Cargo Express',
+    paymentStatus: o.paymentStatus || (payment.status === 'Completed' ? 'Paid' : 'Paid'),
+    paymentMethod,
+    transactionId,
+    fulfillmentPartner: o.fulfillmentPartner || 'Delhivery Express Cargo',
     trackingNumber: o.trackingNumber || '',
     estimatedDelivery: o.estimatedDelivery || '3 - 5 Business Days',
     payoutStatus: o.payoutStatus || (o.orderStatus === 'Delivered' ? 'Settled' : 'Escrow Held'),
-    timeline: Array.isArray(o.timeline) ? o.timeline : [],
+    timeline: Array.isArray(o.timeline) && o.timeline.length > 0 ? o.timeline : [],
     placedAt: createdAt.toLocaleString('en-IN', {
       month: 'short',
       day: 'numeric',
       year: 'numeric',
       hour: '2-digit',
-      minute: '2-digit'
+      minute: '2-digit',
+      hour12: true
     }),
+    orderedDateFormatted: orderTimeStr,
+    shippedDateFormatted: shippedDateStr,
+    estDeliveryDateFormatted: estDeliveryDateStr,
     createdAt: createdAt.toISOString(),
     shipping: {
-      carrier: o.fulfillmentPartner || 'Delhivery Cargo Express',
+      carrier: o.fulfillmentPartner || 'Delhivery Express Cargo',
       method: 'Standard Express Freight',
       trackingNumber: o.trackingNumber || 'Pending Dispatch',
       estimatedDelivery: o.estimatedDelivery || '3 - 5 Business Days',
@@ -606,20 +652,40 @@ export function getDealerOrderById(arg1, arg2) {
 }
 
 /**
- * Async API fetch for single order
+ * Async API fetch for single order from live MongoDB backend with caching
  */
 export async function fetchDealerOrderById(id, dealerId) {
-  const local = getDealerOrderById(id, dealerId);
-  if (local) return local;
+  const activeId = resolveDealerId(dealerId);
 
+  // 1. Live API fetch from backend MongoDB first
   try {
     const res = await ordersApi.getDealerOrderById(id);
     const raw = res?.order || res?.data || res;
-    if (raw && (raw._id || raw.orderNumber)) {
-      return normalizeOrder(raw, resolveDealerId(dealerId));
+    if (raw && (raw._id || raw.orderNumber || raw.parentOrderNumber)) {
+      const normalized = normalizeOrder(raw, activeId);
+      if (normalized) {
+        // Cache in localStorage
+        const all = getAllStoredOrders();
+        const cleanId = String(id).replace(/^#/, '').toLowerCase();
+        const existingIdx = all.findIndex((o) => {
+          const oId = String(o.id || o.orderNumber || o.parentOrderNumber || o._id || '').replace(/^#/, '').toLowerCase();
+          return oId === cleanId || ('grv-' + oId) === cleanId || oId === ('grv-' + cleanId);
+        });
+        if (existingIdx !== -1) {
+          all[existingIdx] = normalized;
+        } else {
+          all.unshift(normalized);
+        }
+        saveAllStoredOrders(all);
+        return normalized;
+      }
     }
-  } catch {}
-  return null;
+  } catch (err) {
+    console.warn(`Backend fetch for order ${id} failed, checking local cache:`, err?.message || err);
+  }
+
+  // 2. Fallback to cached order in localStorage if offline/network error
+  return getDealerOrderById(id, activeId);
 }
 
 /**
@@ -895,6 +961,37 @@ export function getDealerDashboardMetrics(dealerId) {
 }
 
 /**
+ * Async API fetch for real dealer performance analytics from MongoDB
+ */
+export async function fetchDealerAnalytics(arg1, arg2) {
+  let activeId;
+  let range = '30D';
+  const validRanges = ['7D', '30D', '90D', '1Y'];
+
+  if (arg1 && validRanges.includes(String(arg1).toUpperCase())) {
+    range = String(arg1).toUpperCase();
+    activeId = resolveDealerId(arg2);
+  } else {
+    activeId = resolveDealerId(arg1);
+    if (arg2 && validRanges.includes(String(arg2).toUpperCase())) {
+      range = String(arg2).toUpperCase();
+    }
+  }
+
+  try {
+    const res = await dealerApi.getAnalytics();
+    const raw = res?.data || res;
+    if (raw && typeof raw === 'object') {
+      saveStoredAnalytics(activeId, raw);
+    }
+  } catch (err) {
+    console.warn('Backend analytics sync warning:', err?.message || err);
+  }
+
+  return getDealerAnalytics(activeId, range);
+}
+
+/**
  * Returns analytics for a dealer over a specified time range, derived from live DB
  */
 export function getDealerAnalytics(arg1, arg2) {
@@ -918,12 +1015,17 @@ export function getDealerAnalytics(arg1, arg2) {
   const backendAnalytics = getStoredAnalytics(activeId);
 
   const nonCancelledOrders = orders.filter((o) => o.orderStatus !== 'Cancelled');
-  const revenueTotal = nonCancelledOrders.reduce(
+  const computedRevenue = nonCancelledOrders.reduce(
     (sum, o) => sum + (Number(o.subtotal || o.amount || o.total) || 0),
     0
   );
+  const revenueTotal = backendAnalytics?.kpis?.grossRevenue !== undefined
+    ? Number(backendAnalytics.kpis.grossRevenue)
+    : computedRevenue;
 
-  const aov = nonCancelledOrders.length > 0 ? Math.round(revenueTotal / nonCancelledOrders.length) : 0;
+  const aov = backendAnalytics?.kpis?.avgTicketSize !== undefined
+    ? Number(backendAnalytics.kpis.avgTicketSize)
+    : (nonCancelledOrders.length > 0 ? Math.round(revenueTotal / nonCancelledOrders.length) : 0);
 
   // Category breakdown
   let categoryBreakdown = backendAnalytics?.categoryBreakdown;
@@ -991,7 +1093,7 @@ export function getDealerAnalytics(arg1, arg2) {
       },
       {
         title: 'Fulfillment Success Rate',
-        value: `${settings.fulfillmentSLA || 99.1}%`,
+        value: `${backendAnalytics?.slaHealth?.compliance || settings.fulfillmentSLA || 99.1}%`,
         change: '+1.4%',
         positive: true,
         subtext: `${orders.filter(o => o.orderStatus === 'Delivered').length} orders successfully delivered`

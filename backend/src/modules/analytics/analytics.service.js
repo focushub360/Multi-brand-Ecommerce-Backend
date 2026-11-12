@@ -59,10 +59,33 @@ export class AnalyticsService {
    * Dealer Specific Performance Analytics
    */
   static async getDealerAnalytics(dealerId) {
-    const [subOrders, products, dealer] = await Promise.all([
-      DealerOrder.find({ dealer: dealerId }).sort({ createdAt: -1 }).lean(),
-      Product.find({ dealer: dealerId }).lean(),
-      Dealer.findById(dealerId).lean()
+    const dealer = await Dealer.findOne({
+      $or: [
+        { _id: String(dealerId).match(/^[0-9a-fA-F]{24}$/) ? dealerId : undefined },
+        { dealerCode: dealerId }
+      ].filter(Boolean)
+    }).lean();
+
+    const dId = dealer?._id || dealerId;
+    const dCode = dealer?.dealerCode;
+
+    const orderQuery = {
+      $or: [
+        { dealer: dId },
+        dCode ? { dealerCode: dCode } : null
+      ].filter(Boolean)
+    };
+
+    const prodQuery = {
+      $or: [
+        { dealer: dId },
+        dCode ? { dealerCode: dCode } : null
+      ].filter(Boolean)
+    };
+
+    const [subOrders, products] = await Promise.all([
+      DealerOrder.find(orderQuery).sort({ createdAt: -1 }).lean(),
+      Product.find(prodQuery).lean()
     ]);
 
     const totalOrders = subOrders.length;

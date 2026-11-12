@@ -16,20 +16,99 @@ import {
   Package
 } from 'lucide-react';
 import DealerLayout from '../../components/dealer/DealerLayout';
-import { getDealerAnalytics } from '../../services/dealerService';
+import { getDealerAnalytics, fetchDealerAnalytics, getDealerOrders } from '../../services/dealerService';
 import { getActiveDealerId } from '../../utils/auth';
 
 export default function DealerAnalytics() {
   const [timeRange, setTimeRange] = useState('30D');
   const [activeChartTab, setActiveChartTab] = useState('revenue');
   const [analyticsData, setAnalyticsData] = useState(() => getDealerAnalytics(getActiveDealerId(), '30D'));
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
     document.title = 'Analytics & Insights | GROVE Dealer Portal';
     window.scrollTo(0, 0);
     const activeId = getActiveDealerId();
+    
+    // 1. Instant local render
     setAnalyticsData(getDealerAnalytics(activeId, timeRange));
+
+    // 2. Fetch live data from backend MongoDB
+    let isMounted = true;
+    setIsLoading(true);
+    fetchDealerAnalytics(activeId, timeRange)
+      .then((live) => {
+        if (isMounted && live) {
+          setAnalyticsData(live);
+        }
+      })
+      .catch((err) => {
+        console.warn('Live analytics fetch warning:', err);
+      })
+      .finally(() => {
+        if (isMounted) setIsLoading(false);
+      });
+
+    return () => { isMounted = false; };
   }, [timeRange]);
+
+  const handleRefresh = () => {
+    const activeId = getActiveDealerId();
+    setIsLoading(true);
+    fetchDealerAnalytics(activeId, timeRange)
+      .then((live) => {
+        if (live) setAnalyticsData(live);
+      })
+      .finally(() => setIsLoading(false));
+  };
+
+  const handleExport = () => {
+    const activeId = getActiveDealerId();
+    const orders = getDealerOrders(activeId);
+    const headers = [
+      'Order ID',
+      'Placed Date',
+      'Customer Name',
+      'City',
+      'State',
+      'Product Name',
+      'SKU',
+      'Category',
+      'Qty',
+      'Subtotal (INR)',
+      'Status',
+      'Payment'
+    ];
+
+    const rows = [headers.join(',')];
+    orders.forEach((o) => {
+      const items = o.items && o.items.length > 0 ? o.items : [o.product];
+      items.forEach((item) => {
+        rows.push([
+          o.orderNumber || o.id,
+          `"${o.placedAt || ''}"`,
+          `"${(o.customer?.name || '').replace(/"/g, '""')}"`,
+          `"${(o.customer?.city || '').replace(/"/g, '""')}"`,
+          `"${(o.customer?.state || '').replace(/"/g, '""')}"`,
+          `"${(item?.name || '').replace(/"/g, '""')}"`,
+          item?.sku || '',
+          `"${item?.category || ''}"`,
+          item?.quantity || 1,
+          item?.subtotal || item?.price || o.amount,
+          o.orderStatus,
+          o.paymentStatus
+        ].join(','));
+      });
+    });
+
+    const csvContent = 'data:text/csv;charset=utf-8,' + encodeURIComponent(rows.join('\r\n'));
+    const link = document.createElement('a');
+    link.setAttribute('href', csvContent);
+    link.setAttribute('download', `grove_dealer_analytics_${activeId}_${timeRange}.csv`);
+    document.body.appendChild(link);
+    link.click();
+    link.remove();
+  };
 
   const kpis = analyticsData?.kpis || [];
   const monthlyData = analyticsData?.monthlyRevenueData || [];
@@ -88,12 +167,23 @@ export default function DealerAnalytics() {
             </div>
 
             <button
-              onClick={() => alert(`Exporting ${timeRange} comprehensive analytics report as CSV/PDF...`)}
+              onClick={handleRefresh}
+              disabled={isLoading}
+              title="Refresh live analytics from database"
+              className="h-10 w-10 rounded-xl border border-[#C1C8C2]/60 bg-white hover:bg-[#EDF6ED] text-[#012D1D] transition-colors flex items-center justify-center shadow-2xs cursor-pointer active:scale-95 disabled:opacity-50"
+              type="button"
+            >
+              <RefreshCw className={`w-4 h-4 text-[#717973] ${isLoading ? 'animate-spin text-[#2C694E]' : ''}`} />
+            </button>
+
+            <button
+              onClick={handleExport}
+              title="Download RFC-4180 CSV export of orders and revenue metrics"
               className="h-10 px-4 rounded-xl border border-[#C1C8C2]/60 bg-white hover:bg-[#EDF6ED] text-[#012D1D] text-xs sm:text-sm font-semibold transition-colors flex items-center gap-2 shadow-2xs cursor-pointer active:scale-95"
               type="button"
             >
               <Download className="w-4 h-4 text-[#717973]" />
-              <span>Export</span>
+              <span>Export CSV</span>
             </button>
           </div>
         </div>
