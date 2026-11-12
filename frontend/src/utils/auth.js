@@ -1,4 +1,4 @@
-import { authApi } from '../services/apiClient.js';
+import { authApi, cartApi, wishlistApi } from '../services/apiClient.js';
 
 // Dedicated localStorage keys for strict role and feature isolation
 export const CUSTOMER_AUTH_KEY = 'grove_current_user';
@@ -27,7 +27,8 @@ export function getStoredCustomer() {
         id: user.id,
         name: user.name,
         email: user.email,
-        role: 'customer'
+        role: 'customer',
+        token: user.token || localStorage.getItem('grove_auth_token')
       };
     }
     return null;
@@ -47,9 +48,13 @@ export function setStoredCustomer(customer) {
       id: customer.id,
       name: customer.name,
       email: customer.email,
-      role: 'customer'
+      role: 'customer',
+      token: customer.token
     };
     localStorage.setItem(CUSTOMER_AUTH_KEY, JSON.stringify(sanitized));
+    if (customer.token) {
+      localStorage.setItem('grove_auth_token', customer.token);
+    }
     window.dispatchEvent(new Event('grove_auth_changed'));
   } catch (err) {
     console.error('Failed to store customer session', err);
@@ -63,6 +68,7 @@ export function setStoredCustomer(customer) {
 export function clearStoredCustomer() {
   try {
     localStorage.removeItem(CUSTOMER_AUTH_KEY);
+    localStorage.removeItem('grove_auth_token');
     window.dispatchEvent(new Event('grove_auth_changed'));
   } catch (err) {
     console.error('Failed to clear customer session', err);
@@ -128,10 +134,14 @@ export function setStoredDealer(dealer) {
       name: dealer.name,
       email: dealer.email,
       role: 'dealer',
-      dealerId: resolvedDealerId
+      dealerId: resolvedDealerId,
+      token: dealer.token
     };
 
     localStorage.setItem(DEALER_AUTH_KEY, JSON.stringify(sanitized));
+    if (dealer.token) {
+      localStorage.setItem('grove_auth_token', dealer.token);
+    }
 
     // Clear legacy storage if dealer was saved in customer slot
     try {
@@ -157,6 +167,7 @@ export function setStoredDealer(dealer) {
 export function clearStoredDealer() {
   try {
     localStorage.removeItem(DEALER_AUTH_KEY);
+    localStorage.removeItem('grove_auth_token');
     try {
       const legacyRaw = localStorage.getItem(CUSTOMER_AUTH_KEY);
       if (legacyRaw) {
@@ -314,6 +325,8 @@ export function executePendingAction(customer) {
         localStorage.setItem(cartKey, JSON.stringify(currentCart));
         window.dispatchEvent(new Event('grove_cart_updated'));
       } catch {}
+
+      cartApi.addItem(product.id || product._id, qtyToAdd).catch(() => {});
     }
   } else if (pending.type === 'toggle_wishlist') {
     const productId = pending.productId;
@@ -333,6 +346,8 @@ export function executePendingAction(customer) {
           localStorage.setItem(wishlistKey, JSON.stringify(currentWishlist));
           window.dispatchEvent(new Event('grove_wishlist_updated'));
         } catch {}
+
+        wishlistApi.toggle(productId).catch(() => {});
       }
     }
   }

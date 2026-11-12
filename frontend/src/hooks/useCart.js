@@ -1,6 +1,7 @@
 import { useState, useEffect, useCallback } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { getStoredCustomer, setPendingAction } from '../utils/auth';
+import { cartApi } from '../services/apiClient.js';
 
 export function useCart() {
   const navigate = useNavigate();
@@ -20,7 +21,23 @@ export function useCart() {
   const [cart, setCart] = useState(getCustomerCart);
   const [lastAddedItem, setLastAddedItem] = useState(null);
 
+  // Synchronize cart with live MongoDB database
   useEffect(() => {
+    const customer = getStoredCustomer();
+    if (customer?.id) {
+      cartApi.get()
+        .then((res) => {
+          if (res?.items) {
+            const cartKey = `grove_cart_${customer.id}`;
+            localStorage.setItem(cartKey, JSON.stringify(res.items));
+            setCart(res.items);
+          }
+        })
+        .catch((err) => {
+          console.warn('Backend cart sync warning:', err.message);
+        });
+    }
+
     const syncCart = () => {
       setCart(getCustomerCart());
     };
@@ -37,7 +54,7 @@ export function useCart() {
   }, [getCustomerCart]);
 
   /**
-   * Adds an item to the current customer's cart.
+   * Adds an item to the current customer's cart and saves directly to database.
    * If unauthenticated, blocks action, saves pending action, and redirects to /login.
    */
   const addToCart = (product, quantity = 1) => {
@@ -49,7 +66,7 @@ export function useCart() {
       setPendingAction({
         type: 'add_to_cart',
         product,
-        productId: product.id,
+        productId: product.id || product._id,
         quantity: Math.max(1, parseInt(quantity, 10) || 1),
         returnUrl: currentUrl
       });
@@ -73,14 +90,15 @@ export function useCart() {
       currentCart = cart;
     }
 
-    const existingIdx = currentCart.findIndex((item) => String(item.id) === String(product.id));
+    const targetId = String(product.id || product._id);
+    const existingIdx = currentCart.findIndex((item) => String(item.id || item._id) === targetId);
     let updatedCart;
     if (existingIdx >= 0) {
       updatedCart = currentCart.map((item, idx) =>
         idx === existingIdx ? { ...item, quantity: item.quantity + qtyToAdd } : item
       );
     } else {
-      updatedCart = [...currentCart, { ...product, quantity: qtyToAdd }];
+      updatedCart = [...currentCart, { ...product, id: targetId, quantity: qtyToAdd }];
     }
 
     try {
@@ -93,6 +111,18 @@ export function useCart() {
     setLastAddedItem(product);
     window.dispatchEvent(new Event('grove_cart_updated'));
 
+    // Persist immediately in MongoDB Atlas
+    cartApi.addItem(product.id || product._id, qtyToAdd)
+      .then((res) => {
+        if (res?.items) {
+          localStorage.setItem(cartKey, JSON.stringify(res.items));
+          setCart(res.items);
+        }
+      })
+      .catch((err) => {
+        console.warn('Failed to persist cart item to database:', err.message);
+      });
+
     setTimeout(() => {
       setLastAddedItem(null);
     }, 3000);
@@ -101,7 +131,7 @@ export function useCart() {
   };
 
   /**
-   * Removes an item from the customer's cart.
+   * Removes an item from the customer's cart in database and state.
    */
   const removeFromCart = (productId) => {
     const customer = getStoredCustomer();
@@ -109,7 +139,7 @@ export function useCart() {
 
     const cartKey = `grove_cart_${customer.id}`;
     const pidStr = String(productId);
-    const updated = cart.filter((item) => String(item.id) !== pidStr);
+    const updated = cart.filter((item) => String(item.id || item._id) !== pidStr);
 
     try {
       localStorage.setItem(cartKey, JSON.stringify(updated));
@@ -117,10 +147,22 @@ export function useCart() {
 
     setCart(updated);
     window.dispatchEvent(new Event('grove_cart_updated'));
+
+    // Remove from MongoDB database
+    cartApi.removeItem(productId)
+      .then((res) => {
+        if (res?.items) {
+          localStorage.setItem(cartKey, JSON.stringify(res.items));
+          setCart(res.items);
+        }
+      })
+      .catch((err) => {
+        console.warn('Failed to remove cart item from database:', err.message);
+      });
   };
 
   /**
-   * Updates item quantity in the customer's cart.
+   * Updates item quantity in the customer's cart in database and state.
    */
   const updateQuantity = (productId, delta) => {
     const customer = getStoredCustomer();
@@ -129,10 +171,12 @@ export function useCart() {
     const cartKey = `grove_cart_${customer.id}`;
     const pidStr = String(productId);
 
+    let newTargetQty = 0;
     const updated = cart
       .map((item) => {
-        if (String(item.id) === pidStr) {
+        if (String(item.id || item._id) === pidStr) {
           const newQty = item.quantity + delta;
+          newTargetQty = newQty;
           return newQty > 0 ? { ...item, quantity: newQty } : null;
         }
         return item;
@@ -145,10 +189,35 @@ export function useCart() {
 
     setCart(updated);
     window.dispatchEvent(new Event('grove_cart_updated'));
+
+    // Persist quantity change in MongoDB database
+    if (newTargetQty > 0) {
+      cartApi.updateQuantity(productId, newTargetQty)
+        .then((res) => {
+          if (res?.items) {
+            localStorage.setItem(cartKey, JSON.stringify(res.items));
+            setCart(res.items);
+          }
+        })
+        .catch((err) => {
+          console.warn('Failed to update cart quantity in database:', err.message);
+        });
+    } else {
+      cartApi.removeItem(productId)
+        .then((res) => {
+          if (res?.items) {
+            localStorage.setItem(cartKey, JSON.stringify(res.items));
+            setCart(res.items);
+          }
+        })
+        .catch((err) => {
+          console.warn('Failed to delete zero-quantity cart item from database:', err.message);
+        });
+    }
   };
 
   /**
-   * Clears the current customer's cart.
+   * Clears the current customer's cart in database and state.
    */
   const clearCart = () => {
     const customer = getStoredCustomer();
@@ -161,6 +230,12 @@ export function useCart() {
 
     setCart([]);
     window.dispatchEvent(new Event('grove_cart_updated'));
+
+    // Clear cart in MongoDB database
+    cartApi.clear()
+      .catch((err) => {
+        console.warn('Failed to clear cart in database:', err.message);
+      });
   };
 
   const totalCartCount = cart.reduce((total, item) => total + (item.quantity || 0), 0);

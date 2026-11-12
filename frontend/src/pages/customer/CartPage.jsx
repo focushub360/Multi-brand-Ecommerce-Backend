@@ -25,16 +25,16 @@ export default function CartPage() {
   const { toggleWishlist, isWishlisted } = useWishlist();
 
   // Selected item IDs for checkout. Default to all items in cart.
-  const [selectedIds, setSelectedIds] = useState(() => cart.map((i) => String(i.id)));
+  const [selectedIds, setSelectedIds] = useState(() => cart.map((i) => String(i.id || i._id)));
   const [feedbackMsg, setFeedbackMsg] = useState('');
 
   // Keep selectedIds in sync if cart items are deleted
   useEffect(() => {
-    const validIds = new Set(cart.map((i) => String(i.id)));
+    const validIds = new Set(cart.map((i) => String(i.id || i._id)));
     setSelectedIds((prev) => {
       const filtered = prev.filter((id) => validIds.has(id));
       // If newly added item, include it
-      const added = cart.map((i) => String(i.id)).filter((id) => !prev.includes(id) && validIds.has(id));
+      const added = cart.map((i) => String(i.id || i._id)).filter((id) => !prev.includes(id) && validIds.has(id));
       return [...filtered, ...added];
     });
   }, [cart]);

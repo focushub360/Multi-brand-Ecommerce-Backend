@@ -1,6 +1,7 @@
 import { useState, useEffect, useCallback } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { getStoredCustomer, setPendingAction } from '../utils/auth';
+import { wishlistApi } from '../services/apiClient.js';
 
 export function useWishlist() {
   const navigate = useNavigate();
@@ -19,7 +20,24 @@ export function useWishlist() {
 
   const [wishlist, setWishlist] = useState(getCustomerWishlist);
 
+  // Synchronize wishlist with live MongoDB database
   useEffect(() => {
+    const customer = getStoredCustomer();
+    if (customer?.id) {
+      wishlistApi.get()
+        .then((res) => {
+          if (Array.isArray(res?.products)) {
+            const ids = res.products.map((p) => String(p._id || p.id));
+            const wishlistKey = `grove_wishlist_${customer.id}`;
+            localStorage.setItem(wishlistKey, JSON.stringify(ids));
+            setWishlist(ids);
+          }
+        })
+        .catch((err) => {
+          console.warn('Backend wishlist sync warning:', err.message);
+        });
+    }
+
     const syncWishlist = () => {
       setWishlist(getCustomerWishlist());
     };
@@ -36,7 +54,7 @@ export function useWishlist() {
   }, [getCustomerWishlist]);
 
   /**
-   * Toggles product in customer's wishlist.
+   * Toggles product in customer's wishlist and persists directly in database.
    * If unauthenticated, blocks action, saves pending action, and redirects to /login.
    */
   const toggleWishlist = (productId) => {
@@ -75,7 +93,7 @@ export function useWishlist() {
     if (exists) {
       updated = current.filter((id) => String(id) !== pidStr);
     } else {
-      updated = [...current, productId];
+      updated = [...current, pidStr];
     }
 
     try {
@@ -86,11 +104,33 @@ export function useWishlist() {
 
     setWishlist(updated);
     window.dispatchEvent(new Event('grove_wishlist_updated'));
+
+    // Persist toggle in MongoDB database
+    wishlistApi.toggle(productId)
+      .then((res) => {
+        // Sync fresh list from database if returned
+        if (res?.productId) {
+          const freshId = String(res.productId);
+          if (res.action === 'added' && !updated.includes(freshId)) {
+            const next = [...updated, freshId];
+            localStorage.setItem(wishlistKey, JSON.stringify(next));
+            setWishlist(next);
+          } else if (res.action === 'removed' && updated.includes(freshId)) {
+            const next = updated.filter((id) => id !== freshId);
+            localStorage.setItem(wishlistKey, JSON.stringify(next));
+            setWishlist(next);
+          }
+        }
+      })
+      .catch((err) => {
+        console.warn('Failed to persist wishlist item to database:', err.message);
+      });
+
     return true;
   };
 
   /**
-   * Explicitly removes a product from customer's wishlist.
+   * Explicitly removes a product from customer's wishlist in database and state.
    */
   const removeFromWishlist = (productId) => {
     if (!productId) return;
@@ -117,6 +157,12 @@ export function useWishlist() {
 
     setWishlist(updated);
     window.dispatchEvent(new Event('grove_wishlist_updated'));
+
+    // Remove from MongoDB database
+    wishlistApi.remove(productId)
+      .catch((err) => {
+        console.warn('Failed to remove wishlist item from database:', err.message);
+      });
   };
 
   /**

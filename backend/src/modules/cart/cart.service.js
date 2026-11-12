@@ -84,10 +84,28 @@ export class CartService {
   }
 
   /**
+   * Helper to resolve a product by ObjectId, slug, or SKU
+   */
+  static async resolveProduct(productId) {
+    if (!productId) return null;
+    let product = null;
+    const pidStr = String(productId).trim();
+    if (pidStr.match(/^[0-9a-fA-F]{24}$/)) {
+      product = await Product.findById(pidStr);
+    }
+    if (!product) {
+      product = await Product.findOne({
+        $or: [{ slug: pidStr }, { sku: pidStr.toUpperCase() }]
+      });
+    }
+    return product;
+  }
+
+  /**
    * Add Item to Customer Cart
    */
   static async addItem(userId, { productId, quantity = 1 }) {
-    const product = await Product.findById(productId);
+    const product = await this.resolveProduct(productId);
     if (!product || product.status !== 'Active') {
       throw ApiError.notFound('Product is currently unavailable.');
     }
@@ -101,8 +119,9 @@ export class CartService {
       cart = new Cart({ user: userId, items: [] });
     }
 
+    const prodIdStr = product._id.toString();
     const existingIndex = cart.items.findIndex(
-      (item) => item.product.toString() === productId.toString()
+      (item) => item.product.toString() === prodIdStr
     );
 
     const qtyToAdd = Math.max(1, parseInt(quantity, 10) || 1);
@@ -131,10 +150,12 @@ export class CartService {
     const cart = await Cart.findOne({ user: userId });
     if (!cart) throw ApiError.notFound('Cart not found.');
 
-    const item = cart.items.find((i) => i.product.toString() === productId.toString());
+    const product = await this.resolveProduct(productId);
+    const targetProdId = product ? product._id.toString() : String(productId).trim();
+
+    const item = cart.items.find((i) => i.product.toString() === targetProdId);
     if (!item) throw ApiError.notFound('Item not in cart.');
 
-    const product = await Product.findById(productId);
     if (!product) throw ApiError.notFound('Product not found.');
 
     const newQty = Math.max(1, parseInt(quantity, 10));
@@ -153,9 +174,12 @@ export class CartService {
    */
   static async removeItem(userId, productId) {
     const cart = await Cart.findOne({ user: userId });
-    if (!cart) return;
+    if (!cart) return await this.getCart(userId);
 
-    cart.items = cart.items.filter((i) => i.product.toString() !== productId.toString());
+    const product = await this.resolveProduct(productId);
+    const targetProdId = product ? product._id.toString() : String(productId).trim();
+
+    cart.items = cart.items.filter((i) => i.product.toString() !== targetProdId);
     await cart.save();
 
     return await this.getCart(userId);

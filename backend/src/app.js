@@ -17,6 +17,9 @@ import apiRouter from './routes/index.js';
 
 const app = express();
 
+// Disable ETag generation to prevent 304 Not Modified responses on dynamic API resources
+app.set('etag', false);
+
 // 1. Security Headers (Allow inline styles/scripts for Swagger UI)
 app.use(
   helmet({
