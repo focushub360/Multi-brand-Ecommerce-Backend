@@ -42,7 +42,7 @@ export default function ElectronicsPage() {
     setIsLoading(true);
     productsApi.getAll({ category: 'Electronics & Gadgets', limit: 100 })
       .then((res) => {
-        const serverProds = res?.products || (Array.isArray(res) ? res : []);
+        const serverProds = Array.isArray(res) ? res : (res?.products || res?.data || []);
         if (serverProds.length > 0) {
           const normalized = serverProds.map((p) => ({
             ...p,
@@ -93,7 +93,7 @@ export default function ElectronicsPage() {
     // 1. Subcategory / Category Filter
     if (selectedCategory !== 'All') {
       result = result.filter(
-        (p) => (p.subcategory || p.category) === selectedCategory
+        (p) => ((p.subcategory || p.category || '')).trim().toLowerCase() === selectedCategory.trim().toLowerCase()
       );
     }
 
@@ -302,6 +302,7 @@ export default function ElectronicsPage() {
                 onSortChange={handleSortChange}
                 onResetFilters={handleResetFilters}
                 onOpenMobileFilters={() => setIsMobileFiltersOpen(true)}
+                isLoading={isLoading}
               />
 
               {/* 3-Column Product Grid (desktop), 2-Col (tablet/mobile) */}
@@ -312,6 +313,7 @@ export default function ElectronicsPage() {
                 onViewDetails={(product) => navigate(`/electronics/product/${product.id}`)}
                 onAddToCart={addToCart}
                 onResetFilters={handleResetFilters}
+                isLoading={isLoading}
               />
 
               {/* Functional Pagination */}

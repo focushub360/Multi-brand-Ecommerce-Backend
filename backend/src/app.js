@@ -20,6 +20,14 @@ const app = express();
 // Disable ETag generation to prevent 304 Not Modified responses on dynamic API resources
 app.set('etag', false);
 
+// Prevent caching on dynamic API routes to avoid stale/empty 304 responses
+app.use('/api', (req, res, next) => {
+  res.setHeader('Cache-Control', 'no-store, no-cache, must-revalidate, proxy-revalidate');
+  res.setHeader('Pragma', 'no-cache');
+  res.setHeader('Expires', '0');
+  next();
+});
+
 // 1. Security Headers (Allow inline styles/scripts for Swagger UI)
 app.use(
   helmet({

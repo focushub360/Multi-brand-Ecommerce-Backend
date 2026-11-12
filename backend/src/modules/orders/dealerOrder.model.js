@@ -14,6 +14,10 @@ const dealerOrderSchema = new Schema(
       required: true,
       index: true
     },
+    orderNumber: {
+      type: String,
+      index: true
+    },
     dealer: {
       type: Schema.Types.ObjectId,
       ref: 'Dealer',

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { 
   ArrowLeft, 
@@ -11,20 +11,64 @@ import {
   ChevronDown, 
   ChevronUp, 
   AlertCircle,
-  Eye
+  Eye,
+  Lock
 } from 'lucide-react';
 import DealerLayout from '../../components/dealer/DealerLayout';
-import { addDealerProduct } from '../../services/dealerService';
-import { getActiveDealerId } from '../../utils/auth';
+import { addDealerProduct, getDealerStoreSettings } from '../../services/dealerService';
+import { getActiveDealerId, getStoredDealer } from '../../utils/auth';
+
+const SUBCATEGORIES_BY_CATEGORY = {
+  'Agriculture & Farming': [
+    'Hybrid Seeds',
+    'Fertilizers & Soil Nutrition',
+    'Crop Protection & Spraying',
+    'Irrigation & Drip Systems',
+    'Solar & Sustainable Energy',
+    'Farm Machinery & Heavy Equipment'
+  ],
+  'Electronics & Gadgets': [
+    'Smart Ag Tech & Sensors',
+    'Solar Pumps & Inverters',
+    'Field Surveillance Cameras',
+    'Battery Packs & Power Backup',
+    'Testing & Measuring Meters',
+    'Communication & Telemetry'
+  ],
+  'Automotive & Spare Parts': [
+    'Tractor Engine Components',
+    'Hydraulic Pumps & Cylinders',
+    'Transmission & Gearboxes',
+    'Braking & Clutch Systems',
+    'Commercial Farm Tires',
+    'Filters, Belts & Bearings'
+  ],
+  'Groceries': [
+    'Organic Staples & Grains',
+    'Cold Pressed Oils',
+    'Farm Fresh Pulses',
+    'Spices & Seasonings'
+  ]
+};
 
 export default function AddProduct() {
   const navigate = useNavigate();
+  const activeId = getActiveDealerId();
+  const dealerSettings = getDealerStoreSettings(activeId);
+  const storedDealer = getStoredDealer();
+
+  // Determine authorized category
+  const authorizedCategory = 
+    dealerSettings?.businessCategory || 
+    (storedDealer?.email?.includes('hub') ? 'Electronics & Gadgets' : 'Agriculture & Farming');
+
+  const availableSubcategories = SUBCATEGORIES_BY_CATEGORY[authorizedCategory] || SUBCATEGORIES_BY_CATEGORY['Agriculture & Farming'];
 
   const [formData, setFormData] = useState({
     name: '',
     description: '',
-    category: 'Agriculture & Farming',
-    subcategory: '',
+    category: authorizedCategory,
+    subcategory: availableSubcategories[0] || 'Farm Machinery & Heavy Equipment',
     sellingPrice: '',
     mrpPrice: '',
     gstRate: '18',
@@ -293,24 +337,33 @@ export default function AddProduct() {
 
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div className="flex flex-col gap-1.5">
-                  <label htmlFor="main-cat" className="text-xs font-semibold text-[#151D18]">
-                    Main Category
-                  </label>
-                  <select
-                    id="main-cat"
-                    value={formData.category}
-                    onChange={(e) => setFormData({ ...formData, category: e.target.value })}
-                    className="w-full h-11 px-3.5 rounded-xl bg-[#EDF6ED] border border-[#C1C8C2]/40 text-xs sm:text-sm text-[#151D18] focus:outline-none focus:bg-white focus:border-[#2C694E] cursor-pointer"
-                  >
-                    <option>Agriculture &amp; Farming</option>
-                    <option>Automotive &amp; Spare Parts</option>
-                    <option>Electronics &amp; Gadgets</option>
-                  </select>
+                  <div className="flex items-center justify-between">
+                    <label htmlFor="main-cat" className="text-xs font-semibold text-[#151D18]">
+                      Authorized Category
+                    </label>
+                    <span className="inline-flex items-center gap-1 text-[10px] font-bold text-[#2C694E] bg-[#EDF6ED] px-2 py-0.5 rounded-md">
+                      <Lock className="w-2.5 h-2.5" />
+                      Locked to Dealership
+                    </span>
+                  </div>
+                  <div className="relative">
+                    <input
+                      id="main-cat"
+                      type="text"
+                      readOnly
+                      value={authorizedCategory}
+                      className="w-full h-11 px-3.5 pr-8 rounded-xl bg-neutral-100 border border-[#C1C8C2]/60 text-xs sm:text-sm font-bold text-[#151D18] cursor-not-allowed select-none"
+                    />
+                    <Lock className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[#717973] pointer-events-none" />
+                  </div>
+                  <p className="text-[11px] text-[#717973]">
+                    Your verified dealership is authorized exclusively for <strong>{authorizedCategory}</strong>.
+                  </p>
                 </div>
 
                 <div className="flex flex-col gap-1.5">
                   <label htmlFor="sub-cat" className="text-xs font-semibold text-[#151D18]">
-                    Subcategory
+                    Subcategory <span className="text-red-500">*</span>
                   </label>
                   <select
                     id="sub-cat"
@@ -318,14 +371,13 @@ export default function AddProduct() {
                     onChange={(e) => setFormData({ ...formData, subcategory: e.target.value })}
                     className="w-full h-11 px-3.5 rounded-xl bg-[#EDF6ED] border border-[#C1C8C2]/40 text-xs sm:text-sm text-[#151D18] focus:outline-none focus:bg-white focus:border-[#2C694E] cursor-pointer"
                   >
-                    <option>Micro-Irrigation &amp; Tubing</option>
-                    <option>Fertilizer Injectors</option>
-                    <option>Filtration Units</option>
-                    <option>Control Valves &amp; Solenoids</option>
-                    <option>Drivetrain Linkages</option>
-                    <option>Electrical Charging</option>
-                    <option>Smart Ag Tech</option>
+                    {availableSubcategories.map((sub) => (
+                      <option key={sub} value={sub}>{sub}</option>
+                    ))}
                   </select>
+                  <p className="text-[11px] text-[#717973]">
+                    Subcategory options tailored to {authorizedCategory}.
+                  </p>
                 </div>
               </div>
 

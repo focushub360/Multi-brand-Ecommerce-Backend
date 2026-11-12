@@ -18,14 +18,14 @@ export default function AgricultureHero({ onScrollToCatalog }) {
   };
 
   return (
-    <header className="relative bg-[#F8FAF5] text-neutral-900 border-b border-neutral-200/70">
+    <header className="relative bg-[#F8FAF5] text-neutral-900 border-b border-neutral-200/70 z-30">
       {/* Reused GROVE Navbar with darkText variant for clean light background */}
-      <div className="relative z-50 border-b border-neutral-200/60 bg-white/70 backdrop-blur-xs">
+      <div className="relative z-50 border-b border-neutral-200/60 bg-white/95 shadow-2xs">
         <Navbar darkText={true} />
       </div>
 
       {/* Main Hero Container */}
-      <div className="max-w-[1440px] mx-auto px-4 sm:px-6 md:px-10 lg:px-16 pt-6 sm:pt-8 md:pt-10 pb-10 sm:pb-16 lg:pb-20">
+      <div className="relative z-10 max-w-[1440px] mx-auto px-4 sm:px-6 md:px-10 lg:px-16 pt-6 sm:pt-8 md:pt-10 pb-10 sm:pb-16 lg:pb-20">
         {/* Two-Column Balanced Hero: Content Left, Authentic Photography Right */}
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center">
           {/* Left Column: Heading, Value Proposition, CTAs, and Trust Highlights */}
@@ -98,9 +98,9 @@ export default function AgricultureHero({ onScrollToCatalog }) {
           </div>
 
           {/* Right Column: Genuine DSLR Agricultural Photograph */}
-          <div className="lg:col-span-5 relative mt-2 lg:mt-0 w-full">
+          <div className="lg:col-span-5 relative z-0 mt-2 lg:mt-0 w-full">
             {/* Clean, Framed Photograph with Natural Drop Shadow */}
-            <div className="relative rounded-[20px] sm:rounded-[28px] overflow-hidden border border-neutral-200/90 shadow-[0_12px_36px_rgba(27,67,50,0.08)] bg-neutral-100 aspect-[4/3] sm:aspect-[16/11] lg:aspect-[4/3] xl:aspect-[16/12]">
+            <div className="relative z-0 rounded-[20px] sm:rounded-[28px] overflow-hidden border border-neutral-200/90 shadow-[0_12px_36px_rgba(27,67,50,0.08)] bg-neutral-100 aspect-[4/3] sm:aspect-[16/11] lg:aspect-[4/3] xl:aspect-[16/12]">
               <img
                 src={imgSrc}
                 alt="Indian farmer inspecting healthy crops in lush green field in morning light"

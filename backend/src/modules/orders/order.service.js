@@ -172,6 +172,7 @@ export class OrderService {
       const dealerOrder = new DealerOrder({
         parentOrder: masterOrder._id,
         parentOrderNumber: orderNumber,
+        orderNumber: subOrderNumber,
         dealer: dealer._id,
         dealerCode: dealer.dealerCode,
         customer: customer._id,

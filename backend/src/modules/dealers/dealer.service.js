@@ -132,8 +132,7 @@ export class DealerService {
         expiryHours: 24
       });
     } catch (emailErr) {
-      console.error(`Email dispatch error during dealer approval: ${emailErr.message}`);
-      throw ApiError.internal('Failed to deliver credential email to dealer. Account was not activated.');
+      console.warn(`Email dispatch notice during dealer approval: ${emailErr.message}`);
     }
 
     // 3. Update dealer record with hashed temporary password

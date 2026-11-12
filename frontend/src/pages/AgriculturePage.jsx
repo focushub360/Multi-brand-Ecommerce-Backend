@@ -41,7 +41,7 @@ export default function AgriculturePage() {
     setIsLoading(true);
     productsApi.getAll({ category: 'Agriculture & Farming', limit: 100 })
       .then((res) => {
-        const serverProds = res?.products || (Array.isArray(res) ? res : []);
+        const serverProds = Array.isArray(res) ? res : (res?.products || res?.data || []);
         if (serverProds.length > 0) {
           const normalized = serverProds.map((p) => ({
             ...p,
@@ -79,7 +79,9 @@ export default function AgriculturePage() {
 
     // 1. Category Filter
     if (selectedCategory !== 'All') {
-      result = result.filter((p) => p.category === selectedCategory);
+      result = result.filter(
+        (p) => (p.subcategory || p.category || '').trim().toLowerCase() === selectedCategory.trim().toLowerCase()
+      );
     }
 
     // 2. Price Range Filter
@@ -270,6 +272,7 @@ export default function AgriculturePage() {
                 onSortChange={handleSortChange}
                 onResetFilters={handleResetFilters}
                 onOpenMobileFilters={() => setIsMobileFiltersOpen(true)}
+                isLoading={isLoading}
               />
 
               {/* 3-Column Product Grid (desktop), 2-Col (tablet/mobile) */}
@@ -280,6 +283,7 @@ export default function AgriculturePage() {
                 onViewDetails={(product) => navigate(`/agriculture/product/${product.id}`)}
                 onAddToCart={addToCart}
                 onResetFilters={handleResetFilters}
+                isLoading={isLoading}
               />
 
               {/* Functional Pagination */}

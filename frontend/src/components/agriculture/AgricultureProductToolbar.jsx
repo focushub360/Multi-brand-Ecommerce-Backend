@@ -23,6 +23,7 @@ export default function AgricultureProductToolbar({
   onSortChange,
   onResetFilters,
   onOpenMobileFilters,
+  isLoading = false,
 }) {
   const isFiltered = 
     selectedCategory !== 'All' || 
@@ -49,7 +50,12 @@ export default function AgricultureProductToolbar({
             Agricultural Products
           </h3>
           <p className="text-xs text-neutral-500 font-medium mt-0.5">
-            {filteredCount > 0 ? (
+            {isLoading ? (
+              <span className="inline-flex items-center gap-1.5 text-[#1B4332] font-semibold">
+                <span className="w-1.5 h-1.5 rounded-full bg-[#1B4332] animate-pulse inline-block" />
+                Loading verified agricultural products...
+              </span>
+            ) : filteredCount > 0 ? (
               <>
                 Showing <span className="font-bold text-[#081C15]">{startItem}–{endItem}</span> of{' '}
                 <span className="font-bold text-[#081C15]">{filteredCount}</span> items

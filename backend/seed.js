@@ -222,7 +222,120 @@ async function seedDatabase() {
     }
   });
 
-  console.log(`✅ Created Dealer profile: ${dealerEntity.businessName} (${dealerEntity.dealerCode})\n`);
+  console.log(`✅ Created Dealer profile: ${dealerEntity.businessName} (${dealerEntity.dealerCode})`);
+
+  // Seed Additional Specialized Dealers for Electronics and Automotive
+  const dealer2User = await User.create({
+    name: 'ElectroTech Systems Lead',
+    email: 'dealer2@grove.com',
+    phone: '9822054321',
+    password: 'Password@123',
+    role: ROLES.DEALER,
+    status: 'ACTIVE',
+    isEmailVerified: true
+  });
+
+  const dealer2Entity = await Dealer.create({
+    user: dealer2User._id,
+    dealerCode: 'DEALER_002',
+    businessName: 'ElectroTech Smart Components & Sensors',
+    businessType: 'Authorized Dealer',
+    primaryCategory: elecCat._id,
+    primaryCategoryName: elecCat.name,
+    ownerName: dealer2User.name,
+    officialEmail: dealer2User.email,
+    phone: dealer2User.phone,
+    gstin: '27XYZPA9876Q1Z2',
+    pan: 'XYZPA9876Q',
+    businessAddress: {
+      address: 'Survey No 88, Hadapsar Electronic Estate',
+      city: 'Pune',
+      state: 'Maharashtra',
+      pincode: '411028'
+    },
+    warehouseAddress: 'Survey No 88, Hadapsar Electronic Estate, Pune - 411028',
+    location: {
+      type: 'Point',
+      coordinates: [73.9312, 18.5089]
+    },
+    status: DEALER_STATUS.APPROVED,
+    tier: 'Silver Tier',
+    commissionRate: 5.0,
+    bankDetails: {
+      accountName: 'ElectroTech Smart Components',
+      accountNumber: '987654321099',
+      ifsc: 'HDFC0001234',
+      bankName: 'HDFC Bank'
+    },
+    kycDocuments: [
+      { name: 'GSTIN Registration Certificate', url: 'https://grove.internal/docs/gstin-el.pdf', status: 'Verified' },
+      { name: 'Business License', url: 'https://grove.internal/docs/license-el.pdf', status: 'Verified' }
+    ],
+    storeSettings: {
+      tagline: 'Precision Agri-Sensors & Telemetry Electronics',
+      description: 'Authorized regional dealer for field cameras, telemetry laptops, solar pumps, and smart agriculture monitoring.',
+      operatingHours: 'Mon - Sat: 09:00 AM - 08:00 PM',
+      isOpen: true,
+      fulfillmentSLA: 98.8
+    }
+  });
+  console.log(`✅ Created Dealer profile: ${dealer2Entity.businessName} (${dealer2Entity.dealerCode})`);
+
+  const dealer3User = await User.create({
+    name: 'AutoMech Agro Spares Lead',
+    email: 'dealer3@grove.com',
+    phone: '9822067890',
+    password: 'Password@123',
+    role: ROLES.DEALER,
+    status: 'ACTIVE',
+    isEmailVerified: true
+  });
+
+  const dealer3Entity = await Dealer.create({
+    user: dealer3User._id,
+    dealerCode: 'DEALER_003',
+    businessName: 'AutoMech Heavy Commercial Spares',
+    businessType: 'Authorized Dealer',
+    primaryCategory: autoCat._id,
+    primaryCategoryName: autoCat.name,
+    ownerName: dealer3User.name,
+    officialEmail: dealer3User.email,
+    phone: dealer3User.phone,
+    gstin: '27DEFGH5678J1Z9',
+    pan: 'DEFGH5678J',
+    businessAddress: {
+      address: 'Plot 15, Chakan Auto Hub Phase 2',
+      city: 'Pune',
+      state: 'Maharashtra',
+      pincode: '410501'
+    },
+    warehouseAddress: 'Plot 15, Chakan Auto Hub Phase 2, Pune - 410501',
+    location: {
+      type: 'Point',
+      coordinates: [73.8643, 18.7589]
+    },
+    status: DEALER_STATUS.APPROVED,
+    tier: 'Gold Tier',
+    commissionRate: 5.0,
+    bankDetails: {
+      accountName: 'AutoMech Heavy Commercial Spares',
+      accountNumber: '987654321100',
+      ifsc: 'ICIC0001234',
+      bankName: 'ICICI Bank'
+    },
+    kycDocuments: [
+      { name: 'GSTIN Registration Certificate', url: 'https://grove.internal/docs/gstin-au.pdf', status: 'Verified' },
+      { name: 'Business License', url: 'https://grove.internal/docs/license-au.pdf', status: 'Verified' }
+    ],
+    storeSettings: {
+      tagline: 'OEM Tractor Engine & Drivetrain Components',
+      description: 'Authorized regional dealer for tractor replacement parts, commercial farm tires, hydraulic systems, and tool kits.',
+      operatingHours: 'Mon - Sat: 08:30 AM - 07:30 PM',
+      isOpen: true,
+      fulfillmentSLA: 99.2
+    }
+  });
+  console.log(`✅ Created Dealer profile: ${dealer3Entity.businessName} (${dealer3Entity.dealerCode})\n`);
 
   // 5. Seed Catalog Products (JSON format: exactly 3 products per subcategory, 18 per category, 54 total)
   console.log('📦 Seeding Products (18 Agriculture, 18 Electronics, 18 Automotive)...');
@@ -1359,20 +1472,29 @@ async function seedDatabase() {
     }
   ];
 
-  // Enrich products with dealer metadata
-  const productsToInsert = rawProducts.map((p) => ({
-    ...p,
-    dealer: dealerEntity._id,
-    dealerCode: dealerEntity.dealerCode,
-    dealerName: dealerEntity.businessName,
-    threshold: 10,
-    status: 'Active',
-    deliveryInfo: {
-      standardDays: '2 - 4 Business Days',
-      shippingFee: 'FREE Express Delivery',
-      dispatchTime: 'Dispatched within 24 Hours'
+  // Enrich products with dealer metadata matching their specialized category
+  const productsToInsert = rawProducts.map((p) => {
+    let assignedDealer = dealerEntity; // DEALER_001 (Agri)
+    if (p.categoryName && p.categoryName.includes('Electronic')) {
+      assignedDealer = dealer2Entity; // DEALER_002 (Electronics)
+    } else if (p.categoryName && p.categoryName.includes('Auto')) {
+      assignedDealer = dealer3Entity; // DEALER_003 (Automotive)
     }
-  }));
+
+    return {
+      ...p,
+      dealer: assignedDealer._id,
+      dealerCode: assignedDealer.dealerCode,
+      dealerName: assignedDealer.businessName,
+      threshold: 10,
+      status: 'Active',
+      deliveryInfo: {
+        standardDays: '2 - 4 Business Days',
+        shippingFee: 'FREE Express Delivery',
+        dispatchTime: 'Dispatched within 24 Hours'
+      }
+    };
+  });
 
   const createdProducts = await Product.create(productsToInsert);
   console.log(`✅ Seeded ${createdProducts.length} catalog products across 3 categories (18 per category, 3 per subcategory).\n`);
@@ -1381,7 +1503,7 @@ async function seedDatabase() {
   console.log('📊 Seeding Warehouse Inventory Records...');
   const inventoryDocs = createdProducts.map((prod) => ({
     product: prod._id,
-    dealer: dealerEntity._id,
+    dealer: prod.dealer,
     sku: prod.sku,
     currentStock: prod.stock,
     reservedStock: 0,
@@ -1454,8 +1576,7 @@ async function seedDatabase() {
   const orderSeeds = [
     {
       orderNumber: 'ORD-7821',
-      sku: 'SKU-AG-10',
-      quantity: 1,
+      items: [{ sku: 'SKU-AG-10', quantity: 1 }],
       orderStatus: 'Delivered',
       paymentMethod: 'upi',
       paymentStatus: 'Completed',
@@ -1464,8 +1585,7 @@ async function seedDatabase() {
     },
     {
       orderNumber: 'ORD-7822',
-      sku: 'SKU-AG-01',
-      quantity: 2,
+      items: [{ sku: 'SKU-AG-01', quantity: 2 }],
       orderStatus: 'Shipped',
       paymentMethod: 'card',
       paymentStatus: 'Completed',
@@ -1474,8 +1594,7 @@ async function seedDatabase() {
     },
     {
       orderNumber: 'ORD-7823',
-      sku: 'SKU-EL-01',
-      quantity: 1,
+      items: [{ sku: 'SKU-EL-01', quantity: 1 }],
       orderStatus: 'Processing',
       paymentMethod: 'netbanking',
       paymentStatus: 'Completed',
@@ -1484,8 +1603,7 @@ async function seedDatabase() {
     },
     {
       orderNumber: 'ORD-7824',
-      sku: 'SKU-AU-04',
-      quantity: 2,
+      items: [{ sku: 'SKU-AU-04', quantity: 2 }],
       orderStatus: 'Placed',
       paymentMethod: 'cod',
       paymentStatus: 'Pending',
@@ -1494,25 +1612,77 @@ async function seedDatabase() {
     },
     {
       orderNumber: 'ORD-7825',
-      sku: 'SKU-AG-07',
-      quantity: 1,
+      items: [{ sku: 'SKU-AG-07', quantity: 1 }],
       orderStatus: 'Delivered',
       paymentMethod: 'upi',
       paymentStatus: 'Completed',
       daysAgo: 18,
       trackingNumber: 'DEL-AG-110294'
+    },
+    // Multi-Category Multi-Dealer Order: 2 Agri (Dealer 1) + 1 Electronics (Dealer 2)
+    {
+      orderNumber: 'ORD-7826',
+      items: [
+        { sku: 'SKU-AG-01', quantity: 1 },
+        { sku: 'SKU-AG-02', quantity: 1 },
+        { sku: 'SKU-EL-01', quantity: 1 }
+      ],
+      orderStatus: 'Placed',
+      paymentMethod: 'upi',
+      paymentStatus: 'Completed',
+      daysAgo: 1,
+      trackingNumber: ''
     }
   ];
 
   for (const s of orderSeeds) {
-    const prod = createdProducts.find((p) => p.sku === s.sku);
-    if (!prod) continue;
-
-    const subtotal = prod.price * s.quantity;
     const createdAt = new Date(Date.now() - s.daysAgo * 24 * 60 * 60 * 1000);
-    const commissionRate = 5.0;
-    const commissionAmount = Math.round((subtotal * commissionRate) / 100);
-    const netSettlementAmount = subtotal - commissionAmount;
+    const orderItems = [];
+    const dealerMap = new Map();
+
+    for (const itemSeed of s.items) {
+      const prod = createdProducts.find((p) => p.sku === itemSeed.sku);
+      if (!prod) continue;
+
+      const subtotal = prod.price * itemSeed.quantity;
+      const lineItem = {
+        product: prod._id,
+        name: prod.name,
+        sku: prod.sku,
+        price: prod.price,
+        mrp: prod.mrp,
+        quantity: itemSeed.quantity,
+        category: prod.categoryName,
+        dealer: prod.dealer,
+        dealerCode: prod.dealerCode,
+        dealerName: prod.dealerName,
+        image: prod.image,
+        subtotal
+      };
+      orderItems.push(lineItem);
+
+      const dKey = prod.dealer.toString();
+      if (!dealerMap.has(dKey)) {
+        dealerMap.set(dKey, {
+          dealerId: prod.dealer,
+          dealerCode: prod.dealerCode,
+          dealerName: prod.dealerName,
+          items: [],
+          subtotal: 0
+        });
+      }
+      const dEntry = dealerMap.get(dKey);
+      dEntry.items.push(lineItem);
+      dEntry.subtotal += subtotal;
+
+      await Product.findByIdAndUpdate(prod._id, { $inc: { totalSales: itemSeed.quantity } });
+    }
+
+    if (orderItems.length === 0) continue;
+
+    const itemsTotal = orderItems.reduce((acc, curr) => acc + curr.subtotal, 0);
+    const taxTotal = Math.round(itemsTotal * 0.18);
+    const grandTotal = itemsTotal + taxTotal;
 
     const masterOrder = await Order.create({
       orderNumber: s.orderNumber,
@@ -1533,29 +1703,14 @@ async function seedDatabase() {
         state: userAddress.state,
         type: userAddress.type
       },
-      items: [
-        {
-          product: prod._id,
-          name: prod.name,
-          sku: prod.sku,
-          price: prod.price,
-          mrp: prod.mrp,
-          quantity: s.quantity,
-          category: prod.categoryName,
-          dealer: dealerEntity._id,
-          dealerCode: dealerEntity.dealerCode,
-          dealerName: dealerEntity.businessName,
-          image: prod.image,
-          subtotal
-        }
-      ],
-      dealers: [dealerEntity._id],
+      items: orderItems,
+      dealers: Array.from(dealerMap.values()).map((d) => d.dealerId),
       pricing: {
-        itemsTotal: subtotal,
+        itemsTotal,
         discount: 0,
         deliveryFee: 0,
-        tax: Math.round(subtotal * 0.18),
-        total: subtotal + Math.round(subtotal * 0.18)
+        tax: taxTotal,
+        total: grandTotal
       },
       payment: {
         method: s.paymentMethod,
@@ -1575,7 +1730,7 @@ async function seedDatabase() {
               {
                 status: 'Shipped',
                 title: 'Dispatched from Warehouse',
-                note: `Carrier tracking: ${s.trackingNumber}`,
+                note: `Carrier tracking: ${s.trackingNumber || 'DEL-EXP-772190'}`,
                 timestamp: new Date(createdAt.getTime() + 24 * 3600000)
               }
             ]
@@ -1595,46 +1750,67 @@ async function seedDatabase() {
       updatedAt: createdAt
     });
 
-    const dealerOrder = await DealerOrder.create({
-      parentOrder: masterOrder._id,
-      parentOrderNumber: masterOrder.orderNumber,
-      dealer: dealerEntity._id,
-      dealerCode: dealerEntity.dealerCode,
-      customer: user1._id,
-      customerSnapshot: {
-        name: user1.name,
-        city: userAddress.city,
-        state: userAddress.state,
-        phone: user1.phone,
-        address: `${userAddress.house}, ${userAddress.street}, ${userAddress.city} - ${userAddress.pincode}`
-      },
-      items: [
-        {
-          product: prod._id,
-          name: prod.name,
-          sku: prod.sku,
-          price: prod.price,
-          quantity: s.quantity,
-          subtotal,
-          image: prod.image
-        }
-      ],
-      subtotal,
-      commissionRate,
-      commissionAmount,
-      netSettlementAmount,
-      orderStatus: s.orderStatus,
-      paymentStatus: s.paymentStatus === 'Completed' ? 'Paid' : 'Pending',
-      fulfillmentPartner: 'Delhivery Cargo Express',
-      trackingNumber: s.trackingNumber,
-      estimatedDelivery: '3 - 5 Business Days',
-      payoutStatus: s.orderStatus === 'Delivered' ? 'Settled' : s.orderStatus === 'Shipped' ? 'Released' : 'Escrow Held',
-      timeline: masterOrder.timeline,
-      createdAt,
-      updatedAt: createdAt
-    });
+    // Create discrete suborders per dealer
+    const createdDealerOrderIds = [];
+    let dIndex = 1;
 
-    masterOrder.dealerOrders = [dealerOrder._id];
+    for (const [dKey, dEntry] of dealerMap.entries()) {
+      const commissionRate = 5.0;
+      const commissionAmount = Math.round((dEntry.subtotal * commissionRate) / 100);
+      const netSettlementAmount = dEntry.subtotal - commissionAmount;
+      const subOrderNumber = `${s.orderNumber}-D${dIndex++}`;
+
+      const dealerOrder = await DealerOrder.create({
+        parentOrder: masterOrder._id,
+        parentOrderNumber: masterOrder.orderNumber,
+        orderNumber: subOrderNumber,
+        dealer: dEntry.dealerId,
+        dealerCode: dEntry.dealerCode,
+        customer: user1._id,
+        customerSnapshot: {
+          name: user1.name,
+          city: userAddress.city,
+          state: userAddress.state,
+          phone: user1.phone,
+          address: `${userAddress.house}, ${userAddress.street}, ${userAddress.city} - ${userAddress.pincode}`
+        },
+        items: dEntry.items,
+        subtotal: dEntry.subtotal,
+        commissionRate,
+        commissionAmount,
+        netSettlementAmount,
+        orderStatus: s.orderStatus,
+        paymentStatus: s.paymentStatus === 'Completed' ? 'Paid' : 'Pending',
+        fulfillmentPartner: 'Delhivery Cargo Express',
+        trackingNumber: s.trackingNumber || (s.orderStatus !== 'Placed' ? `DEL-${dEntry.dealerCode}-9912` : ''),
+        estimatedDelivery: '3 - 5 Business Days',
+        payoutStatus: s.orderStatus === 'Delivered' ? 'Settled' : s.orderStatus === 'Shipped' ? 'Released' : 'Escrow Held',
+        timeline: masterOrder.timeline,
+        createdAt,
+        updatedAt: createdAt
+      });
+
+      createdDealerOrderIds.push(dealerOrder._id);
+
+      if (s.orderStatus === 'Delivered') {
+        await Settlement.create({
+          settlementId: `SETTL-${subOrderNumber}`,
+          dealer: dEntry.dealerId,
+          dealerName: dEntry.dealerName,
+          cycle: 'Weekly Standard Payout',
+          grossAmount: dEntry.subtotal,
+          commissionDeducted: commissionAmount,
+          taxDeducted: Math.round(dEntry.subtotal * 0.01),
+          netPayout: netSettlementAmount - Math.round(dEntry.subtotal * 0.01),
+          bankRef: `NEFT${Math.floor(100000000 + Math.random() * 900000000)}`,
+          status: 'SETTLED',
+          dealerOrders: [dealerOrder._id],
+          settledAt: new Date(createdAt.getTime() + 96 * 3600000)
+        });
+      }
+    }
+
+    masterOrder.dealerOrders = createdDealerOrderIds;
     await masterOrder.save();
 
     await Payment.create({
@@ -1650,25 +1826,6 @@ async function seedDatabase() {
       escrowStatus: s.orderStatus === 'Delivered' ? 'Released' : 'Escrow Held',
       paidAt: s.paymentStatus === 'Completed' ? createdAt : null
     });
-
-    if (s.orderStatus === 'Delivered') {
-      await Settlement.create({
-        settlementId: `SETTL-${s.orderNumber}`,
-        dealer: dealerEntity._id,
-        dealerName: dealerEntity.businessName,
-        cycle: 'Weekly Standard Payout',
-        grossAmount: subtotal,
-        commissionDeducted: commissionAmount,
-        taxDeducted: Math.round(subtotal * 0.01),
-        netPayout: netSettlementAmount - Math.round(subtotal * 0.01),
-        bankRef: `NEFT${Math.floor(100000000 + Math.random() * 900000000)}`,
-        status: 'SETTLED',
-        dealerOrders: [dealerOrder._id],
-        settledAt: new Date(createdAt.getTime() + 96 * 3600000)
-      });
-    }
-
-    await Product.findByIdAndUpdate(prod._id, { $inc: { totalSales: s.quantity } });
   }
   console.log(`✅ Seeded ${orderSeeds.length} customer orders and dealer suborders.\n`);
 

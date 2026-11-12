@@ -9,7 +9,31 @@ export default function ElectronicsProductGrid({
   onViewDetails,
   onAddToCart,
   onResetFilters,
+  isLoading = false,
 }) {
+  if (isLoading) {
+    return (
+      <div className="w-full">
+        <div className="grid grid-cols-1 min-[480px]:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 gap-4 lg:gap-5">
+          {[...Array(6)].map((_, i) => (
+            <div key={i} className="bg-white rounded-[20px] p-4 border border-neutral-200/70 shadow-2xs animate-pulse flex flex-col justify-between h-[360px]">
+              <div>
+                <div className="w-full aspect-[4/3] bg-neutral-200/70 rounded-[14px] mb-4" />
+                <div className="h-3.5 bg-neutral-200/80 rounded-full w-1/3 mb-2.5" />
+                <div className="h-5 bg-neutral-200/90 rounded-md w-4/5 mb-2" />
+                <div className="h-3.5 bg-neutral-200/70 rounded-md w-1/2" />
+              </div>
+              <div className="flex items-center justify-between pt-3 border-t border-neutral-100 mt-4">
+                <div className="h-6 bg-neutral-200 rounded-md w-24" />
+                <div className="h-9 bg-neutral-200 rounded-[12px] w-28" />
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    );
+  }
+
   if (products.length === 0) {
     return (
       <div className="w-full bg-white rounded-[20px] py-16 px-6 text-center border border-neutral-200/80 shadow-2xs">

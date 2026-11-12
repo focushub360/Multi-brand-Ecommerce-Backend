@@ -8,15 +8,58 @@ import {
   ChevronDown, 
   ChevronUp, 
   Eye, 
-  AlertCircle 
+  AlertCircle,
+  Lock
 } from 'lucide-react';
 import DealerLayout from '../../components/dealer/DealerLayout';
-import { getDealerProductById, fetchDealerProductById, updateDealerProduct, deleteDealerProduct } from '../../services/dealerService';
-import { getActiveDealerId } from '../../utils/auth';
+import { getDealerProductById, fetchDealerProductById, updateDealerProduct, deleteDealerProduct, getDealerStoreSettings } from '../../services/dealerService';
+import { getActiveDealerId, getStoredDealer } from '../../utils/auth';
+
+const SUBCATEGORIES_BY_CATEGORY = {
+  'Agriculture & Farming': [
+    'Hybrid Seeds',
+    'Fertilizers & Soil Nutrition',
+    'Crop Protection & Spraying',
+    'Irrigation & Drip Systems',
+    'Solar & Sustainable Energy',
+    'Farm Machinery & Heavy Equipment'
+  ],
+  'Electronics & Gadgets': [
+    'Smart Ag Tech & Sensors',
+    'Solar Pumps & Inverters',
+    'Field Surveillance Cameras',
+    'Battery Packs & Power Backup',
+    'Testing & Measuring Meters',
+    'Communication & Telemetry'
+  ],
+  'Automotive & Spare Parts': [
+    'Tractor Engine Components',
+    'Hydraulic Pumps & Cylinders',
+    'Transmission & Gearboxes',
+    'Braking & Clutch Systems',
+    'Commercial Farm Tires',
+    'Filters, Belts & Bearings'
+  ],
+  'Groceries': [
+    'Organic Staples & Grains',
+    'Cold Pressed Oils',
+    'Farm Fresh Pulses',
+    'Spices & Seasonings'
+  ]
+};
 
 export default function EditProduct() {
   const { id } = useParams();
   const navigate = useNavigate();
+  const activeId = getActiveDealerId();
+  const dealerSettings = getDealerStoreSettings(activeId);
+  const storedDealer = getStoredDealer();
+
+  const authorizedCategory = 
+    dealerSettings?.businessCategory || 
+    (storedDealer?.email?.includes('hub') ? 'Electronics & Gadgets' : 'Agriculture & Farming');
+
+  const availableSubcategories = SUBCATEGORIES_BY_CATEGORY[authorizedCategory] || SUBCATEGORIES_BY_CATEGORY['Agriculture & Farming'];
 
   const [product, setProduct] = useState(null);
   const [formData, setFormData] = useState(null);
@@ -233,26 +276,41 @@ export default function EditProduct() {
 
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div className="flex flex-col gap-1.5">
-                  <label className="text-xs font-semibold text-[#151D18]">Main Category</label>
-                  <select
-                    value={formData.category}
-                    onChange={(e) => setFormData({ ...formData, category: e.target.value })}
-                    className="w-full h-11 px-3.5 rounded-xl bg-[#EDF6ED] border border-[#C1C8C2]/40 text-xs sm:text-sm text-[#151D18] focus:outline-none focus:bg-white focus:border-[#2C694E]"
-                  >
-                    <option>Agriculture &amp; Farming</option>
-                    <option>Automotive &amp; Spare Parts</option>
-                    <option>Electronics &amp; Gadgets</option>
-                  </select>
+                  <div className="flex items-center justify-between">
+                    <label className="text-xs font-semibold text-[#151D18]">Authorized Category</label>
+                    <span className="inline-flex items-center gap-1 text-[10px] font-bold text-[#2C694E] bg-[#EDF6ED] px-2 py-0.5 rounded-md">
+                      <Lock className="w-2.5 h-2.5" />
+                      Locked to Dealership
+                    </span>
+                  </div>
+                  <div className="relative">
+                    <input
+                      type="text"
+                      readOnly
+                      value={authorizedCategory}
+                      className="w-full h-11 px-3.5 pr-8 rounded-xl bg-neutral-100 border border-[#C1C8C2]/60 text-xs sm:text-sm font-bold text-[#151D18] cursor-not-allowed select-none"
+                    />
+                    <Lock className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[#717973] pointer-events-none" />
+                  </div>
+                  <p className="text-[11px] text-[#717973]">
+                    Your verified dealership is authorized exclusively for <strong>{authorizedCategory}</strong>.
+                  </p>
                 </div>
 
                 <div className="flex flex-col gap-1.5">
                   <label className="text-xs font-semibold text-[#151D18]">Subcategory</label>
-                  <input
-                    type="text"
+                  <select
                     value={formData.subcategory}
                     onChange={(e) => setFormData({ ...formData, subcategory: e.target.value })}
-                    className="w-full h-11 px-3.5 rounded-xl bg-[#EDF6ED] border border-[#C1C8C2]/40 text-xs sm:text-sm text-[#151D18] focus:outline-none focus:bg-white focus:border-[#2C694E]"
-                  />
+                    className="w-full h-11 px-3.5 rounded-xl bg-[#EDF6ED] border border-[#C1C8C2]/40 text-xs sm:text-sm text-[#151D18] focus:outline-none focus:bg-white focus:border-[#2C694E] cursor-pointer"
+                  >
+                    {availableSubcategories.map((sub) => (
+                      <option key={sub} value={sub}>{sub}</option>
+                    ))}
+                  </select>
+                  <p className="text-[11px] text-[#717973]">
+                    Authorized sector subcategories.
+                  </p>
                 </div>
               </div>
 

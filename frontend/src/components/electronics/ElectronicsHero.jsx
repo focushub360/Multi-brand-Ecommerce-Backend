@@ -17,14 +17,14 @@ export default function ElectronicsHero({ onScrollToCatalog }) {
   };
 
   return (
-    <header className="relative bg-[#FAF9F5] text-neutral-900 border-b border-neutral-200/70">
+    <header className="relative bg-[#FAF9F5] text-neutral-900 border-b border-neutral-200/70 z-30">
       {/* Reused GROVE Navbar with darkText variant for clean light background */}
-      <div className="relative z-50 border-b border-neutral-200/60 bg-white/75 backdrop-blur-xs">
+      <div className="relative z-50 border-b border-neutral-200/60 bg-white/95 shadow-2xs">
         <Navbar darkText={true} />
       </div>
 
       {/* Main Hero Container */}
-      <div className="max-w-[1440px] mx-auto px-4 sm:px-6 md:px-10 lg:px-16 pt-6 sm:pt-8 md:pt-10 pb-10 sm:pb-16 lg:pb-20">
+      <div className="relative z-10 max-w-[1440px] mx-auto px-4 sm:px-6 md:px-10 lg:px-16 pt-6 sm:pt-8 md:pt-10 pb-10 sm:pb-16 lg:pb-20">
         {/* Two-Column Balanced Hero: Content Left, Authentic Photography Right */}
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center">
           {/* Left Column: Heading, Value Proposition, CTAs, and Trust Highlights */}

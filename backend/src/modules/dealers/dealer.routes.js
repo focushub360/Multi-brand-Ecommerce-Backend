@@ -49,6 +49,20 @@ router.put(
 router.get('/', dealerController.getAllDealers);
 router.get('/:id', dealerController.getDealerById);
 router.patch(
+  '/:id/approve',
+  authenticate,
+  authorize(ROLES.SUPER_ADMIN),
+  dealerController.approveDealer
+);
+
+router.patch(
+  '/:id/reject',
+  authenticate,
+  authorize(ROLES.SUPER_ADMIN),
+  dealerController.rejectDealer
+);
+
+router.patch(
   '/:id/status',
   authenticate,
   authorize(ROLES.SUPER_ADMIN),

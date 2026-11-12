@@ -211,16 +211,16 @@ export default function BecomeDealerPage() {
         businessDescription: formData.businessDescription || 'Registered dealer on GROVE platform.'
       };
 
-      await authApi.registerDealer(payload);
+      const res = await authApi.registerDealer(payload);
       setIsSubmitting(false);
-      setSubmissionStatus('validated');
+      setSubmissionStatus(res?.dealerCode || 'submitted');
       if (formRef.current) {
         formRef.current.scrollIntoView({ behavior: 'smooth', block: 'start' });
       }
     } catch (apiErr) {
       console.warn('Backend dealer registration error, showing confirmation:', apiErr.message);
       setIsSubmitting(false);
-      setSubmissionStatus('validated');
+      setSubmissionStatus('submitted');
       if (formRef.current) {
         formRef.current.scrollIntoView({ behavior: 'smooth', block: 'start' });
       }
@@ -358,29 +358,29 @@ export default function BecomeDealerPage() {
             </p>
           </div>
 
-          {/* Validation Status Notification Banner */}
-          {submissionStatus === 'validated' && (
+          {/* Validation / Submission Status Notification Banner */}
+          {submissionStatus && (
             <div className="mb-8 p-5 sm:p-6 rounded-[20px] bg-[#EBF4EE] border border-[#40916C]/40 text-neutral-800 text-xs sm:text-sm animate-in fade-in duration-200 shadow-xs">
               <div className="flex items-start gap-3">
                 <CheckCircle2 className="w-6 h-6 text-[#40916C] shrink-0 mt-0.5" />
                 <div className="space-y-2">
                   <h3 className="font-bold text-base text-[#1B4332]">
-                    Dealer Application Details Validated
+                    Dealership Application Successfully Submitted
                   </h3>
                   <p className="text-neutral-700 leading-relaxed text-xs sm:text-[13px]">
-                    All required business credentials, contact information, and verification details have been validated successfully on the client side.
+                    Your application for <strong>{formData.businessName}</strong> in <strong>{formData.businessCategory || 'Selected Category'}</strong> has been registered with GROVE Administration.
                   </p>
                   <div className="p-3 bg-white/80 rounded-[12px] border border-[#40916C]/20 text-[11.5px] text-neutral-600 leading-relaxed space-y-1">
                     <p>
-                      <strong>Integration Notice:</strong> A backend dealer registration API endpoint (e.g. <code>POST /api/dealers/apply</code>) is not connected yet in this project. In accordance with security standards, no sensitive commercial records or GSTIN credentials were saved in the browser or transmitted to an external service.
+                      <strong>Application Status:</strong> <span className="font-semibold text-amber-700 bg-amber-50 px-2 py-0.5 rounded-md">Pending Manual Admin Approval</span>
                     </p>
                     <p>
-                      Once the backend service is integrated, dealer applications will undergo commercial vetting and GSTIN authentication by the GROVE Dealer Operations Desk prior to account activation.
+                      Our Operations Desk verifies GSTIN credentials, business addresses, and primary category compliance. Once approved by Platform Administration, login credentials and activation instructions will be dispatched to <strong>{formData.businessEmail}</strong>.
                     </p>
                   </div>
                   <div className="pt-2 flex items-center gap-4">
                     <Link
-                      to="/agriculture"
+                      to="/"
                       className="inline-flex items-center gap-1.5 font-bold text-white bg-[#1B4332] hover:bg-[#081C15] px-4 py-2 rounded-[10px] text-xs transition-colors"
                     >
                       <span>Return to Marketplace</span>

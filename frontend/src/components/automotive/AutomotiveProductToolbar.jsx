@@ -26,6 +26,7 @@ export default function AutomotiveProductToolbar({
   onSortChange,
   onResetFilters,
   onOpenMobileFilters,
+  isLoading = false,
 }) {
   const isFiltered = 
     selectedCategory !== 'All' || 
@@ -56,7 +57,12 @@ export default function AutomotiveProductToolbar({
             Automotive Spares &amp; Components
           </h3>
           <p className="text-xs text-neutral-500 font-medium mt-0.5">
-            {filteredCount > 0 ? (
+            {isLoading ? (
+              <span className="inline-flex items-center gap-1.5 text-neutral-800 font-semibold">
+                <span className="w-1.5 h-1.5 rounded-full bg-neutral-800 animate-pulse inline-block" />
+                Loading automotive catalog...
+              </span>
+            ) : filteredCount > 0 ? (
               <>
                 Showing <span className="font-bold text-neutral-900">{startItem}–{endItem}</span> of{' '}
                 <span className="font-bold text-neutral-900">{filteredCount}</span> items
