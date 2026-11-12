@@ -32,6 +32,7 @@ export const login = asyncHandler(async (req, res) => {
         user: result.user,
         dealer: result.dealer,
         accessToken: result.accessToken,
+        refreshToken: result.refreshToken,
         mustChangePassword: result.mustChangePassword
       },
       'Authentication successful'
@@ -59,7 +60,8 @@ export const register = asyncHandler(async (req, res) => {
     ApiResponse.created(
       {
         user: result.user,
-        accessToken: result.accessToken
+        accessToken: result.accessToken,
+        refreshToken: result.refreshToken
       },
       'Customer registered successfully'
     )
@@ -81,7 +83,10 @@ export const refreshToken = asyncHandler(async (req, res) => {
 
   return res.status(200).json(
     ApiResponse.success(
-      { accessToken: result.accessToken },
+      { 
+        accessToken: result.accessToken,
+        refreshToken: result.refreshToken 
+      },
       'Token refreshed successfully'
     )
   );

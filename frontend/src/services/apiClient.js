@@ -81,6 +81,8 @@ function buildQueryString(params = {}) {
   return str ? `?${str}` : '';
 }
 
+let refreshPromise = null;
+
 /**
  * Core HTTP Request Dispatcher
  */
@@ -117,6 +119,67 @@ async function request(endpoint, options = {}) {
       return { success: true };
     }
 
+    // Auto-refresh on 401 Unauthorized (TokenExpiredError)
+    if (res.status === 401 && !options._retry && !endpoint.includes('/auth/login') && !endpoint.includes('/auth/refresh-token')) {
+      options._retry = true;
+      try {
+        if (!refreshPromise) {
+          refreshPromise = (async () => {
+            const storedRefreshToken = localStorage.getItem(REFRESH_TOKEN_STORAGE_KEY);
+            const refreshRes = await fetch(`${API_BASE_URL}/auth/refresh-token`, {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
+              credentials: 'include',
+              body: JSON.stringify({ refreshToken: storedRefreshToken || undefined })
+            });
+
+            if (!refreshRes.ok) {
+              throw new Error('Refresh failed');
+            }
+
+            const refreshJson = await refreshRes.json();
+            const newAccessToken = refreshJson?.data?.accessToken;
+            if (newAccessToken) {
+              setAuthToken(newAccessToken);
+              if (refreshJson?.data?.refreshToken) {
+                localStorage.setItem(REFRESH_TOKEN_STORAGE_KEY, refreshJson.data.refreshToken);
+              }
+
+              // Update token inside customer session storage
+              const rawCust = localStorage.getItem('grove_current_user');
+              if (rawCust) {
+                try {
+                  const cust = JSON.parse(rawCust);
+                  cust.token = newAccessToken;
+                  localStorage.setItem('grove_current_user', JSON.stringify(cust));
+                } catch {}
+              }
+              return newAccessToken;
+            }
+            throw new Error('No access token returned');
+          })();
+        }
+
+        const freshToken = await refreshPromise;
+        refreshPromise = null;
+
+        // Replay original request with fresh token
+        return request(endpoint, {
+          ...options,
+          headers: {
+            ...options.headers,
+            Authorization: `Bearer ${freshToken}`
+          }
+        });
+      } catch (refreshErr) {
+        refreshPromise = null;
+        // Session cannot be refreshed: clear invalid stale tokens
+        clearAuthToken();
+        localStorage.removeItem('grove_current_user');
+        window.dispatchEvent(new Event('grove_auth_changed'));
+      }
+    }
+
     const data = await res.json().catch(() => null);
 
     if (!res.ok) {
@@ -128,6 +191,7 @@ async function request(endpoint, options = {}) {
 
       const error = new Error(message);
       error.status = res.status;
+      error.code = data?.code;
       error.data = data;
       throw error;
     }
@@ -170,6 +234,9 @@ export const authApi = {
     if (res?.data?.accessToken) {
       setAuthToken(res.data.accessToken);
     }
+    if (res?.data?.refreshToken) {
+      localStorage.setItem(REFRESH_TOKEN_STORAGE_KEY, res.data.refreshToken);
+    }
     return res.data;
   },
 
@@ -177,6 +244,9 @@ export const authApi = {
     const res = await apiClient.post('/auth/register', userData);
     if (res?.data?.accessToken) {
       setAuthToken(res.data.accessToken);
+    }
+    if (res?.data?.refreshToken) {
+      localStorage.setItem(REFRESH_TOKEN_STORAGE_KEY, res.data.refreshToken);
     }
     return res.data;
   },

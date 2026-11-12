@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
-import { getStoredCustomer, setPendingAction } from '../utils/auth';
+import { getStoredCustomer, setPendingAction, clearStoredCustomer } from '../utils/auth';
 import { wishlistApi } from '../services/apiClient.js';
 
 export function useWishlist() {
@@ -34,7 +34,11 @@ export function useWishlist() {
           }
         })
         .catch((err) => {
-          console.warn('Backend wishlist sync warning:', err.message);
+          if (err.status === 401) {
+            clearStoredCustomer();
+          } else {
+            console.warn('Backend wishlist sync warning:', err.message);
+          }
         });
     }
 
