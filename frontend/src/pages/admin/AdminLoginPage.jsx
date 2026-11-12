@@ -61,12 +61,6 @@ export default function AdminLoginPage() {
     }
   };
 
-  const handleFillDemo = (demoEmail = 'admin@grove.com', demoPass = 'Admin@123') => {
-    setEmail(demoEmail);
-    setPassword(demoPass);
-    setError('');
-  };
-
   return (
     <div className="min-h-screen bg-[#F3FCF3] flex flex-col justify-between font-sans selection:bg-[#012D1D] selection:text-white">
       {/* Top Banner Navigation */}
@@ -144,7 +138,7 @@ export default function AdminLoginPage() {
                       type="email"
                       value={email}
                       onChange={(e) => setEmail(e.target.value)}
-                      placeholder="admin@grove.com"
+                      placeholder="admin@example.com"
                       autoComplete="username"
                       required
                       className="w-full h-11 pl-10 pr-4 rounded-xl bg-[#F8FAF8] border border-[#C1C8C2]/70 text-[#151D18] text-sm font-medium placeholder:text-[#717973] focus:outline-none focus:border-[#012D1D] focus:bg-white transition-all shadow-2xs"
@@ -202,36 +196,8 @@ export default function AdminLoginPage() {
                 </button>
               </form>
 
-              {/* Demo Credentials Helper Pill */}
-              <div className="pt-2 border-t border-[#C1C8C2]/40">
-                <div className="p-3.5 rounded-2xl bg-[#F3FCF3] border border-[#AEEECB]/60 space-y-2.5">
-                  <div className="flex items-center justify-between text-xs font-bold text-[#0E5138]">
-                    <div className="flex items-center gap-1.5 font-mono">
-                      <KeyRound className="w-3.5 h-3.5 text-[#2C694E]" />
-                      <span>Demo Admin Credentials</span>
-                    </div>
-                    <span className="text-[10px] px-2 py-0.5 rounded bg-[#AEEECB] text-[#0E5138] font-bold">
-                      Pre-configured
-                    </span>
-                  </div>
-                  
-                  <div className="text-[11px] font-mono text-[#3F4943] space-y-0.5">
-                    <div>Email: <span className="font-bold text-[#012D1D]">admin@grove.com</span></div>
-                    <div>Password: <span className="font-bold text-[#012D1D]">Admin@123</span></div>
-                  </div>
-
-                  <button
-                    type="button"
-                    onClick={() => handleFillDemo('admin@grove.com', 'Admin@123')}
-                    className="w-full py-1.5 px-3 rounded-lg bg-white hover:bg-[#E3EBE4] border border-[#C1C8C2]/60 text-xs font-bold text-[#012D1D] transition-colors cursor-pointer text-center"
-                  >
-                    Auto-Fill Demo Credentials
-                  </button>
-                </div>
-              </div>
-
               {/* Security Notice */}
-              <div className="text-center">
+              <div className="pt-2 border-t border-[#C1C8C2]/40 text-center">
                 <p className="text-[11px] text-[#717973] font-medium leading-relaxed">
                   Platform access is strictly monitored and logged. Unauthorized attempts are recorded.
                 </p>

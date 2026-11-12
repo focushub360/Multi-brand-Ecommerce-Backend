@@ -33,7 +33,7 @@ export default function DealerSidebar({ mobileOpen, onCloseMobile }) {
   const activeDealerId = getActiveDealerId();
   const dealerProfile = getDealerById(activeDealerId);
 
-  const dealerName = user?.name || dealerProfile?.name || 'Demo Dealer';
+  const dealerName = user?.name || dealerProfile?.name || 'GROVE Dealer';
 
   const handleLogout = () => {
     if (onCloseMobile) onCloseMobile();

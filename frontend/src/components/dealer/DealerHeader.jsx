@@ -25,8 +25,8 @@ export default function DealerHeader({ onToggleMobile }) {
 
   const notifications = getDealerNotifications(activeDealerId);
 
-  const dealerName = user?.name || dealerProfile?.name || 'Demo Dealer';
-  const dealerEmail = user?.email || dealerProfile?.email || 'dealer@grove.com';
+  const dealerName = user?.name || dealerProfile?.name || 'GROVE Dealer';
+  const dealerEmail = user?.email || dealerProfile?.email || '';
   const initials = dealerName
     .split(' ')
     .map((w) => w[0])

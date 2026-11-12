@@ -64,9 +64,8 @@ export function isAdminAuthenticated() {
 }
 
 /**
- * Validates admin credentials against the live backend API,
- * with fallback to local seed data.
- * Demo credentials: admin@grove.com / Admin@123
+ * Validates admin credentials directly against the live backend API.
+ * All credentials are authenticated strictly via the database.
  */
 export async function validateAdminCredentials(email, password) {
   if (!email || !password) {
@@ -98,30 +97,13 @@ export async function validateAdminCredentials(email, password) {
       setStoredAdmin(adminObj);
       return { success: true, admin: adminObj };
     }
+    return { success: false, error: 'Authentication failed. Please verify your credentials.' };
   } catch (apiErr) {
-    console.warn('Backend admin login error, checking fallback:', apiErr.message);
     if (apiErr.status === 401 || apiErr.status === 400 || apiErr.status === 403) {
       return { success: false, error: apiErr.message || 'Invalid admin credentials.' };
     }
+    return { success: false, error: apiErr.message || 'Unable to connect to authentication server. Please try again.' };
   }
-
-  // Offline fallback for demo super admin credentials
-  if (cleanEmail === 'admin@grove.com' && password === 'Admin@123') {
-    const adminObj = {
-      id: 'USR_ADMIN_001',
-      name: 'Super Admin',
-      email: 'admin@grove.com',
-      role: 'Super Admin',
-      department: 'Platform Operations',
-      avatar: 'GA',
-      lastLogin: 'Just now',
-      loginTime: new Date().toISOString()
-    };
-    setStoredAdmin(adminObj);
-    return { success: true, admin: adminObj };
-  }
-
-  return { success: false, error: 'Invalid admin credentials. Please verify your email and password.' };
 }
 
 /**

@@ -4,7 +4,6 @@ import { authApi } from '../services/apiClient.js';
 export const CUSTOMER_AUTH_KEY = 'grove_current_user';
 export const DEALER_AUTH_KEY = 'grove_dealer_user';
 export const PENDING_ACTION_KEY = 'grove_pending_action';
-export const REGISTERED_USERS_KEY = 'grove_registered_users';
 
 // Legacy export for backward compatibility
 export const AUTH_STORAGE_KEY = CUSTOMER_AUTH_KEY;
@@ -342,71 +341,12 @@ export function executePendingAction(customer) {
 }
 
 /* ==========================================================================
-   5. DEMO USER REGISTRATION REGISTRY (localStorage + users.json)
+   5. AUTHENTICATION SERVICE (Backend MongoDB API)
    ========================================================================== */
 
 /**
- * Returns newly registered demo users stored in localStorage.
- */
-export function getRegisteredUsers() {
-  try {
-    const raw = localStorage.getItem(REGISTERED_USERS_KEY);
-    return raw ? JSON.parse(raw) : [];
-  } catch {
-    return [];
-  }
-}
-
-/**
- * Appends a new registered demo user to localStorage.
- */
-export function addRegisteredUser(newUser) {
-  try {
-    const list = getRegisteredUsers();
-    list.push(newUser);
-    localStorage.setItem(REGISTERED_USERS_KEY, JSON.stringify(list));
-  } catch {}
-}
-
-export const DEFAULT_DEMO_ACCOUNTS = [
-  {
-    id: 'CUST-DEMO-01',
-    name: 'Customer Demo',
-    email: 'user1@grove.com',
-    password: 'Password@123',
-    role: 'customer',
-    phone: '+91 98765 43210'
-  },
-  {
-    id: 'DLR-DEMO-01',
-    name: 'Apex Machinery (dealer1)',
-    email: 'dealer1@grove.com',
-    password: 'Password@123',
-    role: 'dealer',
-    dealerId: 'DEALER_001',
-    phone: '+91 98220 11223'
-  },
-  {
-    id: 'ADM-DEMO-01',
-    name: 'Platform Super Admin',
-    email: 'admin@grove.com',
-    password: 'Admin@123',
-    role: 'admin',
-    phone: '+91 80000 12345'
-  }
-];
-
-/**
- * Returns all user records across demo accounts and registered demo users.
- */
-export function getAllUsers() {
-  const registered = getRegisteredUsers();
-  return [...DEFAULT_DEMO_ACCOUNTS, ...registered];
-}
-
-/**
- * Authenticates user credentials against the live MongoDB backend API,
- * with resilient offline fallback to local seed data.
+ * Authenticates user credentials directly against the live MongoDB backend API.
+ * All credentials are authenticated strictly via the database.
  */
 export async function authenticateUser(email, password) {
   if (!email || !password) {
@@ -435,22 +375,11 @@ export async function authenticateUser(email, password) {
 
       return { success: true, user: userObj, token: apiRes.accessToken };
     }
+    return { success: false, error: 'Invalid email or password. Please verify your credentials.' };
   } catch (apiErr) {
-    console.warn('Backend login returned error or is offline:', apiErr.message);
     if (apiErr.status === 401 || apiErr.status === 400) {
       return { success: false, error: apiErr.message || 'Invalid email or password.' };
     }
+    return { success: false, error: apiErr.message || 'Unable to connect to authentication server. Please try again.' };
   }
-
-  // Fallback to local accounts if backend is unreachable
-  const all = getAllUsers();
-  const matched = all.find(
-    (u) => u.email.toLowerCase() === cleanEmail && u.password === password
-  );
-
-  if (!matched) {
-    return { success: false, error: 'Invalid email or password. Please verify your credentials.' };
-  }
-
-  return { success: true, user: matched };
 }

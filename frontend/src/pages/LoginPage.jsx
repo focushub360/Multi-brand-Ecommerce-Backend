@@ -19,8 +19,7 @@ import {
   setStoredCustomer, 
   setStoredDealer, 
   authenticateUser, 
-  executePendingAction, 
-  getAllUsers 
+  executePendingAction 
 } from '../utils/auth';
 
 const CURRENT_YEAR = new Date().getFullYear();
@@ -143,18 +142,6 @@ export default function LoginPage() {
     }
   };
 
-  // Quick fill demo user credentials by role
-  const fillDemoCredentials = (role = 'customer') => {
-    const all = getAllUsers();
-    const defaultDemo = all.find((u) => u.role === role) || all.find((u) => u.role === 'customer');
-    if (defaultDemo) {
-      setEmail(defaultDemo.email);
-      setPassword(defaultDemo.password);
-      setErrors({});
-      setAuthError('');
-    }
-  };
-
   // Handle forgot password submit
   const handleForgotSubmit = (e) => {
     e.preventDefault();
@@ -257,31 +244,6 @@ export default function LoginPage() {
                     <AlertCircle className="w-4 h-4 text-red-600 shrink-0 mt-0.5" />
                     <div className="flex-1">
                       <p className="font-semibold leading-snug">{authError}</p>
-                      <div className="mt-1.5 flex items-center gap-1.5 flex-wrap text-[11px] font-bold text-[#1B4332]">
-                        <span>Try demo:</span>
-                        <button
-                          type="button"
-                          onClick={() => fillDemoCredentials('customer')}
-                          className="underline hover:opacity-80 cursor-pointer"
-                        >
-                          Customer
-                        </button>
-                        <span>•</span>
-                        <button
-                          type="button"
-                          onClick={() => fillDemoCredentials('dealer')}
-                          className="underline hover:opacity-80 cursor-pointer"
-                        >
-                          Dealer
-                        </button>
-                        <span>•</span>
-                        <Link
-                          to="/admin/login"
-                          className="underline hover:opacity-80 text-neutral-600"
-                        >
-                          Admin Portal &rarr;
-                        </Link>
-                      </div>
                     </div>
                   </div>
                 )}
@@ -408,27 +370,6 @@ export default function LoginPage() {
                     </button>
                   </div>
                 </form>
-
-                {/* Demo Helper Pill */}
-                <div className="mt-4 pt-3 border-t border-neutral-100 flex flex-wrap items-center justify-between gap-2 text-xs text-neutral-500">
-                  <span>Demo Accounts:</span>
-                  <div className="flex items-center gap-2">
-                    <button
-                      type="button"
-                      onClick={() => fillDemoCredentials('customer')}
-                      className="font-bold text-[#1B4332] hover:underline bg-[#EBF4EE] px-2.5 py-1 rounded-full text-[11px] cursor-pointer"
-                    >
-                      Customer (user1)
-                    </button>
-                    <button
-                      type="button"
-                      onClick={() => fillDemoCredentials('dealer')}
-                      className="font-bold text-[#1B4332] hover:underline bg-[#EBF4EE] px-2.5 py-1 rounded-full text-[11px] cursor-pointer"
-                    >
-                      Dealer (dealer1)
-                    </button>
-                  </div>
-                </div>
               </div>
 
               {/* Bottom Switch Link to Sign Up */}
@@ -497,10 +438,7 @@ export default function LoginPage() {
                     <span>Password Reset Request Received</span>
                   </div>
                   <p className="text-neutral-600 leading-relaxed text-[11.5px]">
-                    In a production environment connected to a live auth server, a secure reset token would be emailed to <strong>{forgotEmail}</strong>.
-                  </p>
-                  <p className="text-neutral-500 text-[10.5px]">
-                    (Frontend Demo Notice: No external emails are dispatched in this static phase).
+                    If an account is associated with <strong>{forgotEmail}</strong>, password reset instructions have been dispatched. Please check your inbox.
                   </p>
                 </div>
 
@@ -515,7 +453,7 @@ export default function LoginPage() {
             ) : (
               <form onSubmit={handleForgotSubmit} noValidate className="space-y-3.5">
                 <p className="text-xs text-neutral-600 leading-relaxed">
-                  Enter your registered GROVE email address. We will verify its format and simulate the recovery process.
+                  Enter your registered GROVE email address. We will verify your account and initiate the recovery process.
                 </p>
 
                 <div>
@@ -532,7 +470,7 @@ export default function LoginPage() {
                         setForgotEmail(e.target.value);
                         if (forgotError) setForgotError('');
                       }}
-                      placeholder="e.g. dealer@grove.com"
+                      placeholder="e.g. user@example.com"
                       className="w-full pl-9 pr-3 py-2.5 bg-[#F8FAF5] border border-neutral-300 rounded-[12px] text-xs font-medium text-neutral-900 placeholder:text-neutral-400 focus:outline-none focus:border-[#1B4332] focus:bg-white transition-all"
                     />
                   </div>

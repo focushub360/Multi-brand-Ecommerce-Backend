@@ -182,7 +182,7 @@ export default function AddressModal({ isOpen, onClose, onSaved, initialData = n
                 name="name"
                 value={formData.name}
                 onChange={handleChange}
-                placeholder="e.g. Harish Patel"
+                placeholder="e.g. Ramesh Patel"
                 className={`w-full px-3.5 py-2.5 text-sm rounded-lg border ${
                   errors.name ? 'border-red-500 bg-red-50/30' : 'border-gray-300'
                 } focus:outline-none focus:ring-2 focus:ring-[#1B4332]`}

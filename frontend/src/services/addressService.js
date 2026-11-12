@@ -10,43 +10,10 @@ export const INDIAN_STATES = [
   'Jammu & Kashmir', 'Ladakh', 'Puducherry', 'Chandigarh'
 ];
 
-export const DEFAULT_DEMO_ADDRESSES = {
-  // Demo address pre-seeded for customer ID 3 (Harish Patel)
-  3: [
-    {
-      id: 'addr_demo_01',
-      name: 'Harish Patel',
-      mobile: '9876543210',
-      pincode: '411001',
-      house: 'Flat 402, Green Fields Enclave',
-      street: 'Kisan Mandi Marg, Shivajinagar',
-      landmark: 'Near Central Agricultural Depot',
-      city: 'Pune',
-      state: 'Maharashtra',
-      type: 'Home',
-      isDefault: true
-    },
-    {
-      id: 'addr_demo_02',
-      name: 'Harish Patel (Farm Depot)',
-      mobile: '9876543210',
-      pincode: '412207',
-      house: 'Survey No. 44, Estate Farm Office',
-      street: 'Hadapsar-Saswad Rural Link',
-      landmark: 'Next to Agro Irrigation Center',
-      city: 'Pune',
-      state: 'Maharashtra',
-      type: 'Work',
-      isDefault: false
-    }
-  ]
-};
-
 const MAX_ADDRESSES = 5;
 
 /**
- * Returns saved addresses for a specific customer ID from localStorage.
- * Automatically seeds demo addresses on first access.
+ * Returns saved addresses for a specific customer ID from localStorage cache.
  */
 export function getCustomerAddresses(customerId) {
   if (!customerId) return [];
@@ -57,14 +24,6 @@ export function getCustomerAddresses(customerId) {
       const parsed = JSON.parse(raw);
       if (Array.isArray(parsed) && parsed.length > 0) return parsed;
     }
-
-    // Seed initial demo address if defined for this customer
-    const seed = DEFAULT_DEMO_ADDRESSES[customerId] || [];
-    if (seed.length > 0) {
-      localStorage.setItem(key, JSON.stringify(seed));
-      return seed;
-    }
-
     return [];
   } catch {
     return [];

@@ -296,7 +296,7 @@ export default function CheckoutPage() {
 
           <div className="flex items-center gap-2 text-xs font-semibold text-emerald-800 bg-emerald-50 px-3 py-1.5 rounded-xl border border-emerald-200 self-start sm:self-auto">
             <ShieldCheck className="w-4 h-4 text-emerald-700" />
-            <span>256-Bit SSL Demo Checkout</span>
+            <span>256-Bit SSL Secure Checkout</span>
           </div>
         </div>
 
@@ -575,7 +575,7 @@ export default function CheckoutPage() {
               )}
             </div>
 
-            {/* STEP 3: Payment Options (Demo Simulation) */}
+            {/* STEP 3: Payment Gateway & Verification */}
             <div className="bg-white rounded-2xl border border-gray-200 shadow-sm overflow-hidden transition-all">
               <div 
                 className={`p-5 flex items-center justify-between border-b ${
@@ -593,7 +593,7 @@ export default function CheckoutPage() {
                       Payment Method
                     </h2>
                     <p className="text-xs text-gray-400">
-                      All options are simulated demo modes • No real money charged
+                      Select your preferred payment gateway method
                     </p>
                   </div>
                 </div>
@@ -601,13 +601,6 @@ export default function CheckoutPage() {
 
               {activeStep === 3 && (
                 <div className="p-6 space-y-6">
-                  {/* Demo Simulation Badge */}
-                  <div className="p-3.5 rounded-xl bg-amber-50 border border-amber-200 text-amber-900 text-xs flex items-center gap-3">
-                    <div className="w-2 h-2 rounded-full bg-amber-500 animate-pulse flex-shrink-0" />
-                    <p className="leading-relaxed">
-                      <strong>Demo Payment Simulation:</strong> Select any payment method below to test order fulfillment. No banking credentials are transmitted or billed.
-                    </p>
-                  </div>
 
                   {/* Payment Method Selector */}
                   <div className="space-y-4">
@@ -629,7 +622,7 @@ export default function CheckoutPage() {
                           <div className="flex items-center justify-between">
                             <span className="font-bold text-sm text-gray-900">UPI (Google Pay, PhonePe, Paytm, BHIM)</span>
                             <span className="text-[10px] font-bold text-emerald-800 bg-emerald-100 px-2 py-0.5 rounded">
-                              Instant Demo
+                              Instant Verification
                             </span>
                           </div>
                           <p className="text-xs text-gray-500 mt-0.5">Pay directly using your Virtual Payment Address (VPA)</p>
@@ -645,26 +638,19 @@ export default function CheckoutPage() {
                                     type="text"
                                     value={upiId}
                                     onChange={(e) => setUpiId(e.target.value)}
-                                    placeholder="harish.patel@okhdfcbank"
+                                    placeholder="user@upi"
                                     className="flex-1 px-3.5 py-2 text-sm rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-[#1B4332]"
                                   />
-                                  <button
-                                    type="button"
-                                    onClick={() => setUpiId('harish.patel@okhdfcbank')}
-                                    className="px-3 py-2 text-xs font-bold text-[#1B4332] bg-[#E9F3ED] rounded-lg border border-[#c4e3cf] hover:bg-[#d8ecdf]"
-                                  >
-                                    Autofill Demo
-                                  </button>
                                 </div>
                               </div>
 
                               <div className="flex items-center gap-2 text-[11px] text-gray-500">
-                                <span>Quick Handles:</span>
+                                <span>Supported Handles:</span>
                                 {['@okhdfcbank', '@okicici', '@oksbi', '@paytm'].map((handle) => (
                                   <button
                                     key={handle}
                                     type="button"
-                                    onClick={() => setUpiId(`demo${handle}`)}
+                                    onClick={() => setUpiId((prev) => (prev ? prev.split('@')[0] + handle : 'customer' + handle))}
                                     className="px-2 py-0.5 rounded bg-gray-100 hover:bg-gray-200 text-gray-700 font-mono text-[10px]"
                                   >
                                     {handle}
@@ -706,7 +692,7 @@ export default function CheckoutPage() {
                                   type="button"
                                   onClick={() => setCardData({
                                     number: '4242 4242 4242 4242',
-                                    name: 'Harish Patel',
+                                    name: customer?.name || 'Customer Account',
                                     expiry: '12/28',
                                     cvv: '888'
                                   })}
@@ -739,7 +725,7 @@ export default function CheckoutPage() {
                                     type="text"
                                     value={cardData.name}
                                     onChange={(e) => setCardData((p) => ({ ...p, name: e.target.value }))}
-                                    placeholder="Harish Patel"
+                                    placeholder={customer?.name || 'Cardholder Name'}
                                     className="w-full px-3 py-2 text-sm rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-[#1B4332]"
                                   />
                                 </div>
@@ -929,7 +915,7 @@ export default function CheckoutPage() {
               <div className="text-center space-y-1">
                 <p className="text-[11px] text-gray-500 flex items-center justify-center gap-1">
                   <ShieldCheck className="w-3.5 h-3.5 text-emerald-600" />
-                  Demo Purchase • No Financial Obligation
+                  Safe & Encrypted 256-Bit Payment Gateway
                 </p>
                 <p className="text-[10px] text-gray-400">
                   By placing an order, you agree to GROVE's Terms of Service and Privacy Policy.

@@ -95,7 +95,7 @@ export default function CartPage() {
     });
 
     const discount = Math.max(0, mrpTotal - itemsTotal);
-    // Free delivery if order total > 500, else ₹49 demo shipping fee
+    // Free delivery if order total > 500, else ₹49 standard shipping fee
     const deliveryFee = itemsTotal > 500 || itemsTotal === 0 ? 0 : 49;
     const finalPayable = itemsTotal + deliveryFee;
 
@@ -461,7 +461,7 @@ export default function CartPage() {
                 </button>
 
                 <p className="text-[11px] text-gray-400 text-center">
-                  Safe & Secure Checkout • Demo Payment Simulation
+                  Safe & Secure Checkout • 256-Bit SSL Encrypted
                 </p>
               </div>
             </div>

@@ -13,7 +13,6 @@ import {
   ArrowRight
 } from 'lucide-react';
 import CategoryShowcase from '../components/auth/CategoryShowcase';
-import { addRegisteredUser, getAllUsers } from '../utils/auth';
 import { authApi } from '../services/apiClient.js';
 
 const CURRENT_YEAR = new Date().getFullYear();
@@ -85,15 +84,6 @@ export default function SignupPage() {
       const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
       if (!emailRegex.test(trimmedEmail)) {
         errs.email = 'Please enter a valid email address.';
-      } else {
-        // Prevent duplicate email registration within frontend demo data and registry
-        const allUsers = getAllUsers();
-        const isDuplicate = allUsers.some(
-          (u) => u.email.toLowerCase() === trimmedEmail.toLowerCase()
-        );
-        if (isDuplicate) {
-          errs.email = 'This email is already registered in GROVE. Please sign in or use another email.';
-        }
       }
     }
 
@@ -146,7 +136,6 @@ export default function SignupPage() {
       setIsSubmitting(false);
       setSignupSuccess(true);
     } catch (apiErr) {
-      console.warn('Backend registration failed, saving locally:', apiErr.message);
       setIsSubmitting(false);
 
       if (apiErr.status === 409) {
@@ -154,17 +143,7 @@ export default function SignupPage() {
         return;
       }
 
-      // Offline fallback
-      const newUser = {
-        id: Date.now(),
-        name: formData.fullName.trim(),
-        email: formData.email.trim(),
-        password: formData.password,
-        role: 'customer'
-      };
-
-      addRegisteredUser(newUser);
-      setSignupSuccess(true);
+      setErrors((prev) => ({ ...prev, general: apiErr.message || 'Registration failed. Please check your details and try again.' }));
     }
   };
 
@@ -218,7 +197,7 @@ export default function SignupPage() {
                   </p>
                 </div>
 
-                {/* Successful Registration State (Frontend Demonstration Mode) */}
+                {/* Successful Registration State */}
                 {signupSuccess ? (
                   <div className="space-y-5 animate-in fade-in duration-200">
                     <div className="p-5 sm:p-6 rounded-[20px] bg-[#EBF4EE] border border-[#40916C]/40 text-[#081C15]">
@@ -226,14 +205,11 @@ export default function SignupPage() {
                         <CheckCircle2 className="w-6 h-6 text-[#40916C] shrink-0 mt-0.5" />
                         <div className="space-y-2">
                           <h3 className="font-extrabold text-base sm:text-lg text-[#1B4332]">
-                            Registration Details Validated!
+                            Account Created Successfully!
                           </h3>
                           <p className="text-xs sm:text-[13px] text-neutral-700 leading-relaxed">
-                            Welcome, <strong>{formData.fullName}</strong>. All field formats, Indian mobile verification parameters, and password security rules have been checked successfully.
+                            Welcome, <strong>{formData.fullName}</strong>. Your account has been registered with GROVE. You can now sign in using your email and password.
                           </p>
-                          <div className="p-3 bg-white/80 rounded-[12px] border border-[#40916C]/20 text-[11px] text-neutral-600 leading-relaxed">
-                            <strong>Frontend Demonstration Status:</strong> In this demo phase, no remote database write is executed. Your data is formatted and ready for API connection (e.g. <code>POST /api/auth/register</code>).
-                          </div>
                         </div>
                       </div>
                     </div>
@@ -267,6 +243,12 @@ export default function SignupPage() {
                 ) : (
                   /* Registration Form */
                   <form onSubmit={handleSubmit} noValidate className="space-y-4">
+                    {errors.general && (
+                      <div className="p-3.5 rounded-[14px] bg-red-50 border border-red-200 text-red-700 flex items-center gap-2.5 text-xs">
+                        <AlertCircle className="w-4 h-4 text-red-600 shrink-0" />
+                        <span className="font-semibold">{errors.general}</span>
+                      </div>
+                    )}
                     {/* Full Name Field */}
                     <div>
                       <label 

@@ -26,7 +26,7 @@ export default function AdminHeader({ onToggleMobile }) {
   const notifRef = useRef(null);
 
   const adminName = admin?.name || 'GROVE Admin';
-  const adminEmail = admin?.email || 'admin@grove.com';
+  const adminEmail = admin?.email || '';
   const adminRole = admin?.role || 'Super Admin';
   const adminDept = admin?.department || 'Platform Operations';
   const initials = admin?.avatar || 'GA';
