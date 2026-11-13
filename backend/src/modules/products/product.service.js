@@ -1,3 +1,6 @@
+import fs from 'fs/promises';
+import path from 'path';
+import { fileURLToPath } from 'url';
 import { Product } from './product.model.js';
 import { Category } from '../categories/category.model.js';
 import { Dealer } from '../dealers/dealer.model.js';
@@ -5,7 +8,46 @@ import { Inventory } from '../inventory/inventory.model.js';
 import { InventoryTransaction } from '../inventory/inventoryTransaction.model.js';
 import { ApiError } from '../../utils/ApiError.js';
 
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+const SEED_PRODUCTS_FILE = path.resolve(__dirname, '../../../data/seed-products.json');
+
 export class ProductService {
+  /**
+   * Helper: Synchronize active products from MongoDB with seed-products.json
+   */
+  static async syncProductsJson() {
+    try {
+      const activeProducts = await Product.find({ status: { $ne: 'Archived' } })
+        .sort({ createdAt: -1 })
+        .lean();
+
+      const serialized = activeProducts.map((p) => ({
+        name: p.name,
+        sku: p.sku,
+        slug: p.slug,
+        categoryName: p.categoryName,
+        subcategory: p.subcategory,
+        brand: p.brand || 'Generic',
+        description: p.description,
+        price: p.price,
+        mrp: p.mrp || p.price,
+        discount: p.discount || 0,
+        stock: p.stock,
+        rating: p.rating || 4.5,
+        reviewCount: p.reviewCount || 10,
+        image: p.image || (p.images?.[0] || ''),
+        images: p.images?.length ? p.images : (p.image ? [p.image] : []),
+        specs: p.specs || {},
+        highlights: p.highlights || []
+      }));
+
+      await fs.writeFile(SEED_PRODUCTS_FILE, JSON.stringify(serialized, null, 2), 'utf8');
+      console.log(`[ProductService] Synchronized ${serialized.length} products to data/seed-products.json`);
+    } catch (err) {
+      console.warn('[ProductService] Warning syncing seed-products.json:', err.message);
+    }
+  }
   /**
    * Create Product (Strict Category Enforcement)
    */
@@ -73,8 +115,8 @@ export class ProductService {
       stock: Number(data.stock) || 0,
       threshold: Number(data.threshold) || 10,
       status: data.status || 'Active',
-      image: data.image,
-      images: data.images?.length ? data.images : [data.image],
+      image: data.image || data.images?.[0] || '/images/card-agri-clean.png',
+      images: data.images?.length ? data.images : [data.image || '/images/card-agri-clean.png'],
       specs: data.specs || data.specifications || {},
       highlights: data.highlights || [],
       warranty: data.warranty || 'Standard 1 Year Warranty'
@@ -110,6 +152,9 @@ export class ProductService {
     } catch (e) {
       console.warn('Inventory auto-intake warning:', e.message);
     }
+
+    // Auto-sync active products with seed-products.json
+    ProductService.syncProductsJson().catch(() => {});
 
     return product;
   }
@@ -178,6 +223,7 @@ export class ProductService {
     if (updateData.warranty) product.warranty = updateData.warranty;
 
     await product.save();
+    ProductService.syncProductsJson().catch(() => {});
     return product;
   }
 
@@ -196,6 +242,7 @@ export class ProductService {
 
     product.status = 'Archived';
     await product.save();
+    ProductService.syncProductsJson().catch(() => {});
 
     return { message: `Product '${product.name}' archived successfully.` };
   }

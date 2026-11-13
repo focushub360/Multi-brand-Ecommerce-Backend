@@ -19,7 +19,7 @@ export default function HomePage() {
 
     productsApi.getAll({ limit: 60 })
       .then((res) => {
-        const prods = res?.products || (Array.isArray(res) ? res : []);
+        const prods = res?.products || res?.data?.products || res?.data || (Array.isArray(res) ? res : []);
         if (prods.length > 0) {
           const normalize = (p) => ({
             id: p.sku?.toLowerCase() || p.slug || p.id || p._id,

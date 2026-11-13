@@ -9,7 +9,7 @@ export default function BestSellers() {
   useEffect(() => {
     productsApi.getAll({ limit: 16, sort: 'rating' })
       .then((res) => {
-        const serverProds = res?.products || (Array.isArray(res) ? res : []);
+        const serverProds = res?.products || res?.data?.products || res?.data || (Array.isArray(res) ? res : []);
         if (serverProds.length > 0) {
           const normalized = serverProds.map((p) => ({
             id: p.id || p._id,

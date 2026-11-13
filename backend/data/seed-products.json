@@ -1,892 +1,28 @@
 [
   {
-    "name": "High-Yield Hybrid Basmati Paddy Seeds (10kg)",
-    "sku": "SKU-AG-01",
-    "slug": "high-yield-hybrid-basmati-paddy-seeds-ag-01",
-    "categoryName": "Agriculture & Farming",
-    "subcategory": "Hybrid Seeds",
-    "brand": "GROVE AgriMaster",
-    "description": "Certified high-germination hybrid paddy seeds offering aromatic extra-long grains with supreme resistance to bacterial leaf blight.",
-    "price": 1850,
-    "mrp": 2200,
-    "discount": 16,
-    "stock": 45,
-    "rating": 4.8,
-    "reviewCount": 38,
-    "image": "https://images.unsplash.com/photo-1574323347407-f5e1ad6d020b?auto=format&fit=crop&w=500&q=80",
-    "images": [
-      "https://images.unsplash.com/photo-1574323347407-f5e1ad6d020b?auto=format&fit=crop&w=500&q=80",
-      "/images/card-agri.png"
-    ],
-    "specs": {
-      "Crop Type": "Basmati Rice",
-      "Pack Weight": "10 kg",
-      "Germination Rate": "95%+",
-      "Maturity Duration": "125-130 Days"
-    },
-    "highlights": [
-      "95%+ High Germination Rate",
-      "Resistance to Bacterial Leaf Blight",
-      "Export Grade Long-Grain Basmati",
-      "Lab Tested & Moisture Sealed"
-    ]
-  },
-  {
-    "name": "Certified Disease-Resistant Wheat Seeds (25kg)",
-    "sku": "SKU-AG-03",
-    "slug": "certified-disease-resistant-wheat-seeds-ag-03",
-    "categoryName": "Agriculture & Farming",
-    "subcategory": "Hybrid Seeds",
-    "brand": "GROVE AgriMaster",
-    "description": "Breeder-certified high-tiller wheat seeds with strong lodging resistance and superior protein content for commercial milling.",
-    "price": 2100,
-    "mrp": 2600,
+    "name": "demo",
+    "sku": "SKU-EL-TEST-6927",
+    "slug": "demo-1700",
+    "categoryName": "Electronics & Gadgets",
+    "subcategory": "Smart Sensors & IoT",
+    "brand": "GROVE Prime",
+    "description": "Solar-powered IoT multi-depth soil moisture, EC salinity, and ambient temperature telemetry probe with Bluetooth 5.0 and 4G GSM cloud uplink for real-time agronomy analytics.",
+    "price": 6899,
+    "mrp": 8500,
     "discount": 19,
-    "stock": 35,
-    "rating": 4.6,
-    "reviewCount": 44,
-    "image": "https://images.unsplash.com/photo-1530595467537-0b5996c41f2d?auto=format&fit=crop&w=500&q=80",
-    "images": [
-      "https://images.unsplash.com/photo-1530595467537-0b5996c41f2d?auto=format&fit=crop&w=500&q=80",
-      "/images/card-agri.png"
-    ],
-    "specs": {
-      "Crop Type": "Bread Wheat (HD-2967)",
-      "Pack Weight": "25 kg",
-      "Sowing Season": "Rabi (Nov - Dec)",
-      "Average Yield": "22-24 Quintals/Acre"
-    },
-    "highlights": [
-      "Immune to Yellow & Brown Rust",
-      "Heavy Tillering (12-14 tillers/plant)",
-      "High Gluten Content for Premium Flour",
-      "Government Certified Quality Seed"
-    ]
-  },
-  {
-    "name": "Hybrid Golden Corn Maize Seeds (5kg)",
-    "sku": "SKU-AG-02",
-    "slug": "hybrid-golden-corn-maize-seeds-ag-02",
-    "categoryName": "Agriculture & Farming",
-    "subcategory": "Hybrid Seeds",
-    "brand": "AgriPower",
-    "description": "High-density hybrid yellow corn seeds with heavy ear filling, drought tolerance, and uniform harvest maturity.",
-    "price": 1250,
-    "mrp": 1600,
-    "discount": 22,
-    "stock": 50,
-    "rating": 4.7,
-    "reviewCount": 29,
-    "image": "https://images.unsplash.com/photo-1551754655-cd27e38d2076?auto=format&fit=crop&w=500&q=80",
-    "images": [
-      "https://images.unsplash.com/photo-1551754655-cd27e38d2076?auto=format&fit=crop&w=500&q=80",
-      "/images/card-agri-clean.png"
-    ],
-    "specs": {
-      "Crop Type": "Yellow Corn / Maize",
-      "Pack Weight": "5 kg",
-      "Plant Density": "26,000 Plants/Acre",
-      "Cob Length": "8 - 9.5 Inches"
-    },
-    "highlights": [
-      "Excellent Heat & Moisture Stress Tolerance",
-      "High Shelling Percentage (>82%)",
-      "Deep Orange-Yellow Kernels",
-      "Ideal for Grain and Fodder Yield"
-    ]
-  },
-  {
-    "name": "Organic Vermicompost Soil Conditioner (50kg)",
-    "sku": "SKU-AG-04",
-    "slug": "organic-vermicompost-soil-conditioner-ag-04",
-    "categoryName": "Agriculture & Farming",
-    "subcategory": "Fertilizers & Soil Nutrition",
-    "brand": "AgriPower",
-    "description": "100% natural earthworm compost enriched with active beneficial soil microbes, nitrogen, phosphorus, and moisture-retaining humus.",
-    "price": 850,
-    "mrp": 1100,
-    "discount": 23,
-    "stock": 60,
-    "rating": 4.9,
-    "reviewCount": 65,
-    "image": "https://images.unsplash.com/photo-1628352081506-83c43123ed6d?auto=format&fit=crop&w=500&q=80",
-    "images": [
-      "https://images.unsplash.com/photo-1628352081506-83c43123ed6d?auto=format&fit=crop&w=500&q=80",
-      "/images/card-agri-clean.png"
-    ],
-    "specs": {
-      "Composition": "100% Pure Worm Castings",
-      "Pack Weight": "50 kg Bag",
-      "Moisture Content": "18-22%",
-      "Organic Carbon": ">16%"
-    },
-    "highlights": [
-      "Restores Depleted Soil Fertility",
-      "Improves Soil Water Holding Capacity",
-      "Zero Weed Seeds & Odor Free",
-      "Certified for Organic Farming"
-    ]
-  },
-  {
-    "name": "Neem-Based Bio-Pesticide Organic Concentrate (5L)",
-    "sku": "SKU-AG-08",
-    "slug": "neem-bio-pesticide-concentrate-ag-08",
-    "categoryName": "Agriculture & Farming",
-    "subcategory": "Crop Protection",
-    "brand": "KisanShield",
-    "description": "Cold-pressed neem oil concentrate with 10,000 PPM Azadirachtin providing broad-spectrum protection against chewing and sucking insect pests.",
-    "price": 1450,
-    "mrp": 1850,
-    "discount": 22,
-    "stock": 35,
-    "rating": 4.8,
-    "reviewCount": 41,
-    "image": "https://images.unsplash.com/photo-1592982537447-7440770cbfc9?auto=format&fit=crop&w=500&q=80",
-    "images": [
-      "https://images.unsplash.com/photo-1592982537447-7440770cbfc9?auto=format&fit=crop&w=500&q=80",
-      "/images/prod-sprayer.png"
-    ],
-    "specs": {
-      "Active Ingredient": "Azadirachtin 10,000 PPM (1%)",
-      "Volume": "5 Liters",
-      "Target Pests": "Aphids, Whiteflies, Caterpillars, Thrips",
-      "Residual Effect": "14 Days"
-    },
-    "highlights": [
-      "100% Organic & Eco-Friendly",
-      "Safe for Pollinators & Beneficial Insects",
-      "Non-Toxic to Earthworms",
-      "Zero Pre-Harvest Interval (PHI)"
-    ]
-  },
-  {
-    "name": "Heavy Duty HDPE Drip Lateral Tubing 16mm (500m Roll)",
-    "sku": "SKU-AG-11",
-    "slug": "hdpe-drip-lateral-tubing-16mm-ag-11",
-    "categoryName": "Agriculture & Farming",
-    "subcategory": "Irrigation & Drip Systems",
-    "brand": "DripAqua",
-    "description": "Premium linear low-density polyethylene (LLDPE) irrigation roll engineered for high tensile strength, UV degradation resistance, and chemical immunity.",
-    "price": 2800,
-    "mrp": 3400,
-    "discount": 18,
-    "stock": 50,
-    "rating": 4.8,
-    "reviewCount": 37,
-    "image": "https://images.unsplash.com/photo-1563514227147-6d2ff665a6a0?auto=format&fit=crop&w=500&q=80",
-    "images": [
-      "https://images.unsplash.com/photo-1563514227147-6d2ff665a6a0?auto=format&fit=crop&w=500&q=80",
-      "/images/prod-drip.png"
-    ],
-    "specs": {
-      "Outer Diameter": "16 mm",
-      "Roll Length": "500 Meters",
-      "Wall Thickness": "1.2 mm Class 2",
-      "Burst Pressure": "6.0 bar"
-    },
-    "highlights": [
-      "Virgin High-Grade Polymer Material",
-      "Carbon Black UV Stabilized Protection",
-      "Resists Insect Chewing & Kinking",
-      "Tested for 10+ Year Field Lifespan"
-    ]
-  },
-  {
-    "name": "Water-Soluble NPK 19-19-19 Fertilizer (25kg)",
-    "sku": "SKU-AG-05",
-    "slug": "water-soluble-npk-fertilizer-ag-05",
-    "categoryName": "Agriculture & Farming",
-    "subcategory": "Fertilizers & Soil Nutrition",
-    "brand": "GROVE AgriMaster",
-    "description": "Balanced 1:1:1 soluble plant nutrient formula with chelated trace elements for foliar spraying and fertigation setups.",
-    "price": 2450,
-    "mrp": 2900,
-    "discount": 16,
-    "stock": 40,
-    "rating": 4.7,
-    "reviewCount": 52,
-    "image": "https://images.unsplash.com/photo-1585314062340-f1a5a7c9328d?auto=format&fit=crop&w=500&q=80",
-    "images": [
-      "https://images.unsplash.com/photo-1585314062340-f1a5a7c9328d?auto=format&fit=crop&w=500&q=80",
-      "/images/card-agri.png"
-    ],
-    "specs": {
-      "Formula": "NPK 19-19-19 + TE",
-      "Solubility": "100% Water Soluble",
-      "Application": "Fertigation & Foliar Spray",
-      "Pack Weight": "25 kg Bag"
-    },
-    "highlights": [
-      "Instant Dissolution with Zero Residue",
-      "Promotes Rapid Vegetative Growth",
-      "Enhances Root Formation & Bloom Count",
-      "Compatible with All Drip Irrigation Lines"
-    ]
-  },
-  {
-    "name": "Micronutrient Chelated Zinc & Boron Booster (5L)",
-    "sku": "SKU-AG-06",
-    "slug": "micronutrient-chelated-booster-ag-06",
-    "categoryName": "Agriculture & Farming",
-    "subcategory": "Fertilizers & Soil Nutrition",
-    "brand": "AgriPower",
-    "description": "EDTA-chelated liquid formulation supplying bioavailable Zinc, Boron, Iron, and Magnesium to correct leaf chlorosis and prevent flower drop.",
-    "price": 1650,
-    "mrp": 2100,
-    "discount": 21,
-    "stock": 30,
-    "rating": 4.6,
-    "reviewCount": 31,
-    "image": "https://images.unsplash.com/photo-1589923188900-85dae523342b?auto=format&fit=crop&w=500&q=80",
-    "images": [
-      "https://images.unsplash.com/photo-1589923188900-85dae523342b?auto=format&fit=crop&w=500&q=80",
-      "/images/card-agri-clean.png"
-    ],
-    "specs": {
-      "Active Nutrients": "Zn (12%), B (5%), Fe (3%), Mg (2%)",
-      "Volume": "5 Liters Can",
-      "pH Stability": "4.0 - 9.0",
-      "Dosage": "2-3 ml per Liter"
-    },
-    "highlights": [
-      "Prevents Fruit Cracking & Blossom End Rot",
-      "100% Chelated Rapid Leaf Absorption",
-      "Boosts Chlorophyll & Photosynthesis",
-      "Mixes Seamlessly with Fungicides"
-    ]
-  },
-  {
-    "name": "Battery-Operated High-Pressure Backpack Sprayer 16L",
-    "sku": "SKU-AG-07",
-    "slug": "battery-backpack-sprayer-ag-07",
-    "categoryName": "Agriculture & Farming",
-    "subcategory": "Crop Protection",
-    "brand": "KisanShield",
-    "description": "16-Liter rechargeable knapsack sprayer with dual diaphragm pump, pressure regulator, and telescopic brass lance for uniform pest control.",
-    "price": 2850,
-    "mrp": 3600,
-    "discount": 20,
-    "stock": 40,
-    "rating": 4.5,
-    "reviewCount": 54,
-    "image": "/images/prod-sprayer.png",
-    "images": [
-      "/images/prod-sprayer.png"
-    ],
-    "specs": {
-      "Tank Capacity": "16 Liters",
-      "Battery": "12V 8Ah Lead Acid",
-      "Working Pressure": "0.15 - 0.40 Mpa",
-      "Discharge Rate": "3.1 L/min"
-    },
-    "highlights": [
-      "Up to 6 Hours Continuous Operation",
-      "Extendable Brass Spray Lance",
-      "Ergonomic Padded Shoulder Straps",
-      "Dual Nozzle Set Included"
-    ]
-  },
-  {
-    "name": "Automated 4-Zone Smart Solenoid Irrigation Timer Valve",
-    "sku": "SKU-AG-12",
-    "slug": "smart-solenoid-irrigation-timer-valve-ag-12",
-    "categoryName": "Agriculture & Farming",
-    "subcategory": "Irrigation & Drip Systems",
-    "brand": "DripAqua",
-    "description": "Solar-rechargeable automatic 4-zone water manifold controller with rainfall pause sensor and programmable pulse watering cycles.",
-    "price": 6500,
-    "mrp": 8200,
-    "discount": 21,
-    "stock": 25,
-    "rating": 4.9,
-    "reviewCount": 22,
-    "image": "https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?auto=format&fit=crop&w=500&q=80",
-    "images": [
-      "https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?auto=format&fit=crop&w=500&q=80",
-      "/images/prod-drip.png"
-    ],
-    "specs": {
-      "Inlet / Outlet": "1 Inch BSP Brass Thread",
-      "Zone Ports": "4 Independent Solenoid Lines",
-      "Power": "Integrated Solar Panel + Li-Ion",
-      "Waterproof": "IP67 Sealed Housing"
-    },
-    "highlights": [
-      "Automated Dawn & Dusk Watering Modes",
-      "Rain Sensor Auto-Delay Feature",
-      "High-Flow Brass Valves Prevent Leakage",
-      "Manual Quick-Bypass Button"
-    ]
-  },
-  {
-    "name": "Submersible Solar Borewell Pump 3HP with Controller",
-    "sku": "SKU-AG-14",
-    "slug": "submersible-solar-borewell-pump-3hp-ag-14",
-    "categoryName": "Agriculture & Farming",
-    "subcategory": "Solar Pumps",
-    "brand": "SolarAgro",
-    "description": "High-head 3HP brushless DC helical rotor solar borewell pump engineered for deep groundwater extraction up to 120 meters.",
-    "price": 52000,
-    "mrp": 62000,
-    "discount": 16,
-    "stock": 18,
-    "rating": 4.8,
-    "reviewCount": 33,
-    "image": "https://images.unsplash.com/photo-1508873696983-2df5293cb32b?auto=format&fit=crop&w=500&q=80",
-    "images": [
-      "https://images.unsplash.com/photo-1508873696983-2df5293cb32b?auto=format&fit=crop&w=500&q=80",
-      "/images/prod-solar.png"
-    ],
-    "specs": {
-      "Motor Type": "BLDC Permanent Magnet 3HP",
-      "Operating Voltage": "72V - 150V DC",
-      "Max Head": "120 Meters",
-      "Discharge Diameter": "1.5 Inch"
-    },
-    "highlights": [
-      "High-Efficiency Brushless DC Technology",
-      "Soft-Start Extends Motor Lifespan",
-      "Submersible Down to 120m Wells",
-      "Complete Auto-Protection Suite"
-    ]
-  },
-  {
-    "name": "Solar Irrigation Water Pumping System 5HP",
-    "sku": "SKU-AG-13",
-    "slug": "solar-irrigation-pumping-system-ag-13",
-    "categoryName": "Agriculture & Farming",
-    "subcategory": "Solar Pumps",
-    "brand": "SolarAgro",
-    "description": "Submersible 5HP stainless steel solar water pump with MPPT solar pump controller, automated dry-run protection, and high discharge head.",
-    "price": 68000,
-    "mrp": 79000,
-    "discount": 13,
-    "stock": 20,
-    "rating": 4.9,
-    "reviewCount": 27,
-    "image": "/images/prod-solar.png",
-    "images": [
-      "/images/prod-solar.png"
-    ],
-    "specs": {
-      "Motor Power": "5 HP / 3.7 kW",
-      "Max Head": "90 Meters",
-      "Max Flow Rate": "18,000 L/Hour",
-      "Controller": "Advanced MPPT Variable Frequency"
-    },
-    "highlights": [
-      "Zero Recurring Electricity Cost",
-      "Grade 304 Stainless Steel Construction",
-      "Integrated Dry-Run & Lightning Protection",
-      "Remote Telemetry Monitoring Compatible"
-    ]
-  },
-  {
-    "name": "Heavy-Duty Multi-Row Rotary Cultivator",
-    "sku": "SKU-AG-17",
-    "slug": "heavy-duty-rotary-cultivator-ag-17",
-    "categoryName": "Agriculture & Farming",
-    "subcategory": "Farm Machinery",
-    "brand": "AgriPower",
-    "description": "Heavy-duty tractor mounted rotary tiller designed for fine seedbed preparation in dry and wet soils with heat-treated boronic steel blades.",
-    "price": 34500,
-    "mrp": 39000,
-    "discount": 11,
-    "stock": 18,
-    "rating": 4.6,
-    "reviewCount": 31,
-    "image": "/images/prod-cultivator.png",
-    "images": [
-      "/images/prod-cultivator.png"
-    ],
-    "specs": {
-      "Working Width": "5 Feet",
-      "Blades Count": "36 Blades",
-      "Tractor Power Required": "35-45 HP",
-      "Drive Type": "Gear Drive"
-    },
-    "highlights": [
-      "High-Tensile Boron Steel L-Type Blades",
-      "Heavy Duty Sealed Gearbox",
-      "Adjustable Depth Skids",
-      "Vibration Dampened Side Shields"
-    ]
-  },
-  {
-    "name": "Professional Studio Broadcast Headset with Boom Mic",
-    "sku": "SKU-EL-01",
-    "slug": "professional-studio-broadcast-headset-el-01",
-    "categoryName": "Electronics & Gadgets",
-    "subcategory": "Audio & Headphones",
-    "brand": "Audio-Technica",
-    "description": "Closed-back dynamic monitoring headphones with high-output cardioid dynamic microphone tailored for noisy control rooms and field broadcasting.",
-    "price": 5499,
-    "mrp": 7200,
-    "discount": 24,
-    "stock": 25,
-    "rating": 4.8,
-    "reviewCount": 42,
-    "image": "/images/prod-headphones.png",
-    "images": [
-      "/images/prod-headphones.png"
-    ],
-    "specs": {
-      "Drivers": "40 mm Neodymium Magnets",
-      "Frequency Response": "20 - 20,000 Hz",
-      "Microphone": "Flexible Dynamic Boom Mic",
-      "Cable": "3.0 m Detachable Coiled"
-    },
-    "highlights": [
-      "Exceptional Clarity Across Mid-Range",
-      "Rigid Sound-Isolating Earcups",
-      "Comfort-Cushioned Headband",
-      "Gold-Plated 3.5mm & 6.3mm Adapters"
-    ]
-  },
-  {
-    "name": "Self-Propelled 7HP Mini Power Weeder & Tiller",
-    "sku": "SKU-AG-18",
-    "slug": "self-propelled-power-weeder-tiller-ag-18",
-    "categoryName": "Agriculture & Farming",
-    "subcategory": "Farm Machinery",
-    "brand": "GROVE AgriMaster",
-    "description": "Compact 7HP 4-stroke petrol-driven inter-cultivator weeder with adjustable tilling width for sugarcane, vegetable, and orchard beds.",
-    "price": 29000,
-    "mrp": 35000,
-    "discount": 17,
-    "stock": 16,
-    "rating": 4.7,
-    "reviewCount": 26,
-    "image": "https://images.unsplash.com/photo-1595246140625-573b715d11dc?auto=format&fit=crop&w=500&q=80",
-    "images": [
-      "https://images.unsplash.com/photo-1595246140625-573b715d11dc?auto=format&fit=crop&w=500&q=80",
-      "/images/prod-cultivator.png"
-    ],
-    "specs": {
-      "Engine": "7 HP 212cc 4-Stroke OHV",
-      "Tilling Width": "60 - 90 cm Adjustable",
-      "Tilling Depth": "15 - 20 cm",
-      "Fuel Consumption": "0.8 L/Hour"
-    },
-    "highlights": [
-      "360-Degree Swivel Handlebars",
-      "Oil-Bath Air Filter for Dusty Environments",
-      "Forward and Reverse Gear Transmission",
-      "Includes Ditching & Weeding Blade Wheels"
-    ]
-  },
-  {
-    "name": "Heavy Duty 45HP Utility Farm Tractor",
-    "sku": "SKU-AG-16",
-    "slug": "heavy-duty-farm-tractor-ag-16",
-    "categoryName": "Agriculture & Farming",
-    "subcategory": "Farm Machinery",
-    "brand": "GROVE AgriMaster",
-    "description": "Commercial 45HP dual-clutch utility tractor with advanced 8F+2R transmission, high ground clearance, and power steering for rigorous farming operations.",
-    "price": 585000,
-    "mrp": 620000,
-    "discount": 5,
-    "stock": 12,
-    "rating": 4.8,
-    "reviewCount": 42,
-    "image": "/images/prod-tractor.png",
-    "images": [
-      "/images/prod-tractor.png",
-      "/images/prod-cultivator.png"
-    ],
-    "specs": {
-      "Horsepower": "45 HP",
-      "Cylinders": "3 Cylinders",
-      "Lifting Capacity": "1500 kg",
-      "Fuel Tank": "50 Liters"
-    },
-    "highlights": [
-      "45 HP Fuel-Efficient Diesel Engine",
-      "Dual Clutch & Power Steering",
-      "1500 kg Hydraulic Lift Capacity",
-      "1 Year Comprehensive Warranty"
-    ]
-  },
-  {
-    "name": "Surface Monoblock DC Solar Water Pump 2HP",
-    "sku": "SKU-AG-15",
-    "slug": "surface-monoblock-dc-solar-pump-2hp-ag-15",
-    "categoryName": "Agriculture & Farming",
-    "subcategory": "Solar Pumps",
-    "brand": "SolarAgro",
-    "description": "Open-well surface monoblock centrifugal solar pump designed for canal lifting, pond drainage, and open irrigation channels.",
-    "price": 38000,
-    "mrp": 45000,
-    "discount": 15,
-    "stock": 22,
-    "rating": 4.7,
-    "reviewCount": 20,
-    "image": "https://images.unsplash.com/photo-1509391365360-2e959784a276?auto=format&fit=crop&w=500&q=80",
-    "images": [
-      "https://images.unsplash.com/photo-1509391365360-2e959784a276?auto=format&fit=crop&w=500&q=80",
-      "/images/prod-solar.png"
-    ],
-    "specs": {
-      "Power Output": "2 HP (1.5 kW)",
-      "Suction Lift": "7.5 Meters",
-      "Discharge Output": "24,000 L/Hour",
-      "Impeller": "Non-Corrosive Gunmetal Bronze"
-    },
-    "highlights": [
-      "Cast-Iron Heavy Duty Pump Volute",
-      "Plug-and-Play Solar Array Direct Drive",
-      "Self-Priming Chamber Design",
-      "Low Maintenance Ceramic Shaft Seal"
-    ]
-  },
-  {
-    "name": "Rugged Waterproof Tactical In-Ear Earbuds IPX8",
-    "sku": "SKU-EL-02",
-    "slug": "rugged-waterproof-tactical-earbuds-el-02",
-    "categoryName": "Electronics & Gadgets",
-    "subcategory": "Audio & Headphones",
-    "brand": "Noise",
-    "description": "IPX8 waterproof wireless earbuds with military-grade silicone wing tips, 48-hour endurance charging case, and ambient transparency audio.",
-    "price": 1999,
-    "mrp": 2999,
-    "discount": 33,
-    "stock": 40,
-    "rating": 4.6,
-    "reviewCount": 56,
-    "image": "https://images.unsplash.com/photo-1590658268037-6bf12165a8df?auto=format&fit=crop&w=500&q=80",
-    "images": [
-      "https://images.unsplash.com/photo-1590658268037-6bf12165a8df?auto=format&fit=crop&w=500&q=80",
-      "/images/prod-headphones.png"
-    ],
-    "specs": {
-      "Waterproof Rating": "IPX8 Fully Submersible",
-      "Bluetooth Version": "v5.3 Low Latency",
-      "Playtime": "10h Buds + 38h Case",
-      "Drivers": "10 mm Titanium Coated"
-    },
-    "highlights": [
-      "Sweat & High-Pressure Water Jet Proof",
-      "Touch Controls with Glove Responsiveness",
-      "ENC Quad Mics for Wind Noise Cancellation",
-      "USB-C Fast Charging (10m charge = 2h play)"
-    ]
-  },
-  {
-    "name": "Industrial Wireless Noise-Cancelling Field Headset",
-    "sku": "SKU-EL-03",
-    "slug": "industrial-wireless-noise-cancelling-headset-el-03",
-    "categoryName": "Electronics & Gadgets",
-    "subcategory": "Audio & Headphones",
-    "brand": "GROVE Tech",
-    "description": "Heavy-duty wireless over-ear headset with active noise cancellation up to 35dB, boom mic with environmental suppression, and 40h battery.",
-    "price": 2999,
-    "mrp": 4499,
-    "discount": 33,
-    "stock": 35,
-    "rating": 4.7,
-    "reviewCount": 46,
-    "image": "https://images.unsplash.com/photo-1505740420928-5e560c06d30e?auto=format&fit=crop&w=500&q=80",
-    "images": [
-      "https://images.unsplash.com/photo-1505740420928-5e560c06d30e?auto=format&fit=crop&w=500&q=80",
-      "/images/prod-headphones.png"
-    ],
-    "specs": {
-      "Noise Cancellation": "Hybrid Active ANC (up to 35dB)",
-      "Battery": "800mAh (40 Hours)",
-      "Connectivity": "Bluetooth 5.2 + 3.5mm Aux",
-      "Weight": "260 g"
-    },
-    "highlights": [
-      "Engine & Machinery Noise Filtering",
-      "All-Day Memory Foam Ear Cushions",
-      "Detachable Noise-Cancelling Boom Mic",
-      "Foldable Heavy-Duty Headband"
-    ]
-  },
-  {
-    "name": "Rugged All-Weather Telemetry Field Laptop 14-inch",
-    "sku": "SKU-EL-04",
-    "slug": "rugged-telemetry-field-laptop-el-04",
-    "categoryName": "Electronics & Gadgets",
-    "subcategory": "Laptops & Computers",
-    "brand": "Lenovo",
-    "description": "Full-ruggedized 14-inch outdoor laptop with drop-resistant chassis, glove-touch outdoor sunlight readable screen, and hot-swappable dual batteries.",
-    "price": 48999,
-    "mrp": 58000,
-    "discount": 15,
-    "stock": 14,
-    "rating": 4.9,
-    "reviewCount": 19,
-    "image": "/images/prod-laptop.png",
-    "images": [
-      "/images/prod-laptop.png"
-    ],
-    "specs": {
-      "Processor": "Intel Core i5 12th Gen",
-      "RAM": "16 GB DDR4",
-      "Storage": "512 GB NVMe SSD",
-      "Drop Spec": "1.8 Meter Shockproof Drop Rating"
-    },
-    "highlights": [
-      "Sunlight-Readable 1200 Nits Display",
-      "Glove-Operable Touchscreen",
-      "Dual Hot-Swappable 12-Hour Batteries",
-      "Dedicated RS232 Serial & GPS Ports"
-    ]
-  },
-  {
-    "name": "Industrial Workstation Core i7 Rugged Laptop 32GB",
-    "sku": "SKU-EL-05",
-    "slug": "industrial-workstation-core-i7-laptop-el-05",
-    "categoryName": "Electronics & Gadgets",
-    "subcategory": "Laptops & Computers",
-    "brand": "Lenovo",
-    "description": "High-performance MIL-SPEC field workstation laptop featuring NVIDIA RTX dedicated graphics, magnesium alloy casing, and spill-resistant keyboard.",
-    "price": 74999,
-    "mrp": 88000,
-    "discount": 15,
-    "stock": 10,
-    "rating": 4.8,
-    "reviewCount": 23,
-    "image": "https://images.unsplash.com/photo-1496181133206-80ce9b88a853?auto=format&fit=crop&w=500&q=80",
-    "images": [
-      "https://images.unsplash.com/photo-1496181133206-80ce9b88a853?auto=format&fit=crop&w=500&q=80",
-      "/images/prod-laptop.png"
-    ],
-    "specs": {
-      "Processor": "Intel Core i7-13700H",
-      "Graphics": "NVIDIA RTX 4050 6GB",
-      "RAM": "32 GB DDR5",
-      "Display": "15.6 Inch 100% sRGB FHD"
-    },
-    "highlights": [
-      "Heavy CAD & Agronomy Telemetry Processing",
-      "Magnesium Alloy Drop-Proof Unibody",
-      "Biometric Fingerprint & Smart Card Reader",
-      "Thunderbolt 4 & Dual PCIe Expansion"
-    ]
-  },
-  {
-    "name": "Compact Fanless Rugged Mini PC Industrial Controller",
-    "sku": "SKU-EL-06",
-    "slug": "compact-fanless-rugged-mini-pc-el-06",
-    "categoryName": "Electronics & Gadgets",
-    "subcategory": "Laptops & Computers",
-    "brand": "GROVE Tech",
-    "description": "Solid-state extruded aluminum fanless embedded PC designed for 24/7 agricultural greenhouse automation, IoT telemetry hubs, and factory kiosks.",
-    "price": 27500,
-    "mrp": 33000,
-    "discount": 16,
-    "stock": 20,
-    "rating": 4.7,
-    "reviewCount": 16,
-    "image": "https://images.unsplash.com/photo-1517336714731-489689fd1ca8?auto=format&fit=crop&w=500&q=80",
-    "images": [
-      "https://images.unsplash.com/photo-1517336714731-489689fd1ca8?auto=format&fit=crop&w=500&q=80",
-      "/images/prod-laptop.png"
-    ],
-    "specs": {
-      "CPU": "Intel Celeron J6412 Quad-Core",
-      "Ports": "4x COM RS485, 2x Gigabit LAN, 6x USB",
-      "Operating Temp": "-20°C to +70°C",
-      "Power Input": "9V - 36V Wide DC"
-    },
-    "highlights": [
-      "100% Sealed Dust-Free Fanless Cooling",
-      "Continuous 24/7/365 Hardware Reliability",
-      "DIN-Rail & VESA Mount Included",
-      "Hardware Watchdog Timer Auto-Reboot"
-    ]
-  },
-  {
-    "name": "Outdoor Multisport GPS Tactical Smartwatch",
-    "sku": "SKU-EL-08",
-    "slug": "outdoor-multisport-gps-tactical-smartwatch-el-08",
-    "categoryName": "Electronics & Gadgets",
-    "subcategory": "Wearables & Smartwatches",
-    "brand": "Noise",
-    "description": "Heavy rugged smartwatch featuring offline topological maps, compass, LED tactical flashlight, and heart rate variability analytics.",
-    "price": 6499,
-    "mrp": 8499,
-    "discount": 24,
-    "stock": 30,
-    "rating": 4.8,
-    "reviewCount": 54,
-    "image": "https://images.unsplash.com/photo-1523275335684-37898b6baf30?auto=format&fit=crop&w=500&q=80",
-    "images": [
-      "https://images.unsplash.com/photo-1523275335684-37898b6baf30?auto=format&fit=crop&w=500&q=80",
-      "/images/prod-smartwatch.png"
-    ],
-    "specs": {
-      "Bezel": "Titanium Alloy with Ceramic Back",
-      "Battery": "500mAh (Up to 21 Days Standby)",
-      "GPS": "Five Satellite Dual-Frequency",
-      "Waterproof": "10 ATM Submersible"
-    },
-    "highlights": [
-      "Built-In High-Intensity White & Red Flashlight",
-      "Offline Topographic Waypoint Navigation",
-      "VO2 Max & Recovery Assistant",
-      "Reinforced Gorilla Glass DX+"
-    ]
-  },
-  {
-    "name": "GROVE Field Rugged Smartwatch with GPS & Sensor Hub",
-    "sku": "SKU-EL-07",
-    "slug": "grove-field-rugged-smartwatch-el-07",
-    "categoryName": "Electronics & Gadgets",
-    "subcategory": "Wearables & Smartwatches",
-    "brand": "GROVE Tech",
-    "description": "MIL-STD-810H rated outdoor smartwatch with dual-band GPS, barometer, optical pulse oximeter, and 14-day ultra-long battery life.",
-    "price": 4299,
-    "mrp": 5999,
-    "discount": 28,
-    "stock": 40,
-    "rating": 4.7,
-    "reviewCount": 88,
-    "image": "/images/prod-smartwatch.png",
-    "images": [
-      "/images/prod-smartwatch.png"
-    ],
-    "specs": {
-      "Display": "1.43 inch AMOLED Sapphire",
-      "Water Resistance": "5 ATM / 50M",
-      "Battery Life": "Up to 14 Days",
-      "Sensors": "Dual GPS, Altimeter, Barometer, SpO2"
-    },
-    "highlights": [
-      "Military-Grade Shock & Dust Resistance",
-      "Ultra-Bright 1000 nits Outdoor Display",
-      "Real-Time Field Telemetry Tracking",
-      "Bluetooth 5.3 Calling Enabled"
-    ]
-  },
-  {
-    "name": "Biometric Telemetry & Heart Health Smart Fitness Band",
-    "sku": "SKU-EL-09",
-    "slug": "biometric-telemetry-smart-fitness-band-el-09",
-    "categoryName": "Electronics & Gadgets",
-    "subcategory": "Wearables & Smartwatches",
-    "brand": "GROVE Tech",
-    "description": "Ultralight health wristband monitoring continuous skin temperature, stress levels, blood oxygenation, and sleep stage cycles.",
-    "price": 1899,
-    "mrp": 2499,
-    "discount": 24,
-    "stock": 45,
-    "rating": 4.5,
-    "reviewCount": 39,
-    "image": "https://images.unsplash.com/photo-1579586337278-3befd40fd17a?auto=format&fit=crop&w=500&q=80",
-    "images": [
-      "https://images.unsplash.com/photo-1579586337278-3befd40fd17a?auto=format&fit=crop&w=500&q=80",
-      "/images/prod-smartwatch.png"
-    ],
-    "specs": {
-      "Display": "1.1 Inch Curved AMOLED",
-      "Weight": "Only 22 Grams",
-      "Battery": "14 Days Magnetic Quick Charge",
-      "Compatibility": "Android & iOS"
-    },
-    "highlights": [
-      "Continuous 24/7 SpO2 & Heart Monitoring",
-      "Automatic Workout Detection (30+ Sports)",
-      "Gentle Silent Vibration Smart Alarms",
-      "Hypoallergenic Silicone Band"
-    ]
-  },
-  {
-    "name": "Wireless Backlit Hot-Swappable Mechanical Keyboard",
-    "sku": "SKU-EL-11",
-    "slug": "wireless-backlit-mechanical-keyboard-el-11",
-    "categoryName": "Electronics & Gadgets",
-    "subcategory": "Keyboards & Accessories",
-    "brand": "Keychron",
-    "description": "Compact 75% mechanical keyboard with Bluetooth 5.1 and 2.4GHz wireless connectivity, south-facing RGB backlight, and sound-absorbing silicone pads.",
-    "price": 5299,
-    "mrp": 6500,
-    "discount": 18,
-    "stock": 28,
-    "rating": 4.9,
-    "reviewCount": 47,
-    "image": "https://images.unsplash.com/photo-1587829741301-dc798b83add3?auto=format&fit=crop&w=500&q=80",
-    "images": [
-      "https://images.unsplash.com/photo-1587829741301-dc798b83add3?auto=format&fit=crop&w=500&q=80",
-      "/images/prod-keyboard.png"
-    ],
-    "specs": {
-      "Layout": "75% (84 Keys)",
-      "Switches": "Gateron G Pro Mechanical Brown",
-      "Connectivity": "Bluetooth 5.1 / 2.4G / Type-C",
-      "Battery": "4000 mAh"
-    },
-    "highlights": [
-      "Hot-Swappable 3-Pin / 5-Pin Switch Sockets",
-      "Connects up to 3 Devices Simultaneously",
-      "CNC Aluminum Top Frame Plate",
-      "Mac & Windows Keycap Sets Included"
-    ]
-  },
-  {
-    "name": "Dustproof Mechanical Industrial Control Keyboard",
-    "sku": "SKU-EL-10",
-    "slug": "dustproof-mechanical-keyboard-el-10",
-    "categoryName": "Electronics & Gadgets",
-    "subcategory": "Keyboards & Accessories",
-    "brand": "Keychron",
-    "description": "IP65-rated sealed mechanical keyboard engineered for industrial workstations, warehouses, and harsh field environments.",
-    "price": 3499,
-    "mrp": 4999,
-    "discount": 30,
     "stock": 25,
     "rating": 4.5,
-    "reviewCount": 39,
-    "image": "/images/prod-keyboard.png",
+    "reviewCount": 10,
+    "image": "https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&fit=crop&w=500&q=80",
     "images": [
-      "/images/prod-keyboard.png"
+      "https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&fit=crop&w=500&q=80"
     ],
     "specs": {
-      "Switch Type": "Dustproof Sealed Optical Switches",
-      "Ingress Protection": "IP65 Dust & Water Resistant",
-      "Chassis": "Anodized Aircraft Aluminum",
-      "Keycaps": "Double-Shot PBT"
+      "material": "Weatherproof Anodized Stainless Steel & UV-Stabilized ABS",
+      "pipeSize": "300 mm Probe Depth",
+      "flowRate": "RS485 Modbus RTU / 4G GSM"
     },
-    "highlights": [
-      "Sealed Internal Membrane Shield",
-      "50 Million Keystroke Durability",
-      "Oil and Solvent Resistant Keycaps",
-      "Integrated Braided USB-C Cable"
-    ]
-  },
-  {
-    "name": "Ergonomic IP68 Heavy-Duty Industrial Trackball Mouse",
-    "sku": "SKU-EL-12",
-    "slug": "ergonomic-industrial-trackball-mouse-el-12",
-    "categoryName": "Electronics & Gadgets",
-    "subcategory": "Keyboards & Accessories",
-    "brand": "GROVE Tech",
-    "description": "Fully sealed optical laser trackball mouse with water-washable stainless steel ball and chemical-resistant housing for control room consoles.",
-    "price": 2699,
-    "mrp": 3499,
-    "discount": 23,
-    "stock": 32,
-    "rating": 4.6,
-    "reviewCount": 18,
-    "image": "https://images.unsplash.com/photo-1615663245857-ac93bb7c39e7?auto=format&fit=crop&w=500&q=80",
-    "images": [
-      "https://images.unsplash.com/photo-1615663245857-ac93bb7c39e7?auto=format&fit=crop&w=500&q=80",
-      "/images/prod-keyboard.png"
-    ],
-    "specs": {
-      "Tracking Technology": "Optical Laser 1200 DPI",
-      "Ball Diameter": "38 mm Solid Steel",
-      "Ingress Rating": "IP68 Washable",
-      "Interface": "USB Plug & Play"
-    },
-    "highlights": [
-      "No Moving Mechanical Friction Parts",
-      "Functions Reliably with Thick Work Gloves",
-      "Resistant to Salt Spray & Oil Splashes",
-      "Zero Desktop Surface Drag Needed"
-    ]
+    "highlights": []
   },
   {
     "name": "Wireless Soil Moisture & Temperature LoRaWAN Sensor",
@@ -921,193 +57,35 @@
     ]
   },
   {
-    "name": "Semi-Metallic Heavy Duty Commercial Brake Pads Set",
-    "sku": "SKU-AU-04",
-    "slug": "semi-metallic-commercial-brake-pads-au-04",
-    "categoryName": "Automotive & Spare Parts",
-    "subcategory": "Braking Systems",
-    "brand": "Brembo",
-    "description": "High-friction semi-metallic front brake pad set for light commercial trucks, tractors, and agricultural haulers with low-dust thermal slots.",
-    "price": 1850,
-    "mrp": 2400,
-    "discount": 22,
-    "stock": 50,
-    "rating": 4.7,
-    "reviewCount": 74,
-    "image": "/images/prod-brakepads.png",
-    "images": [
-      "/images/prod-brakepads.png"
-    ],
-    "specs": {
-      "Material": "Semi-Metallic Carbon Composite",
-      "Operating Temp": "-40°C to +650°C",
-      "Wear Indicator": "Acoustic Wear Sensor",
-      "Axle Placement": "Front Axle"
-    },
-    "highlights": [
-      "Extended Rotor Life Formulation",
-      "Fade-Resistant Heavy Load Braking",
-      "Dual Chamfered Noise Damping Slots",
-      "Includes Hardware Installation Clips"
-    ]
-  },
-  {
-    "name": "Autonomous Agricultural 10L Crop Spraying Drone Hexacopter",
-    "sku": "SKU-EL-16",
-    "slug": "autonomous-agricultural-crop-spraying-drone-el-16",
+    "name": "Ergonomic IP68 Heavy-Duty Industrial Trackball Mouse",
+    "sku": "SKU-EL-12",
+    "slug": "ergonomic-industrial-trackball-mouse-el-12",
     "categoryName": "Electronics & Gadgets",
-    "subcategory": "Drones & Robotics",
-    "brand": "AeroKisan",
-    "description": "Commercial hexacopter sprayer equipped with dual centrifugal atomizing nozzles, RTK centimeter-accurate positioning, and obstacle avoidance radar.",
-    "price": 215000,
-    "mrp": 245000,
-    "discount": 12,
-    "stock": 6,
-    "rating": 4.9,
-    "reviewCount": 14,
-    "image": "https://images.unsplash.com/photo-1508614589041-895b88991e3e?auto=format&fit=crop&w=500&q=80",
-    "images": [
-      "https://images.unsplash.com/photo-1508614589041-895b88991e3e?auto=format&fit=crop&w=500&q=80",
-      "/images/card-electronics-clean.png"
-    ],
-    "specs": {
-      "Payload Capacity": "10 Liters Spray Tank",
-      "Flight Time": "15-20 Min per Battery Cycle",
-      "Spraying Efficiency": "Up to 15 Acres per Hour",
-      "Radar": "Spherical Omnidirectional Obstacle Avoidance"
-    },
-    "highlights": [
-      "Autonomous GPS Route Planning from App",
-      "Centrifugal Nozzles Guarantee Zero Drift",
-      "Foldable Carbon-Fiber Truss Arms",
-      "Dual Smart Hot-Swappable Fast Batteries"
-    ]
-  },
-  {
-    "name": "All-Terrain Commercial Agricultural Radial Rear Tire",
-    "sku": "SKU-AU-01",
-    "slug": "all-terrain-radial-rear-tire-au-01",
-    "categoryName": "Automotive & Spare Parts",
-    "subcategory": "Tires & Wheels",
-    "brand": "Apollo",
-    "description": "Deep-lug agricultural drive wheel tire engineered with dual-angle lug geometry for superior field traction and reduced soil compaction.",
-    "price": 22500,
-    "mrp": 27000,
-    "discount": 16,
-    "stock": 20,
-    "rating": 4.9,
-    "reviewCount": 45,
-    "image": "/images/prod-tyre.png",
-    "images": [
-      "/images/prod-tyre.png"
-    ],
-    "specs": {
-      "Size": "13.6 - 28",
-      "PR (Ply Rating)": "12 Ply",
-      "Load Index": "128 A8",
-      "Tread Depth": "38 mm"
-    },
-    "highlights": [
-      "Self-Cleaning Mud-Shedding Lug Design",
-      "Puncture-Resistant Heavy Sidewall Plies",
-      "Even Footprint Minimizes Soil Compaction",
-      "High Roadability & Wear Resistance"
-    ]
-  },
-  {
-    "name": "Autonomous AI Field Scouting Rover with Optical Cameras",
-    "sku": "SKU-EL-18",
-    "slug": "autonomous-ai-field-scouting-rover-el-18",
-    "categoryName": "Electronics & Gadgets",
-    "subcategory": "Drones & Robotics",
+    "subcategory": "Keyboards & Accessories",
     "brand": "GROVE Tech",
-    "description": "All-terrain robotic field rover with tracked tread suspension, dual RGB-D stereoscopic cameras, and edge AI processor for automated weed identification.",
-    "price": 95000,
-    "mrp": 110000,
-    "discount": 14,
-    "stock": 10,
-    "rating": 4.7,
-    "reviewCount": 11,
-    "image": "https://images.unsplash.com/photo-1485827404703-89b55fcc595e?auto=format&fit=crop&w=500&q=80",
+    "description": "Fully sealed optical laser trackball mouse with water-washable stainless steel ball and chemical-resistant housing for control room consoles.",
+    "price": 2699,
+    "mrp": 3499,
+    "discount": 23,
+    "stock": 32,
+    "rating": 4.6,
+    "reviewCount": 18,
+    "image": "https://images.unsplash.com/photo-1615663245857-ac93bb7c39e7?auto=format&fit=crop&w=500&q=80",
     "images": [
-      "https://images.unsplash.com/photo-1485827404703-89b55fcc595e?auto=format&fit=crop&w=500&q=80",
-      "/images/card-electronics-clean.png"
+      "https://images.unsplash.com/photo-1615663245857-ac93bb7c39e7?auto=format&fit=crop&w=500&q=80",
+      "/images/prod-keyboard.png"
     ],
     "specs": {
-      "Mobility": "Rubber Tank Track All-Terrain System",
-      "Compute": "Edge AI 21 TOPS Neural Engine",
-      "Battery": "48V 30Ah Lithium (8h Operating Time)",
-      "Sensors": "3D LiDAR + Stereoscopic Depth Cameras"
+      "Tracking Technology": "Optical Laser 1200 DPI",
+      "Ball Diameter": "38 mm Solid Steel",
+      "Ingress Rating": "IP68 Washable",
+      "Interface": "USB Plug & Play"
     },
     "highlights": [
-      "Navigates High-Density Crop Furrows",
-      "Detects Early-Stage Weeds with 98% Accuracy",
-      "Autonomous Solar Docking Recharging",
-      "Wireless 4G Live Video Stream & Control"
-    ]
-  },
-  {
-    "name": "High-Resolution Multispectral Field Survey Mapping Drone",
-    "sku": "SKU-EL-17",
-    "slug": "multispectral-field-survey-drone-el-17",
-    "categoryName": "Electronics & Gadgets",
-    "subcategory": "Drones & Robotics",
-    "brand": "AeroKisan",
-    "description": "Fixed-wing quad-hybrid survey drone with 5-band multispectral camera for generating NDVI crop health index, vegetation stress, and irrigation maps.",
-    "price": 165000,
-    "mrp": 185000,
-    "discount": 11,
-    "stock": 8,
-    "rating": 4.8,
-    "reviewCount": 17,
-    "image": "https://images.unsplash.com/photo-1527977966376-1c8408f9f108?auto=format&fit=crop&w=500&q=80",
-    "images": [
-      "https://images.unsplash.com/photo-1527977966376-1c8408f9f108?auto=format&fit=crop&w=500&q=80",
-      "/images/card-electronics.png"
-    ],
-    "specs": {
-      "Camera": "5-Band (Blue, Green, Red, Red Edge, NIR)",
-      "Survey Area": "Up to 150 Acres per Flight",
-      "Max Flight Time": "42 Minutes",
-      "Positioning": "RTK/PPK Ready Centimeter Accuracy"
-    },
-    "highlights": [
-      "Generates Instant NDVI Crop Stress Indices",
-      "Detects Nitrogen Deficiency & Pest Outbreaks",
-      "Automated One-Click Mission Planning",
-      "Includes 1-Year Agronomy Orthomosaic Cloud License"
-    ]
-  },
-  {
-    "name": "Reinforced Heavy Duty Alloy Wheel Rim 16-Inch",
-    "sku": "SKU-AU-03",
-    "slug": "reinforced-heavy-duty-alloy-wheel-rim-au-03",
-    "categoryName": "Automotive & Spare Parts",
-    "subcategory": "Tires & Wheels",
-    "brand": "Apollo",
-    "description": "One-piece forged aluminum alloy heavy rim engineered for commercial flatbeds, transport vans, and rugged agricultural haulage.",
-    "price": 8200,
-    "mrp": 10200,
-    "discount": 20,
-    "stock": 30,
-    "rating": 4.8,
-    "reviewCount": 29,
-    "image": "https://images.unsplash.com/photo-1611821064430-0d40291d0f0b?auto=format&fit=crop&w=500&q=80",
-    "images": [
-      "https://images.unsplash.com/photo-1611821064430-0d40291d0f0b?auto=format&fit=crop&w=500&q=80",
-      "/images/prod-tyre.png"
-    ],
-    "specs": {
-      "Rim Diameter": "16 Inch",
-      "Rim Width": "6.5 J",
-      "PCD": "5 x 160 mm",
-      "Payload Capacity": "1,450 kg per Rim"
-    },
-    "highlights": [
-      "Aviation-Grade Forged T6061 Aluminum",
-      "Corrosion-Resistant Diamond Polished Finish",
-      "Dissipates Brake Heat Faster than Steel",
-      "Tested Against Severe Impact Standards"
+      "No Moving Mechanical Friction Parts",
+      "Functions Reliably with Thick Work Gloves",
+      "Resistant to Salt Spray & Oil Splashes",
+      "Zero Desktop Surface Drag Needed"
     ]
   },
   {
@@ -1175,6 +153,102 @@
     ]
   },
   {
+    "name": "High-Resolution Multispectral Field Survey Mapping Drone",
+    "sku": "SKU-EL-17",
+    "slug": "multispectral-field-survey-drone-el-17",
+    "categoryName": "Electronics & Gadgets",
+    "subcategory": "Drones & Robotics",
+    "brand": "AeroKisan",
+    "description": "Fixed-wing quad-hybrid survey drone with 5-band multispectral camera for generating NDVI crop health index, vegetation stress, and irrigation maps.",
+    "price": 165000,
+    "mrp": 185000,
+    "discount": 11,
+    "stock": 8,
+    "rating": 4.8,
+    "reviewCount": 17,
+    "image": "https://images.unsplash.com/photo-1527977966376-1c8408f9f108?auto=format&fit=crop&w=500&q=80",
+    "images": [
+      "https://images.unsplash.com/photo-1527977966376-1c8408f9f108?auto=format&fit=crop&w=500&q=80",
+      "/images/card-electronics.png"
+    ],
+    "specs": {
+      "Camera": "5-Band (Blue, Green, Red, Red Edge, NIR)",
+      "Survey Area": "Up to 150 Acres per Flight",
+      "Max Flight Time": "42 Minutes",
+      "Positioning": "RTK/PPK Ready Centimeter Accuracy"
+    },
+    "highlights": [
+      "Generates Instant NDVI Crop Stress Indices",
+      "Detects Nitrogen Deficiency & Pest Outbreaks",
+      "Automated One-Click Mission Planning",
+      "Includes 1-Year Agronomy Orthomosaic Cloud License"
+    ]
+  },
+  {
+    "name": "Autonomous Agricultural 10L Crop Spraying Drone Hexacopter",
+    "sku": "SKU-EL-16",
+    "slug": "autonomous-agricultural-crop-spraying-drone-el-16",
+    "categoryName": "Electronics & Gadgets",
+    "subcategory": "Drones & Robotics",
+    "brand": "AeroKisan",
+    "description": "Commercial hexacopter sprayer equipped with dual centrifugal atomizing nozzles, RTK centimeter-accurate positioning, and obstacle avoidance radar.",
+    "price": 215000,
+    "mrp": 245000,
+    "discount": 12,
+    "stock": 6,
+    "rating": 4.9,
+    "reviewCount": 14,
+    "image": "https://images.unsplash.com/photo-1508614589041-895b88991e3e?auto=format&fit=crop&w=500&q=80",
+    "images": [
+      "https://images.unsplash.com/photo-1508614589041-895b88991e3e?auto=format&fit=crop&w=500&q=80",
+      "/images/card-electronics-clean.png"
+    ],
+    "specs": {
+      "Payload Capacity": "10 Liters Spray Tank",
+      "Flight Time": "15-20 Min per Battery Cycle",
+      "Spraying Efficiency": "Up to 15 Acres per Hour",
+      "Radar": "Spherical Omnidirectional Obstacle Avoidance"
+    },
+    "highlights": [
+      "Autonomous GPS Route Planning from App",
+      "Centrifugal Nozzles Guarantee Zero Drift",
+      "Foldable Carbon-Fiber Truss Arms",
+      "Dual Smart Hot-Swappable Fast Batteries"
+    ]
+  },
+  {
+    "name": "Autonomous AI Field Scouting Rover with Optical Cameras",
+    "sku": "SKU-EL-18",
+    "slug": "autonomous-ai-field-scouting-rover-el-18",
+    "categoryName": "Electronics & Gadgets",
+    "subcategory": "Drones & Robotics",
+    "brand": "GROVE Tech",
+    "description": "All-terrain robotic field rover with tracked tread suspension, dual RGB-D stereoscopic cameras, and edge AI processor for automated weed identification.",
+    "price": 95000,
+    "mrp": 110000,
+    "discount": 14,
+    "stock": 10,
+    "rating": 4.7,
+    "reviewCount": 11,
+    "image": "https://images.unsplash.com/photo-1485827404703-89b55fcc595e?auto=format&fit=crop&w=500&q=80",
+    "images": [
+      "https://images.unsplash.com/photo-1485827404703-89b55fcc595e?auto=format&fit=crop&w=500&q=80",
+      "/images/card-electronics-clean.png"
+    ],
+    "specs": {
+      "Mobility": "Rubber Tank Track All-Terrain System",
+      "Compute": "Edge AI 21 TOPS Neural Engine",
+      "Battery": "48V 30Ah Lithium (8h Operating Time)",
+      "Sensors": "3D LiDAR + Stereoscopic Depth Cameras"
+    },
+    "highlights": [
+      "Navigates High-Density Crop Furrows",
+      "Detects Early-Stage Weeds with 98% Accuracy",
+      "Autonomous Solar Docking Recharging",
+      "Wireless 4G Live Video Stream & Control"
+    ]
+  },
+  {
     "name": "Commercial Heavy Truck Front Steer Axle Radial Tire",
     "sku": "SKU-AU-02",
     "slug": "commercial-heavy-truck-steer-tire-au-02",
@@ -1204,6 +278,100 @@
       "High-Tensile Steel Belt Package",
       "Retreadable High-Durability Casing",
       "Optimized Low Rolling Resistance Compound"
+    ]
+  },
+  {
+    "name": "All-Terrain Commercial Agricultural Radial Rear Tire",
+    "sku": "SKU-AU-01",
+    "slug": "all-terrain-radial-rear-tire-au-01",
+    "categoryName": "Automotive & Spare Parts",
+    "subcategory": "Tires & Wheels",
+    "brand": "Apollo",
+    "description": "Deep-lug agricultural drive wheel tire engineered with dual-angle lug geometry for superior field traction and reduced soil compaction.",
+    "price": 22500,
+    "mrp": 27000,
+    "discount": 16,
+    "stock": 20,
+    "rating": 4.9,
+    "reviewCount": 45,
+    "image": "/images/prod-tyre.png",
+    "images": [
+      "/images/prod-tyre.png"
+    ],
+    "specs": {
+      "Size": "13.6 - 28",
+      "PR (Ply Rating)": "12 Ply",
+      "Load Index": "128 A8",
+      "Tread Depth": "38 mm"
+    },
+    "highlights": [
+      "Self-Cleaning Mud-Shedding Lug Design",
+      "Puncture-Resistant Heavy Sidewall Plies",
+      "Even Footprint Minimizes Soil Compaction",
+      "High Roadability & Wear Resistance"
+    ]
+  },
+  {
+    "name": "Reinforced Heavy Duty Alloy Wheel Rim 16-Inch",
+    "sku": "SKU-AU-03",
+    "slug": "reinforced-heavy-duty-alloy-wheel-rim-au-03",
+    "categoryName": "Automotive & Spare Parts",
+    "subcategory": "Tires & Wheels",
+    "brand": "Apollo",
+    "description": "One-piece forged aluminum alloy heavy rim engineered for commercial flatbeds, transport vans, and rugged agricultural haulage.",
+    "price": 8200,
+    "mrp": 10200,
+    "discount": 20,
+    "stock": 30,
+    "rating": 4.8,
+    "reviewCount": 29,
+    "image": "https://images.unsplash.com/photo-1611821064430-0d40291d0f0b?auto=format&fit=crop&w=500&q=80",
+    "images": [
+      "https://images.unsplash.com/photo-1611821064430-0d40291d0f0b?auto=format&fit=crop&w=500&q=80",
+      "/images/prod-tyre.png"
+    ],
+    "specs": {
+      "Rim Diameter": "16 Inch",
+      "Rim Width": "6.5 J",
+      "PCD": "5 x 160 mm",
+      "Payload Capacity": "1,450 kg per Rim"
+    },
+    "highlights": [
+      "Aviation-Grade Forged T6061 Aluminum",
+      "Corrosion-Resistant Diamond Polished Finish",
+      "Dissipates Brake Heat Faster than Steel",
+      "Tested Against Severe Impact Standards"
+    ]
+  },
+  {
+    "name": "Semi-Metallic Heavy Duty Commercial Brake Pads Set",
+    "sku": "SKU-AU-04",
+    "slug": "semi-metallic-commercial-brake-pads-au-04",
+    "categoryName": "Automotive & Spare Parts",
+    "subcategory": "Braking Systems",
+    "brand": "Brembo",
+    "description": "High-friction semi-metallic front brake pad set for light commercial trucks, tractors, and agricultural haulers with low-dust thermal slots.",
+    "price": 1850,
+    "mrp": 2400,
+    "discount": 22,
+    "stock": 50,
+    "rating": 4.7,
+    "reviewCount": 74,
+    "image": "/images/prod-brakepads.png",
+    "images": [
+      "/images/prod-brakepads.png"
+    ],
+    "specs": {
+      "Material": "Semi-Metallic Carbon Composite",
+      "Operating Temp": "-40°C to +650°C",
+      "Wear Indicator": "Acoustic Wear Sensor",
+      "Axle Placement": "Front Axle"
+    },
+    "highlights": [
+      "Extended Rotor Life Formulation",
+      "Fade-Resistant Heavy Load Braking",
+      "Dual Chamfered Noise Damping Slots",
+      "Includes Hardware Installation Clips"
     ]
   },
   {
@@ -1271,6 +439,37 @@
     ]
   },
   {
+    "name": "Dual-Tube Heavy Vehicle Hydraulic Shock Absorber",
+    "sku": "SKU-AU-07",
+    "slug": "dual-tube-hydraulic-shock-absorber-au-07",
+    "categoryName": "Automotive & Spare Parts",
+    "subcategory": "Suspension & Steering",
+    "brand": "Gabriel",
+    "description": "Commercial-grade twin-tube hydraulic shock absorber with multi-lip piston seal and all-weather hydraulic fluid for rough terrain damping.",
+    "price": 3400,
+    "mrp": 4600,
+    "discount": 26,
+    "stock": 32,
+    "rating": 4.6,
+    "reviewCount": 29,
+    "image": "/images/prod-shockabsorber.png",
+    "images": [
+      "/images/prod-shockabsorber.png"
+    ],
+    "specs": {
+      "Extended Length": "540 mm",
+      "Collapsed Length": "345 mm",
+      "Bore Diameter": "45 mm",
+      "Mounting": "Eye-to-Eye Poly Bushing"
+    },
+    "highlights": [
+      "Nitro-Carburized Heavy Piston Rod",
+      "Twin-Tube High Heat Dissipation Design",
+      "Prevents Axle Hop & Load Sway",
+      "Polyurethane Long-Life Bushings Included"
+    ]
+  },
+  {
     "name": "Heavy Commercial Multi-Leaf Spring Suspension Pack",
     "sku": "SKU-AU-08",
     "slug": "heavy-commercial-multi-leaf-spring-au-08",
@@ -1300,37 +499,6 @@
       "High Fatigue Resistance Under Max Payloads",
       "Includes Center Pin & U-Bolt Clamping Kit",
       "OEM Fitment for Commercial Utility Trailers"
-    ]
-  },
-  {
-    "name": "Dual-Tube Heavy Vehicle Hydraulic Shock Absorber",
-    "sku": "SKU-AU-07",
-    "slug": "dual-tube-hydraulic-shock-absorber-au-07",
-    "categoryName": "Automotive & Spare Parts",
-    "subcategory": "Suspension & Steering",
-    "brand": "Gabriel",
-    "description": "Commercial-grade twin-tube hydraulic shock absorber with multi-lip piston seal and all-weather hydraulic fluid for rough terrain damping.",
-    "price": 3400,
-    "mrp": 4600,
-    "discount": 26,
-    "stock": 32,
-    "rating": 4.6,
-    "reviewCount": 29,
-    "image": "/images/prod-shockabsorber.png",
-    "images": [
-      "/images/prod-shockabsorber.png"
-    ],
-    "specs": {
-      "Extended Length": "540 mm",
-      "Collapsed Length": "345 mm",
-      "Bore Diameter": "45 mm",
-      "Mounting": "Eye-to-Eye Poly Bushing"
-    },
-    "highlights": [
-      "Nitro-Carburized Heavy Piston Rod",
-      "Twin-Tube High Heat Dissipation Design",
-      "Prevents Axle Hop & Load Sway",
-      "Polyurethane Long-Life Bushings Included"
     ]
   },
   {
@@ -1430,37 +598,6 @@
     ]
   },
   {
-    "name": "Heavy Duty Spin-On Engine Oil Filter with Anti-Drain Valve",
-    "sku": "SKU-AU-13",
-    "slug": "heavy-duty-tractor-oil-filter-au-13",
-    "categoryName": "Automotive & Spare Parts",
-    "subcategory": "Engine & Drivetrain",
-    "brand": "Bosch",
-    "description": "Spin-on heavy engine oil filter featuring synthetic micro-glass media that captures 99% of contaminants down to 20 microns.",
-    "price": 680,
-    "mrp": 950,
-    "discount": 28,
-    "stock": 120,
-    "rating": 4.8,
-    "reviewCount": 110,
-    "image": "/images/prod-oilfilter-raw.png",
-    "images": [
-      "/images/prod-oilfilter-raw.png"
-    ],
-    "specs": {
-      "Thread Size": "1-12 UNF-2B",
-      "Micron Rating": "20 Microns @ 99%",
-      "Burst Pressure": "350 PSI",
-      "Gasket Type": "Nitrile Rubber Seal"
-    },
-    "highlights": [
-      "Heavy-Gauge Steel Canister Housing",
-      "Silicone Anti-Drainback Valve",
-      "Prevents Cold-Start Engine Wear",
-      "Recommended for 500-Hour Service Intervals"
-    ]
-  },
-  {
     "name": "High-Torque 24V Commercial Heavy Vehicle Starter Motor",
     "sku": "SKU-AU-12",
     "slug": "high-torque-24v-commercial-starter-motor-au-12",
@@ -1490,6 +627,37 @@
       "Soft-Engage Solenoid Extends Flywheel Life",
       "Totally Sealed IP67 Waterproof Armature",
       "Rapid Ignition Even with Cold Engine Oil"
+    ]
+  },
+  {
+    "name": "Heavy Duty Spin-On Engine Oil Filter with Anti-Drain Valve",
+    "sku": "SKU-AU-13",
+    "slug": "heavy-duty-tractor-oil-filter-au-13",
+    "categoryName": "Automotive & Spare Parts",
+    "subcategory": "Engine & Drivetrain",
+    "brand": "Bosch",
+    "description": "Spin-on heavy engine oil filter featuring synthetic micro-glass media that captures 99% of contaminants down to 20 microns.",
+    "price": 680,
+    "mrp": 950,
+    "discount": 28,
+    "stock": 120,
+    "rating": 4.8,
+    "reviewCount": 110,
+    "image": "/images/prod-oilfilter-raw.png",
+    "images": [
+      "/images/prod-oilfilter-raw.png"
+    ],
+    "specs": {
+      "Thread Size": "1-12 UNF-2B",
+      "Micron Rating": "20 Microns @ 99%",
+      "Burst Pressure": "350 PSI",
+      "Gasket Type": "Nitrile Rubber Seal"
+    },
+    "highlights": [
+      "Heavy-Gauge Steel Canister Housing",
+      "Silicone Anti-Drainback Valve",
+      "Prevents Cold-Start Engine Wear",
+      "Recommended for 500-Hour Service Intervals"
     ]
   },
   {
@@ -1589,35 +757,35 @@
     ]
   },
   {
-    "name": "Professional 150-Piece Heavy Mechanical Socket Toolset",
-    "sku": "SKU-AU-18",
-    "slug": "professional-150-piece-socket-toolset-au-18",
-    "categoryName": "Automotive & Spare Parts",
-    "subcategory": "Spares & Accessories",
-    "brand": "Bosch",
-    "description": "Comprehensive 1/2-inch, 3/8-inch, and 1/4-inch drive Chrome-Vanadium alloy socket and 72-tooth quick-release ratchet toolkit in blow-molded case.",
-    "price": 5400,
-    "mrp": 6900,
-    "discount": 22,
-    "stock": 25,
-    "rating": 4.9,
-    "reviewCount": 49,
-    "image": "https://images.unsplash.com/photo-1530124566582-a618bc2615dc?auto=format&fit=crop&w=500&q=80",
+    "name": "Heavy Duty HDPE Drip Lateral Tubing 16mm (500m Roll)",
+    "sku": "SKU-AG-11",
+    "slug": "hdpe-drip-lateral-tubing-16mm-ag-11",
+    "categoryName": "Agriculture & Farming",
+    "subcategory": "Irrigation & Drip Systems",
+    "brand": "DripAqua",
+    "description": "Premium linear low-density polyethylene (LLDPE) irrigation roll engineered for high tensile strength, UV degradation resistance, and chemical immunity.",
+    "price": 2800,
+    "mrp": 3400,
+    "discount": 18,
+    "stock": 50,
+    "rating": 4.8,
+    "reviewCount": 37,
+    "image": "https://images.unsplash.com/photo-1563514227147-6d2ff665a6a0?auto=format&fit=crop&w=500&q=80",
     "images": [
-      "https://images.unsplash.com/photo-1530124566582-a618bc2615dc?auto=format&fit=crop&w=500&q=80",
-      "/images/card-automotive.png"
+      "https://images.unsplash.com/photo-1563514227147-6d2ff665a6a0?auto=format&fit=crop&w=500&q=80",
+      "/images/prod-drip.png"
     ],
     "specs": {
-      "Material": "Drop-Forged Chrome Vanadium (Cr-V)",
-      "Ratchets": "72-Tooth Quick Release (5-Degree Swing)",
-      "Drive Sizes": "1/4\", 3/8\", 1/2\" Metric & SAE",
-      "Case": "Heavy-Duty Latch Blow-Molded Case"
+      "Outer Diameter": "16 mm",
+      "Roll Length": "500 Meters",
+      "Wall Thickness": "1.2 mm Class 2",
+      "Burst Pressure": "6.0 bar"
     },
     "highlights": [
-      "Corrosion-Resistant Full Chrome Mirror Finish",
-      "High-Torque 6-Point Socket Off-Corner Gripping",
-      "Includes Deep Sockets, Extension Bars & Universal Joints",
-      "Lifetime Manufacturer Mechanical Tool Warranty"
+      "Virgin High-Grade Polymer Material",
+      "Carbon Black UV Stabilized Protection",
+      "Resists Insect Chewing & Kinking",
+      "Tested for 10+ Year Field Lifespan"
     ]
   },
   {
@@ -1684,6 +852,260 @@
     ]
   },
   {
+    "name": "Professional 150-Piece Heavy Mechanical Socket Toolset",
+    "sku": "SKU-AU-18",
+    "slug": "professional-150-piece-socket-toolset-au-18",
+    "categoryName": "Automotive & Spare Parts",
+    "subcategory": "Spares & Accessories",
+    "brand": "Bosch",
+    "description": "Comprehensive 1/2-inch, 3/8-inch, and 1/4-inch drive Chrome-Vanadium alloy socket and 72-tooth quick-release ratchet toolkit in blow-molded case.",
+    "price": 5400,
+    "mrp": 6900,
+    "discount": 22,
+    "stock": 25,
+    "rating": 4.9,
+    "reviewCount": 49,
+    "image": "https://images.unsplash.com/photo-1530124566582-a618bc2615dc?auto=format&fit=crop&w=500&q=80",
+    "images": [
+      "https://images.unsplash.com/photo-1530124566582-a618bc2615dc?auto=format&fit=crop&w=500&q=80",
+      "/images/card-automotive.png"
+    ],
+    "specs": {
+      "Material": "Drop-Forged Chrome Vanadium (Cr-V)",
+      "Ratchets": "72-Tooth Quick Release (5-Degree Swing)",
+      "Drive Sizes": "1/4\", 3/8\", 1/2\" Metric & SAE",
+      "Case": "Heavy-Duty Latch Blow-Molded Case"
+    },
+    "highlights": [
+      "Corrosion-Resistant Full Chrome Mirror Finish",
+      "High-Torque 6-Point Socket Off-Corner Gripping",
+      "Includes Deep Sockets, Extension Bars & Universal Joints",
+      "Lifetime Manufacturer Mechanical Tool Warranty"
+    ]
+  },
+  {
+    "name": "Professional Studio Broadcast Headset with Boom Mic",
+    "sku": "SKU-EL-01",
+    "slug": "professional-studio-broadcast-headset-el-01",
+    "categoryName": "Electronics & Gadgets",
+    "subcategory": "Audio & Headphones",
+    "brand": "Audio-Technica",
+    "description": "Closed-back dynamic monitoring headphones with high-output cardioid dynamic microphone tailored for noisy control rooms and field broadcasting.",
+    "price": 5499,
+    "mrp": 7200,
+    "discount": 24,
+    "stock": 25,
+    "rating": 4.8,
+    "reviewCount": 42,
+    "image": "/images/prod-headphones.png",
+    "images": [
+      "/images/prod-headphones.png"
+    ],
+    "specs": {
+      "Drivers": "40 mm Neodymium Magnets",
+      "Frequency Response": "20 - 20,000 Hz",
+      "Microphone": "Flexible Dynamic Boom Mic",
+      "Cable": "3.0 m Detachable Coiled"
+    },
+    "highlights": [
+      "Exceptional Clarity Across Mid-Range",
+      "Rigid Sound-Isolating Earcups",
+      "Comfort-Cushioned Headband",
+      "Gold-Plated 3.5mm & 6.3mm Adapters"
+    ]
+  },
+  {
+    "name": "Water-Soluble NPK 19-19-19 Fertilizer (25kg)",
+    "sku": "SKU-AG-05",
+    "slug": "water-soluble-npk-fertilizer-ag-05",
+    "categoryName": "Agriculture & Farming",
+    "subcategory": "Fertilizers & Soil Nutrition",
+    "brand": "GROVE AgriMaster",
+    "description": "Balanced 1:1:1 soluble plant nutrient formula with chelated trace elements for foliar spraying and fertigation setups.",
+    "price": 2450,
+    "mrp": 2900,
+    "discount": 16,
+    "stock": 40,
+    "rating": 4.7,
+    "reviewCount": 52,
+    "image": "https://images.unsplash.com/photo-1585314062340-f1a5a7c9328d?auto=format&fit=crop&w=500&q=80",
+    "images": [
+      "https://images.unsplash.com/photo-1585314062340-f1a5a7c9328d?auto=format&fit=crop&w=500&q=80",
+      "/images/card-agri.png"
+    ],
+    "specs": {
+      "Formula": "NPK 19-19-19 + TE",
+      "Solubility": "100% Water Soluble",
+      "Application": "Fertigation & Foliar Spray",
+      "Pack Weight": "25 kg Bag"
+    },
+    "highlights": [
+      "Instant Dissolution with Zero Residue",
+      "Promotes Rapid Vegetative Growth",
+      "Enhances Root Formation & Bloom Count",
+      "Compatible with All Drip Irrigation Lines"
+    ]
+  },
+  {
+    "name": "Organic Vermicompost Soil Conditioner (50kg)",
+    "sku": "SKU-AG-04",
+    "slug": "organic-vermicompost-soil-conditioner-ag-04",
+    "categoryName": "Agriculture & Farming",
+    "subcategory": "Fertilizers & Soil Nutrition",
+    "brand": "AgriPower",
+    "description": "100% natural earthworm compost enriched with active beneficial soil microbes, nitrogen, phosphorus, and moisture-retaining humus.",
+    "price": 850,
+    "mrp": 1100,
+    "discount": 23,
+    "stock": 60,
+    "rating": 4.9,
+    "reviewCount": 65,
+    "image": "https://images.unsplash.com/photo-1628352081506-83c43123ed6d?auto=format&fit=crop&w=500&q=80",
+    "images": [
+      "https://images.unsplash.com/photo-1628352081506-83c43123ed6d?auto=format&fit=crop&w=500&q=80",
+      "/images/card-agri-clean.png"
+    ],
+    "specs": {
+      "Composition": "100% Pure Worm Castings",
+      "Pack Weight": "50 kg Bag",
+      "Moisture Content": "18-22%",
+      "Organic Carbon": ">16%"
+    },
+    "highlights": [
+      "Restores Depleted Soil Fertility",
+      "Improves Soil Water Holding Capacity",
+      "Zero Weed Seeds & Odor Free",
+      "Certified for Organic Farming"
+    ]
+  },
+  {
+    "name": "Certified Disease-Resistant Wheat Seeds (25kg)",
+    "sku": "SKU-AG-03",
+    "slug": "certified-disease-resistant-wheat-seeds-ag-03",
+    "categoryName": "Agriculture & Farming",
+    "subcategory": "Hybrid Seeds",
+    "brand": "GROVE AgriMaster",
+    "description": "Breeder-certified high-tiller wheat seeds with strong lodging resistance and superior protein content for commercial milling.",
+    "price": 2100,
+    "mrp": 2600,
+    "discount": 19,
+    "stock": 35,
+    "rating": 4.6,
+    "reviewCount": 44,
+    "image": "https://images.unsplash.com/photo-1530595467537-0b5996c41f2d?auto=format&fit=crop&w=500&q=80",
+    "images": [
+      "https://images.unsplash.com/photo-1530595467537-0b5996c41f2d?auto=format&fit=crop&w=500&q=80",
+      "/images/card-agri.png"
+    ],
+    "specs": {
+      "Crop Type": "Bread Wheat (HD-2967)",
+      "Pack Weight": "25 kg",
+      "Sowing Season": "Rabi (Nov - Dec)",
+      "Average Yield": "22-24 Quintals/Acre"
+    },
+    "highlights": [
+      "Immune to Yellow & Brown Rust",
+      "Heavy Tillering (12-14 tillers/plant)",
+      "High Gluten Content for Premium Flour",
+      "Government Certified Quality Seed"
+    ]
+  },
+  {
+    "name": "Battery-Operated High-Pressure Backpack Sprayer 16L",
+    "sku": "SKU-AG-07",
+    "slug": "battery-backpack-sprayer-ag-07",
+    "categoryName": "Agriculture & Farming",
+    "subcategory": "Crop Protection",
+    "brand": "KisanShield",
+    "description": "16-Liter rechargeable knapsack sprayer with dual diaphragm pump, pressure regulator, and telescopic brass lance for uniform pest control.",
+    "price": 2850,
+    "mrp": 3600,
+    "discount": 20,
+    "stock": 40,
+    "rating": 4.5,
+    "reviewCount": 54,
+    "image": "/images/prod-sprayer.png",
+    "images": [
+      "/images/prod-sprayer.png"
+    ],
+    "specs": {
+      "Tank Capacity": "16 Liters",
+      "Battery": "12V 8Ah Lead Acid",
+      "Working Pressure": "0.15 - 0.40 Mpa",
+      "Discharge Rate": "3.1 L/min"
+    },
+    "highlights": [
+      "Up to 6 Hours Continuous Operation",
+      "Extendable Brass Spray Lance",
+      "Ergonomic Padded Shoulder Straps",
+      "Dual Nozzle Set Included"
+    ]
+  },
+  {
+    "name": "Micronutrient Chelated Zinc & Boron Booster (5L)",
+    "sku": "SKU-AG-06",
+    "slug": "micronutrient-chelated-booster-ag-06",
+    "categoryName": "Agriculture & Farming",
+    "subcategory": "Fertilizers & Soil Nutrition",
+    "brand": "AgriPower",
+    "description": "EDTA-chelated liquid formulation supplying bioavailable Zinc, Boron, Iron, and Magnesium to correct leaf chlorosis and prevent flower drop.",
+    "price": 1650,
+    "mrp": 2100,
+    "discount": 21,
+    "stock": 30,
+    "rating": 4.6,
+    "reviewCount": 31,
+    "image": "https://images.unsplash.com/photo-1589923188900-85dae523342b?auto=format&fit=crop&w=500&q=80",
+    "images": [
+      "https://images.unsplash.com/photo-1589923188900-85dae523342b?auto=format&fit=crop&w=500&q=80",
+      "/images/card-agri-clean.png"
+    ],
+    "specs": {
+      "Active Nutrients": "Zn (12%), B (5%), Fe (3%), Mg (2%)",
+      "Volume": "5 Liters Can",
+      "pH Stability": "4.0 - 9.0",
+      "Dosage": "2-3 ml per Liter"
+    },
+    "highlights": [
+      "Prevents Fruit Cracking & Blossom End Rot",
+      "100% Chelated Rapid Leaf Absorption",
+      "Boosts Chlorophyll & Photosynthesis",
+      "Mixes Seamlessly with Fungicides"
+    ]
+  },
+  {
+    "name": "Neem-Based Bio-Pesticide Organic Concentrate (5L)",
+    "sku": "SKU-AG-08",
+    "slug": "neem-bio-pesticide-concentrate-ag-08",
+    "categoryName": "Agriculture & Farming",
+    "subcategory": "Crop Protection",
+    "brand": "KisanShield",
+    "description": "Cold-pressed neem oil concentrate with 10,000 PPM Azadirachtin providing broad-spectrum protection against chewing and sucking insect pests.",
+    "price": 1450,
+    "mrp": 1850,
+    "discount": 22,
+    "stock": 35,
+    "rating": 4.8,
+    "reviewCount": 41,
+    "image": "https://images.unsplash.com/photo-1592982537447-7440770cbfc9?auto=format&fit=crop&w=500&q=80",
+    "images": [
+      "https://images.unsplash.com/photo-1592982537447-7440770cbfc9?auto=format&fit=crop&w=500&q=80",
+      "/images/prod-sprayer.png"
+    ],
+    "specs": {
+      "Active Ingredient": "Azadirachtin 10,000 PPM (1%)",
+      "Volume": "5 Liters",
+      "Target Pests": "Aphids, Whiteflies, Caterpillars, Thrips",
+      "Residual Effect": "14 Days"
+    },
+    "highlights": [
+      "100% Organic & Eco-Friendly",
+      "Safe for Pollinators & Beneficial Insects",
+      "Non-Toxic to Earthworms",
+      "Zero Pre-Harvest Interval (PHI)"
+    ]
+  },
+  {
     "name": "Automated Knapsack Thermal Fogger & Mister Machine",
     "sku": "SKU-AG-09",
     "slug": "automated-knapsack-thermal-fogger-ag-09",
@@ -1713,6 +1135,609 @@
       "Self-Igniting Battery Electronic Start",
       "Dual-Cooling Airflow Jacket",
       "Lightweight 7.5 kg Dry Weight"
+    ]
+  },
+  {
+    "name": "Solar Irrigation Water Pumping System 5HP",
+    "sku": "SKU-AG-13",
+    "slug": "solar-irrigation-pumping-system-ag-13",
+    "categoryName": "Agriculture & Farming",
+    "subcategory": "Solar Pumps",
+    "brand": "SolarAgro",
+    "description": "Submersible 5HP stainless steel solar water pump with MPPT solar pump controller, automated dry-run protection, and high discharge head.",
+    "price": 68000,
+    "mrp": 79000,
+    "discount": 13,
+    "stock": 20,
+    "rating": 4.9,
+    "reviewCount": 27,
+    "image": "/images/prod-solar.png",
+    "images": [
+      "/images/prod-solar.png"
+    ],
+    "specs": {
+      "Motor Power": "5 HP / 3.7 kW",
+      "Max Head": "90 Meters",
+      "Max Flow Rate": "18,000 L/Hour",
+      "Controller": "Advanced MPPT Variable Frequency"
+    },
+    "highlights": [
+      "Zero Recurring Electricity Cost",
+      "Grade 304 Stainless Steel Construction",
+      "Integrated Dry-Run & Lightning Protection",
+      "Remote Telemetry Monitoring Compatible"
+    ]
+  },
+  {
+    "name": "Surface Monoblock DC Solar Water Pump 2HP",
+    "sku": "SKU-AG-15",
+    "slug": "surface-monoblock-dc-solar-pump-2hp-ag-15",
+    "categoryName": "Agriculture & Farming",
+    "subcategory": "Solar Pumps",
+    "brand": "SolarAgro",
+    "description": "Open-well surface monoblock centrifugal solar pump designed for canal lifting, pond drainage, and open irrigation channels.",
+    "price": 38000,
+    "mrp": 45000,
+    "discount": 15,
+    "stock": 22,
+    "rating": 4.7,
+    "reviewCount": 20,
+    "image": "https://images.unsplash.com/photo-1509391365360-2e959784a276?auto=format&fit=crop&w=500&q=80",
+    "images": [
+      "https://images.unsplash.com/photo-1509391365360-2e959784a276?auto=format&fit=crop&w=500&q=80",
+      "/images/prod-solar.png"
+    ],
+    "specs": {
+      "Power Output": "2 HP (1.5 kW)",
+      "Suction Lift": "7.5 Meters",
+      "Discharge Output": "24,000 L/Hour",
+      "Impeller": "Non-Corrosive Gunmetal Bronze"
+    },
+    "highlights": [
+      "Cast-Iron Heavy Duty Pump Volute",
+      "Plug-and-Play Solar Array Direct Drive",
+      "Self-Priming Chamber Design",
+      "Low Maintenance Ceramic Shaft Seal"
+    ]
+  },
+  {
+    "name": "Submersible Solar Borewell Pump 3HP with Controller",
+    "sku": "SKU-AG-14",
+    "slug": "submersible-solar-borewell-pump-3hp-ag-14",
+    "categoryName": "Agriculture & Farming",
+    "subcategory": "Solar Pumps",
+    "brand": "SolarAgro",
+    "description": "High-head 3HP brushless DC helical rotor solar borewell pump engineered for deep groundwater extraction up to 120 meters.",
+    "price": 52000,
+    "mrp": 62000,
+    "discount": 16,
+    "stock": 18,
+    "rating": 4.8,
+    "reviewCount": 33,
+    "image": "https://images.unsplash.com/photo-1508873696983-2df5293cb32b?auto=format&fit=crop&w=500&q=80",
+    "images": [
+      "https://images.unsplash.com/photo-1508873696983-2df5293cb32b?auto=format&fit=crop&w=500&q=80",
+      "/images/prod-solar.png"
+    ],
+    "specs": {
+      "Motor Type": "BLDC Permanent Magnet 3HP",
+      "Operating Voltage": "72V - 150V DC",
+      "Max Head": "120 Meters",
+      "Discharge Diameter": "1.5 Inch"
+    },
+    "highlights": [
+      "High-Efficiency Brushless DC Technology",
+      "Soft-Start Extends Motor Lifespan",
+      "Submersible Down to 120m Wells",
+      "Complete Auto-Protection Suite"
+    ]
+  },
+  {
+    "name": "Heavy Duty 45HP Utility Farm Tractor",
+    "sku": "SKU-AG-16",
+    "slug": "heavy-duty-farm-tractor-ag-16",
+    "categoryName": "Agriculture & Farming",
+    "subcategory": "Farm Machinery",
+    "brand": "GROVE AgriMaster",
+    "description": "Commercial 45HP dual-clutch utility tractor with advanced 8F+2R transmission, high ground clearance, and power steering for rigorous farming operations.",
+    "price": 585000,
+    "mrp": 620000,
+    "discount": 5,
+    "stock": 12,
+    "rating": 4.8,
+    "reviewCount": 42,
+    "image": "/images/prod-tractor.png",
+    "images": [
+      "/images/prod-tractor.png",
+      "/images/prod-cultivator.png"
+    ],
+    "specs": {
+      "Horsepower": "45 HP",
+      "Cylinders": "3 Cylinders",
+      "Lifting Capacity": "1500 kg",
+      "Fuel Tank": "50 Liters"
+    },
+    "highlights": [
+      "45 HP Fuel-Efficient Diesel Engine",
+      "Dual Clutch & Power Steering",
+      "1500 kg Hydraulic Lift Capacity",
+      "1 Year Comprehensive Warranty"
+    ]
+  },
+  {
+    "name": "Automated 4-Zone Smart Solenoid Irrigation Timer Valve",
+    "sku": "SKU-AG-12",
+    "slug": "smart-solenoid-irrigation-timer-valve-ag-12",
+    "categoryName": "Agriculture & Farming",
+    "subcategory": "Irrigation & Drip Systems",
+    "brand": "DripAqua",
+    "description": "Solar-rechargeable automatic 4-zone water manifold controller with rainfall pause sensor and programmable pulse watering cycles.",
+    "price": 6500,
+    "mrp": 8200,
+    "discount": 21,
+    "stock": 25,
+    "rating": 4.9,
+    "reviewCount": 22,
+    "image": "https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?auto=format&fit=crop&w=500&q=80",
+    "images": [
+      "https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?auto=format&fit=crop&w=500&q=80",
+      "/images/prod-drip.png"
+    ],
+    "specs": {
+      "Inlet / Outlet": "1 Inch BSP Brass Thread",
+      "Zone Ports": "4 Independent Solenoid Lines",
+      "Power": "Integrated Solar Panel + Li-Ion",
+      "Waterproof": "IP67 Sealed Housing"
+    },
+    "highlights": [
+      "Automated Dawn & Dusk Watering Modes",
+      "Rain Sensor Auto-Delay Feature",
+      "High-Flow Brass Valves Prevent Leakage",
+      "Manual Quick-Bypass Button"
+    ]
+  },
+  {
+    "name": "Hybrid Golden Corn Maize Seeds (5kg)",
+    "sku": "SKU-AG-02",
+    "slug": "hybrid-golden-corn-maize-seeds-ag-02",
+    "categoryName": "Agriculture & Farming",
+    "subcategory": "Hybrid Seeds",
+    "brand": "AgriPower",
+    "description": "High-density hybrid yellow corn seeds with heavy ear filling, drought tolerance, and uniform harvest maturity.",
+    "price": 1250,
+    "mrp": 1600,
+    "discount": 22,
+    "stock": 50,
+    "rating": 4.7,
+    "reviewCount": 29,
+    "image": "https://images.unsplash.com/photo-1551754655-cd27e38d2076?auto=format&fit=crop&w=500&q=80",
+    "images": [
+      "https://images.unsplash.com/photo-1551754655-cd27e38d2076?auto=format&fit=crop&w=500&q=80",
+      "/images/card-agri-clean.png"
+    ],
+    "specs": {
+      "Crop Type": "Yellow Corn / Maize",
+      "Pack Weight": "5 kg",
+      "Plant Density": "26,000 Plants/Acre",
+      "Cob Length": "8 - 9.5 Inches"
+    },
+    "highlights": [
+      "Excellent Heat & Moisture Stress Tolerance",
+      "High Shelling Percentage (>82%)",
+      "Deep Orange-Yellow Kernels",
+      "Ideal for Grain and Fodder Yield"
+    ]
+  },
+  {
+    "name": "Rugged Waterproof Tactical In-Ear Earbuds IPX8",
+    "sku": "SKU-EL-02",
+    "slug": "rugged-waterproof-tactical-earbuds-el-02",
+    "categoryName": "Electronics & Gadgets",
+    "subcategory": "Audio & Headphones",
+    "brand": "Noise",
+    "description": "IPX8 waterproof wireless earbuds with military-grade silicone wing tips, 48-hour endurance charging case, and ambient transparency audio.",
+    "price": 1999,
+    "mrp": 2999,
+    "discount": 33,
+    "stock": 40,
+    "rating": 4.6,
+    "reviewCount": 56,
+    "image": "https://images.unsplash.com/photo-1590658268037-6bf12165a8df?auto=format&fit=crop&w=500&q=80",
+    "images": [
+      "https://images.unsplash.com/photo-1590658268037-6bf12165a8df?auto=format&fit=crop&w=500&q=80",
+      "/images/prod-headphones.png"
+    ],
+    "specs": {
+      "Waterproof Rating": "IPX8 Fully Submersible",
+      "Bluetooth Version": "v5.3 Low Latency",
+      "Playtime": "10h Buds + 38h Case",
+      "Drivers": "10 mm Titanium Coated"
+    },
+    "highlights": [
+      "Sweat & High-Pressure Water Jet Proof",
+      "Touch Controls with Glove Responsiveness",
+      "ENC Quad Mics for Wind Noise Cancellation",
+      "USB-C Fast Charging (10m charge = 2h play)"
+    ]
+  },
+  {
+    "name": "Heavy-Duty Multi-Row Rotary Cultivator",
+    "sku": "SKU-AG-17",
+    "slug": "heavy-duty-rotary-cultivator-ag-17",
+    "categoryName": "Agriculture & Farming",
+    "subcategory": "Farm Machinery",
+    "brand": "AgriPower",
+    "description": "Heavy-duty tractor mounted rotary tiller designed for fine seedbed preparation in dry and wet soils with heat-treated boronic steel blades.",
+    "price": 34500,
+    "mrp": 39000,
+    "discount": 11,
+    "stock": 18,
+    "rating": 4.6,
+    "reviewCount": 31,
+    "image": "/images/prod-cultivator.png",
+    "images": [
+      "/images/prod-cultivator.png"
+    ],
+    "specs": {
+      "Working Width": "5 Feet",
+      "Blades Count": "36 Blades",
+      "Tractor Power Required": "35-45 HP",
+      "Drive Type": "Gear Drive"
+    },
+    "highlights": [
+      "High-Tensile Boron Steel L-Type Blades",
+      "Heavy Duty Sealed Gearbox",
+      "Adjustable Depth Skids",
+      "Vibration Dampened Side Shields"
+    ]
+  },
+  {
+    "name": "Self-Propelled 7HP Mini Power Weeder & Tiller",
+    "sku": "SKU-AG-18",
+    "slug": "self-propelled-power-weeder-tiller-ag-18",
+    "categoryName": "Agriculture & Farming",
+    "subcategory": "Farm Machinery",
+    "brand": "GROVE AgriMaster",
+    "description": "Compact 7HP 4-stroke petrol-driven inter-cultivator weeder with adjustable tilling width for sugarcane, vegetable, and orchard beds.",
+    "price": 29000,
+    "mrp": 35000,
+    "discount": 17,
+    "stock": 16,
+    "rating": 4.7,
+    "reviewCount": 26,
+    "image": "https://images.unsplash.com/photo-1595246140625-573b715d11dc?auto=format&fit=crop&w=500&q=80",
+    "images": [
+      "https://images.unsplash.com/photo-1595246140625-573b715d11dc?auto=format&fit=crop&w=500&q=80",
+      "/images/prod-cultivator.png"
+    ],
+    "specs": {
+      "Engine": "7 HP 212cc 4-Stroke OHV",
+      "Tilling Width": "60 - 90 cm Adjustable",
+      "Tilling Depth": "15 - 20 cm",
+      "Fuel Consumption": "0.8 L/Hour"
+    },
+    "highlights": [
+      "360-Degree Swivel Handlebars",
+      "Oil-Bath Air Filter for Dusty Environments",
+      "Forward and Reverse Gear Transmission",
+      "Includes Ditching & Weeding Blade Wheels"
+    ]
+  },
+  {
+    "name": "Industrial Wireless Noise-Cancelling Field Headset",
+    "sku": "SKU-EL-03",
+    "slug": "industrial-wireless-noise-cancelling-headset-el-03",
+    "categoryName": "Electronics & Gadgets",
+    "subcategory": "Audio & Headphones",
+    "brand": "GROVE Tech",
+    "description": "Heavy-duty wireless over-ear headset with active noise cancellation up to 35dB, boom mic with environmental suppression, and 40h battery.",
+    "price": 2999,
+    "mrp": 4499,
+    "discount": 33,
+    "stock": 35,
+    "rating": 4.7,
+    "reviewCount": 46,
+    "image": "https://images.unsplash.com/photo-1505740420928-5e560c06d30e?auto=format&fit=crop&w=500&q=80",
+    "images": [
+      "https://images.unsplash.com/photo-1505740420928-5e560c06d30e?auto=format&fit=crop&w=500&q=80",
+      "/images/prod-headphones.png"
+    ],
+    "specs": {
+      "Noise Cancellation": "Hybrid Active ANC (up to 35dB)",
+      "Battery": "800mAh (40 Hours)",
+      "Connectivity": "Bluetooth 5.2 + 3.5mm Aux",
+      "Weight": "260 g"
+    },
+    "highlights": [
+      "Engine & Machinery Noise Filtering",
+      "All-Day Memory Foam Ear Cushions",
+      "Detachable Noise-Cancelling Boom Mic",
+      "Foldable Heavy-Duty Headband"
+    ]
+  },
+  {
+    "name": "Rugged All-Weather Telemetry Field Laptop 14-inch",
+    "sku": "SKU-EL-04",
+    "slug": "rugged-telemetry-field-laptop-el-04",
+    "categoryName": "Electronics & Gadgets",
+    "subcategory": "Laptops & Computers",
+    "brand": "Lenovo",
+    "description": "Full-ruggedized 14-inch outdoor laptop with drop-resistant chassis, glove-touch outdoor sunlight readable screen, and hot-swappable dual batteries.",
+    "price": 48999,
+    "mrp": 58000,
+    "discount": 15,
+    "stock": 14,
+    "rating": 4.9,
+    "reviewCount": 19,
+    "image": "/images/prod-laptop.png",
+    "images": [
+      "/images/prod-laptop.png"
+    ],
+    "specs": {
+      "Processor": "Intel Core i5 12th Gen",
+      "RAM": "16 GB DDR4",
+      "Storage": "512 GB NVMe SSD",
+      "Drop Spec": "1.8 Meter Shockproof Drop Rating"
+    },
+    "highlights": [
+      "Sunlight-Readable 1200 Nits Display",
+      "Glove-Operable Touchscreen",
+      "Dual Hot-Swappable 12-Hour Batteries",
+      "Dedicated RS232 Serial & GPS Ports"
+    ]
+  },
+  {
+    "name": "GROVE Field Rugged Smartwatch with GPS & Sensor Hub",
+    "sku": "SKU-EL-07",
+    "slug": "grove-field-rugged-smartwatch-el-07",
+    "categoryName": "Electronics & Gadgets",
+    "subcategory": "Wearables & Smartwatches",
+    "brand": "GROVE Tech",
+    "description": "MIL-STD-810H rated outdoor smartwatch with dual-band GPS, barometer, optical pulse oximeter, and 14-day ultra-long battery life.",
+    "price": 4299,
+    "mrp": 5999,
+    "discount": 28,
+    "stock": 40,
+    "rating": 4.7,
+    "reviewCount": 88,
+    "image": "/images/prod-smartwatch.png",
+    "images": [
+      "/images/prod-smartwatch.png"
+    ],
+    "specs": {
+      "Display": "1.43 inch AMOLED Sapphire",
+      "Water Resistance": "5 ATM / 50M",
+      "Battery Life": "Up to 14 Days",
+      "Sensors": "Dual GPS, Altimeter, Barometer, SpO2"
+    },
+    "highlights": [
+      "Military-Grade Shock & Dust Resistance",
+      "Ultra-Bright 1000 nits Outdoor Display",
+      "Real-Time Field Telemetry Tracking",
+      "Bluetooth 5.3 Calling Enabled"
+    ]
+  },
+  {
+    "name": "Industrial Workstation Core i7 Rugged Laptop 32GB",
+    "sku": "SKU-EL-05",
+    "slug": "industrial-workstation-core-i7-laptop-el-05",
+    "categoryName": "Electronics & Gadgets",
+    "subcategory": "Laptops & Computers",
+    "brand": "Lenovo",
+    "description": "High-performance MIL-SPEC field workstation laptop featuring NVIDIA RTX dedicated graphics, magnesium alloy casing, and spill-resistant keyboard.",
+    "price": 74999,
+    "mrp": 88000,
+    "discount": 15,
+    "stock": 10,
+    "rating": 4.8,
+    "reviewCount": 23,
+    "image": "https://images.unsplash.com/photo-1496181133206-80ce9b88a853?auto=format&fit=crop&w=500&q=80",
+    "images": [
+      "https://images.unsplash.com/photo-1496181133206-80ce9b88a853?auto=format&fit=crop&w=500&q=80",
+      "/images/prod-laptop.png"
+    ],
+    "specs": {
+      "Processor": "Intel Core i7-13700H",
+      "Graphics": "NVIDIA RTX 4050 6GB",
+      "RAM": "32 GB DDR5",
+      "Display": "15.6 Inch 100% sRGB FHD"
+    },
+    "highlights": [
+      "Heavy CAD & Agronomy Telemetry Processing",
+      "Magnesium Alloy Drop-Proof Unibody",
+      "Biometric Fingerprint & Smart Card Reader",
+      "Thunderbolt 4 & Dual PCIe Expansion"
+    ]
+  },
+  {
+    "name": "Compact Fanless Rugged Mini PC Industrial Controller",
+    "sku": "SKU-EL-06",
+    "slug": "compact-fanless-rugged-mini-pc-el-06",
+    "categoryName": "Electronics & Gadgets",
+    "subcategory": "Laptops & Computers",
+    "brand": "GROVE Tech",
+    "description": "Solid-state extruded aluminum fanless embedded PC designed for 24/7 agricultural greenhouse automation, IoT telemetry hubs, and factory kiosks.",
+    "price": 27500,
+    "mrp": 33000,
+    "discount": 16,
+    "stock": 20,
+    "rating": 4.7,
+    "reviewCount": 16,
+    "image": "https://images.unsplash.com/photo-1517336714731-489689fd1ca8?auto=format&fit=crop&w=500&q=80",
+    "images": [
+      "https://images.unsplash.com/photo-1517336714731-489689fd1ca8?auto=format&fit=crop&w=500&q=80",
+      "/images/prod-laptop.png"
+    ],
+    "specs": {
+      "CPU": "Intel Celeron J6412 Quad-Core",
+      "Ports": "4x COM RS485, 2x Gigabit LAN, 6x USB",
+      "Operating Temp": "-20°C to +70°C",
+      "Power Input": "9V - 36V Wide DC"
+    },
+    "highlights": [
+      "100% Sealed Dust-Free Fanless Cooling",
+      "Continuous 24/7/365 Hardware Reliability",
+      "DIN-Rail & VESA Mount Included",
+      "Hardware Watchdog Timer Auto-Reboot"
+    ]
+  },
+  {
+    "name": "Outdoor Multisport GPS Tactical Smartwatch",
+    "sku": "SKU-EL-08",
+    "slug": "outdoor-multisport-gps-tactical-smartwatch-el-08",
+    "categoryName": "Electronics & Gadgets",
+    "subcategory": "Wearables & Smartwatches",
+    "brand": "Noise",
+    "description": "Heavy rugged smartwatch featuring offline topological maps, compass, LED tactical flashlight, and heart rate variability analytics.",
+    "price": 6499,
+    "mrp": 8499,
+    "discount": 24,
+    "stock": 30,
+    "rating": 4.8,
+    "reviewCount": 54,
+    "image": "https://images.unsplash.com/photo-1523275335684-37898b6baf30?auto=format&fit=crop&w=500&q=80",
+    "images": [
+      "https://images.unsplash.com/photo-1523275335684-37898b6baf30?auto=format&fit=crop&w=500&q=80",
+      "/images/prod-smartwatch.png"
+    ],
+    "specs": {
+      "Bezel": "Titanium Alloy with Ceramic Back",
+      "Battery": "500mAh (Up to 21 Days Standby)",
+      "GPS": "Five Satellite Dual-Frequency",
+      "Waterproof": "10 ATM Submersible"
+    },
+    "highlights": [
+      "Built-In High-Intensity White & Red Flashlight",
+      "Offline Topographic Waypoint Navigation",
+      "VO2 Max & Recovery Assistant",
+      "Reinforced Gorilla Glass DX+"
+    ]
+  },
+  {
+    "name": "Biometric Telemetry & Heart Health Smart Fitness Band",
+    "sku": "SKU-EL-09",
+    "slug": "biometric-telemetry-smart-fitness-band-el-09",
+    "categoryName": "Electronics & Gadgets",
+    "subcategory": "Wearables & Smartwatches",
+    "brand": "GROVE Tech",
+    "description": "Ultralight health wristband monitoring continuous skin temperature, stress levels, blood oxygenation, and sleep stage cycles.",
+    "price": 1899,
+    "mrp": 2499,
+    "discount": 24,
+    "stock": 45,
+    "rating": 4.5,
+    "reviewCount": 39,
+    "image": "https://images.unsplash.com/photo-1579586337278-3befd40fd17a?auto=format&fit=crop&w=500&q=80",
+    "images": [
+      "https://images.unsplash.com/photo-1579586337278-3befd40fd17a?auto=format&fit=crop&w=500&q=80",
+      "/images/prod-smartwatch.png"
+    ],
+    "specs": {
+      "Display": "1.1 Inch Curved AMOLED",
+      "Weight": "Only 22 Grams",
+      "Battery": "14 Days Magnetic Quick Charge",
+      "Compatibility": "Android & iOS"
+    },
+    "highlights": [
+      "Continuous 24/7 SpO2 & Heart Monitoring",
+      "Automatic Workout Detection (30+ Sports)",
+      "Gentle Silent Vibration Smart Alarms",
+      "Hypoallergenic Silicone Band"
+    ]
+  },
+  {
+    "name": "Dustproof Mechanical Industrial Control Keyboard",
+    "sku": "SKU-EL-10",
+    "slug": "dustproof-mechanical-keyboard-el-10",
+    "categoryName": "Electronics & Gadgets",
+    "subcategory": "Keyboards & Accessories",
+    "brand": "Keychron",
+    "description": "IP65-rated sealed mechanical keyboard engineered for industrial workstations, warehouses, and harsh field environments.",
+    "price": 3499,
+    "mrp": 4999,
+    "discount": 30,
+    "stock": 25,
+    "rating": 4.5,
+    "reviewCount": 39,
+    "image": "/images/prod-keyboard.png",
+    "images": [
+      "/images/prod-keyboard.png"
+    ],
+    "specs": {
+      "Switch Type": "Dustproof Sealed Optical Switches",
+      "Ingress Protection": "IP65 Dust & Water Resistant",
+      "Chassis": "Anodized Aircraft Aluminum",
+      "Keycaps": "Double-Shot PBT"
+    },
+    "highlights": [
+      "Sealed Internal Membrane Shield",
+      "50 Million Keystroke Durability",
+      "Oil and Solvent Resistant Keycaps",
+      "Integrated Braided USB-C Cable"
+    ]
+  },
+  {
+    "name": "Wireless Backlit Hot-Swappable Mechanical Keyboard",
+    "sku": "SKU-EL-11",
+    "slug": "wireless-backlit-mechanical-keyboard-el-11",
+    "categoryName": "Electronics & Gadgets",
+    "subcategory": "Keyboards & Accessories",
+    "brand": "Keychron",
+    "description": "Compact 75% mechanical keyboard with Bluetooth 5.1 and 2.4GHz wireless connectivity, south-facing RGB backlight, and sound-absorbing silicone pads.",
+    "price": 5299,
+    "mrp": 6500,
+    "discount": 18,
+    "stock": 28,
+    "rating": 4.9,
+    "reviewCount": 47,
+    "image": "https://images.unsplash.com/photo-1587829741301-dc798b83add3?auto=format&fit=crop&w=500&q=80",
+    "images": [
+      "https://images.unsplash.com/photo-1587829741301-dc798b83add3?auto=format&fit=crop&w=500&q=80",
+      "/images/prod-keyboard.png"
+    ],
+    "specs": {
+      "Layout": "75% (84 Keys)",
+      "Switches": "Gateron G Pro Mechanical Brown",
+      "Connectivity": "Bluetooth 5.1 / 2.4G / Type-C",
+      "Battery": "4000 mAh"
+    },
+    "highlights": [
+      "Hot-Swappable 3-Pin / 5-Pin Switch Sockets",
+      "Connects up to 3 Devices Simultaneously",
+      "CNC Aluminum Top Frame Plate",
+      "Mac & Windows Keycap Sets Included"
+    ]
+  },
+  {
+    "name": "High-Yield Hybrid Basmati Paddy Seeds (10kg)",
+    "sku": "SKU-AG-01",
+    "slug": "high-yield-hybrid-basmati-paddy-seeds-ag-01",
+    "categoryName": "Agriculture & Farming",
+    "subcategory": "Hybrid Seeds",
+    "brand": "GROVE AgriMaster",
+    "description": "Certified high-germination hybrid paddy seeds offering aromatic extra-long grains with supreme resistance to bacterial leaf blight.",
+    "price": 1850,
+    "mrp": 2200,
+    "discount": 16,
+    "stock": 45,
+    "rating": 4.8,
+    "reviewCount": 38,
+    "image": "https://images.unsplash.com/photo-1574323347407-f5e1ad6d020b?auto=format&fit=crop&w=500&q=80",
+    "images": [
+      "https://images.unsplash.com/photo-1574323347407-f5e1ad6d020b?auto=format&fit=crop&w=500&q=80",
+      "/images/card-agri.png"
+    ],
+    "specs": {
+      "Crop Type": "Basmati Rice",
+      "Pack Weight": "10 kg",
+      "Germination Rate": "95%+",
+      "Maturity Duration": "125-130 Days"
+    },
+    "highlights": [
+      "95%+ High Germination Rate",
+      "Resistance to Bacterial Leaf Blight",
+      "Export Grade Long-Grain Basmati",
+      "Lab Tested & Moisture Sealed"
     ]
   }
 ]

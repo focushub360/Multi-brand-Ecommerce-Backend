@@ -112,16 +112,19 @@ export async function syncAdminDataFromApi() {
       }
     }
 
-    if (prodsRes.status === 'fulfilled' && prodsRes.value?.products?.length > 0) {
-      saveAdminProducts(prodsRes.value.products.map((p) => ({
-        ...p,
-        id: p.id || p._id,
-        category: p.categoryName || p.category,
-        dealerId: p.dealerCode || 'DEALER_001',
-        stock: p.stock,
-        price: p.price,
-        mrp: p.mrp || p.price
-      })));
+    if (prodsRes.status === 'fulfilled') {
+      const prods = prodsRes.value?.products || prodsRes.value?.data?.products || prodsRes.value?.data || (Array.isArray(prodsRes.value) ? prodsRes.value : []);
+      if (prods.length > 0) {
+        saveAdminProducts(prods.map((p) => ({
+          ...p,
+          id: p.id || p._id,
+          category: p.categoryName || p.category,
+          dealerId: p.dealerCode || 'DEALER_001',
+          stock: p.stock,
+          price: p.price,
+          mrp: p.mrp || p.price
+        })));
+      }
     }
 
     if (ordersRes.status === 'fulfilled') {
