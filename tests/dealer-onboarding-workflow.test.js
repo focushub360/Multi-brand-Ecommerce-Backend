@@ -3,7 +3,7 @@ import request from 'supertest';
 import app from '../src/app.js';
 import { User } from '../src/modules/users/user.model.js';
 import { Dealer } from '../src/modules/dealers/dealer.model.js';
-import { AdminService } from '../src/modules/admin/service/admin.service.js';
+import { AdminService } from '../src/modules/admin/admin.service.js';
 import { generateAccessToken } from '../src/utils/generateTokens.js';
 
 describe('Dealer Approval, Rejection & Password Reset Workflow', () => {

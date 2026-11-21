@@ -43,10 +43,6 @@ router.put(
 );
 
 /**
-<<<<<<< Updated upstream:backend/src/modules/dealers/dealer.routes.js
- * Public & Admin Dealer Listing
- * GET /api/v1/dealers
-=======
  * Submit Dealer Settlement Bank Details During Onboarding Wizard
  * PUT /api/v1/dealers/onboarding/bank-details
  */
@@ -84,7 +80,6 @@ router.put(
 
 /**
  * Public dealer directory (approved dealers only; sensitive fields are excluded).
->>>>>>> Stashed changes:src/modules/dealers/dealer.routes.js
  */
 router.get('/', dealerController.getAllDealers);
 router.get('/:id', dealerController.getDealerById);

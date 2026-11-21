@@ -37,13 +37,6 @@ export const getAllTickets = asyncHandler(async (req, res) => {
 });
 
 export const updateTicketStatus = asyncHandler(async (req, res) => {
-<<<<<<< Updated upstream:backend/src/modules/complaints/complaint.controller.js
-  const { status, note } = req.body;
-  const ticket = await ComplaintService.updateTicketStatus(req.params.ticketId, req.user, status, note);
-  return res.status(200).json(ApiResponse.success(ticket, 'Ticket status updated successfully'));
-});
-
-=======
   const { status, note, reason } = req.body;
   const actor = { ...req.user, ipAddress: req.ip, userAgent: req.get('user-agent') };
   const ticket = await ComplaintService.updateTicketStatus(req.params.ticketId, actor, status, note, reason);
@@ -99,4 +92,3 @@ export const markCustomerNotificationRead = asyncHandler(async (req, res) => {
   const notification = await ComplaintService.markCustomerNotificationRead(req.params.id, userId);
   return res.status(200).json(ApiResponse.success(notification, 'Customer notification marked as read'));
 });
->>>>>>> Stashed changes:src/modules/complaints/complaint.controller.js

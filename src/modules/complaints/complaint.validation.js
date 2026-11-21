@@ -34,11 +34,6 @@ export const replyTicketSchema = z.object({
 
 export const updateTicketStatusSchema = z.object({
   body: z.object({
-<<<<<<< Updated upstream:backend/src/modules/complaints/complaint.validation.js
-    status: z.enum(['Open', 'In Progress', 'Escalated', 'Resolved', 'Closed']),
-    note: z.string().optional()
-  })
-=======
     status: z.enum(TICKET_STATUSES, {
       errorMap: () => ({ message: 'Please select a valid ticket status.' })
     }),
@@ -54,7 +49,6 @@ export const adminReplySchema = z.object({
     status: z.enum(TICKET_STATUSES).optional(),
     attachments: z.array(attachmentSchema).optional().default([])
   }).strict()
->>>>>>> Stashed changes:src/modules/complaints/complaint.validation.js
 });
 
 export const reopenTicketSchema = z.object({

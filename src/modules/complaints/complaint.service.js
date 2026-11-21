@@ -7,16 +7,13 @@ import { Order } from '../orders/order.model.js';
 import { Address } from '../addresses/address.model.js';
 import { ROLES } from '../../constants/roles.js';
 import { ApiError } from '../../utils/ApiError.js';
-<<<<<<< Updated upstream:backend/src/modules/complaints/complaint.service.js
-=======
-import { AdminService } from '../admin/service/admin.service.js';
+import { AdminService } from '../admin/admin.service.js';
 import { NotificationService } from '../admin/service/notification.service.js';
 import {
   sendTicketCreatedNotification,
   sendTicketReplyNotification,
   sendTicketStatusNotification
 } from '../../utils/sendEmail.js';
->>>>>>> Stashed changes:src/modules/complaints/complaint.service.js
 
 export class ComplaintService {
   /**
@@ -419,11 +416,7 @@ export class ComplaintService {
   /**
    * Super Admin Update Ticket Status & Add Internal Note
    */
-<<<<<<< Updated upstream:backend/src/modules/complaints/complaint.service.js
-  static async updateTicketStatus(ticketId, adminUser, status, note = '') {
-=======
   static async updateTicketStatus(ticketId, adminUser, status, note = '', reason = '') {
->>>>>>> Stashed changes:src/modules/complaints/complaint.service.js
     const ticket = await Complaint.findOne({
       $or: [{ _id: ticketId.match(/^[0-9a-fA-F]{24}$/) ? ticketId : null }, { ticketId }]
     });
@@ -432,12 +425,8 @@ export class ComplaintService {
 
     const oldStatus = ticket.status;
     ticket.status = status;
-<<<<<<< Updated upstream:backend/src/modules/complaints/complaint.service.js
-    if (note) {
-=======
 
     if (note && note.trim()) {
->>>>>>> Stashed changes:src/modules/complaints/complaint.service.js
       ticket.internalNotes.push({
         author: adminUser.id,
         note: note.trim(),
@@ -445,9 +434,6 @@ export class ComplaintService {
       });
     }
 
-<<<<<<< Updated upstream:backend/src/modules/complaints/complaint.service.js
-    await ticket.save();
-=======
     const statusNote = (reason || note || `Status updated to ${status}`).trim();
     ticket.statusHistory.push({
       status,
@@ -683,7 +669,6 @@ export class ComplaintService {
       userAgent: adminUser.userAgent || ''
     });
 
->>>>>>> Stashed changes:src/modules/complaints/complaint.service.js
     return ticket;
   }
 

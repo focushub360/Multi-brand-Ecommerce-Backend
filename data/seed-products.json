@@ -1,28 +1,5 @@
 [
   {
-<<<<<<< HEAD
-    "name": "demo",
-    "sku": "SKU-EL-TEST-6927",
-    "slug": "demo-1700",
-    "categoryName": "Electronics & Gadgets",
-    "subcategory": "Smart Sensors & IoT",
-    "brand": "GROVE Prime",
-    "description": "Solar-powered IoT multi-depth soil moisture, EC salinity, and ambient temperature telemetry probe with Bluetooth 5.0 and 4G GSM cloud uplink for real-time agronomy analytics.",
-    "price": 6899,
-    "mrp": 8500,
-    "discount": 19,
-    "stock": 25,
-    "rating": 4.5,
-    "reviewCount": 10,
-    "image": "https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&fit=crop&w=500&q=80",
-    "images": [
-      "https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&fit=crop&w=500&q=80"
-    ],
-    "specs": {
-      "material": "Weatherproof Anodized Stainless Steel & UV-Stabilized ABS",
-      "pipeSize": "300 mm Probe Depth",
-      "flowRate": "RS485 Modbus RTU / 4G GSM"
-=======
     "name": "Heavy Duty Multi-Row Ceramic Clutch Plate Assembly 280mm",
     "sku": "SKU-AU-TEST-5478",
     "slug": "heavy-duty-multi-row-ceramic-clutch-plate-assembly-280mm-7818",
@@ -44,75 +21,10 @@
       "material": "Sintered Ceramic & Forged Manganese Alloy",
       "pipeSize": "280 mm Diameter, 10 Splines",
       "flowRate": "Max Torque 750 Nm"
->>>>>>> origin/master
     },
     "highlights": []
   },
   {
-<<<<<<< HEAD
-    "name": "Wireless Soil Moisture & Temperature LoRaWAN Sensor",
-    "sku": "SKU-EL-13",
-    "slug": "wireless-soil-moisture-lorawan-sensor-el-13",
-    "categoryName": "Electronics & Gadgets",
-    "subcategory": "Smart Sensors & IoT",
-    "brand": "AgroSense",
-    "description": "Precision FDR soil probe measuring volumetric water content, soil temperature, and EC salinity transmitting up to 10km via LoRaWAN.",
-    "price": 4800,
-    "mrp": 5900,
-    "discount": 19,
-    "stock": 35,
-    "rating": 4.8,
-    "reviewCount": 31,
-    "image": "https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&fit=crop&w=500&q=80",
-    "images": [
-      "https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&fit=crop&w=500&q=80",
-      "/images/card-electronics.png"
-    ],
-    "specs": {
-      "Wireless Protocol": "LoRaWAN 868/915 MHz",
-      "Battery Life": "5+ Years (19000mAh Li-SOCl2)",
-      "Transmission Range": "Up to 10 km Line of Sight",
-      "Probe Material": "Food-Grade Stainless Steel 316"
-    },
-    "highlights": [
-      "Measures Moisture, Temp & Salinity Simultaneously",
-      "IP68 Underground Enclosure",
-      "Cloud API & MQTT Dashboard Integration",
-      "No Recurring Cellular SIM Fees Required"
-    ]
-  },
-  {
-    "name": "Ergonomic IP68 Heavy-Duty Industrial Trackball Mouse",
-    "sku": "SKU-EL-12",
-    "slug": "ergonomic-industrial-trackball-mouse-el-12",
-    "categoryName": "Electronics & Gadgets",
-    "subcategory": "Keyboards & Accessories",
-    "brand": "GROVE Tech",
-    "description": "Fully sealed optical laser trackball mouse with water-washable stainless steel ball and chemical-resistant housing for control room consoles.",
-    "price": 2699,
-    "mrp": 3499,
-    "discount": 23,
-    "stock": 32,
-    "rating": 4.6,
-    "reviewCount": 18,
-    "image": "https://images.unsplash.com/photo-1615663245857-ac93bb7c39e7?auto=format&fit=crop&w=500&q=80",
-    "images": [
-      "https://images.unsplash.com/photo-1615663245857-ac93bb7c39e7?auto=format&fit=crop&w=500&q=80",
-      "/images/prod-keyboard.png"
-    ],
-    "specs": {
-      "Tracking Technology": "Optical Laser 1200 DPI",
-      "Ball Diameter": "38 mm Solid Steel",
-      "Ingress Rating": "IP68 Washable",
-      "Interface": "USB Plug & Play"
-    },
-    "highlights": [
-      "No Moving Mechanical Friction Parts",
-      "Functions Reliably with Thick Work Gloves",
-      "Resistant to Salt Spray & Oil Splashes",
-      "Zero Desktop Surface Drag Needed"
-    ]
-=======
     "name": "demo spare parts",
     "sku": "SKU-AU-TEST-4230",
     "slug": "demo-spare-parts-8865",
@@ -136,7 +48,6 @@
       "flowRate": "Max Torque 750 Nm"
     },
     "highlights": []
->>>>>>> origin/master
   },
   {
     "name": "Industrial Weather Station Telemetry Gateway 4G",
@@ -171,8 +82,6 @@
     ]
   },
   {
-<<<<<<< HEAD
-=======
     "name": "Wireless Soil Moisture & Temperature LoRaWAN Sensor",
     "sku": "SKU-EL-13",
     "slug": "wireless-soil-moisture-lorawan-sensor-el-13",
@@ -205,7 +114,6 @@
     ]
   },
   {
->>>>>>> origin/master
     "name": "Digital Ultrasonic Wireless Water Tank Depth Monitor",
     "sku": "SKU-EL-15",
     "slug": "digital-ultrasonic-tank-depth-monitor-el-15",
@@ -334,8 +242,6 @@
     ]
   },
   {
-<<<<<<< HEAD
-=======
     "name": "All-Terrain Commercial Agricultural Radial Rear Tire",
     "sku": "SKU-AU-01",
     "slug": "all-terrain-radial-rear-tire-au-01",
@@ -367,7 +273,6 @@
     ]
   },
   {
->>>>>>> origin/master
     "name": "Commercial Heavy Truck Front Steer Axle Radial Tire",
     "sku": "SKU-AU-02",
     "slug": "commercial-heavy-truck-steer-tire-au-02",
@@ -400,40 +305,6 @@
     ]
   },
   {
-<<<<<<< HEAD
-    "name": "All-Terrain Commercial Agricultural Radial Rear Tire",
-    "sku": "SKU-AU-01",
-    "slug": "all-terrain-radial-rear-tire-au-01",
-    "categoryName": "Automotive & Spare Parts",
-    "subcategory": "Tires & Wheels",
-    "brand": "Apollo",
-    "description": "Deep-lug agricultural drive wheel tire engineered with dual-angle lug geometry for superior field traction and reduced soil compaction.",
-    "price": 22500,
-    "mrp": 27000,
-    "discount": 16,
-    "stock": 20,
-    "rating": 4.9,
-    "reviewCount": 45,
-    "image": "/images/prod-tyre.png",
-    "images": [
-      "/images/prod-tyre.png"
-    ],
-    "specs": {
-      "Size": "13.6 - 28",
-      "PR (Ply Rating)": "12 Ply",
-      "Load Index": "128 A8",
-      "Tread Depth": "38 mm"
-    },
-    "highlights": [
-      "Self-Cleaning Mud-Shedding Lug Design",
-      "Puncture-Resistant Heavy Sidewall Plies",
-      "Even Footprint Minimizes Soil Compaction",
-      "High Roadability & Wear Resistance"
-    ]
-  },
-  {
-=======
->>>>>>> origin/master
     "name": "Reinforced Heavy Duty Alloy Wheel Rim 16-Inch",
     "sku": "SKU-AU-03",
     "slug": "reinforced-heavy-duty-alloy-wheel-rim-au-03",
@@ -815,41 +686,6 @@
     ]
   },
   {
-<<<<<<< HEAD
-    "name": "Heavy Duty Ceramic Clutch Plate & Pressure Plate Kit",
-    "sku": "SKU-AU-15",
-    "slug": "ceramic-clutch-plate-pressure-plate-kit-au-15",
-    "categoryName": "Automotive & Spare Parts",
-    "subcategory": "Engine & Drivetrain",
-    "brand": "MRF",
-    "description": "Dual-clutch 310mm ceramic paddle friction disc kit engineered for high-torque commercial tractors, tipper trucks, and heavy haulers.",
-    "price": 8900,
-    "mrp": 11200,
-    "discount": 21,
-    "stock": 20,
-    "rating": 4.9,
-    "reviewCount": 33,
-    "image": "https://images.unsplash.com/photo-1517524008697-84bbe3c3fd98?auto=format&fit=crop&w=500&q=80",
-    "images": [
-      "https://images.unsplash.com/photo-1517524008697-84bbe3c3fd98?auto=format&fit=crop&w=500&q=80",
-      "/images/prod-cultivator.png"
-    ],
-    "specs": {
-      "Disc Diameter": "310 mm",
-      "Spline Count": "14 Splines",
-      "Friction Material": "Sintered Ceramic-Metallic Buttons",
-      "Pressure Plate Type": "Diaphragm Spring High-Clamp"
-    },
-    "highlights": [
-      "Eliminates Clutch Slippage Under 5-Ton Loads",
-      "Withstands 600°C High-Thermal Friction Heat",
-      "Damped Hub Springs Reduce Transmission Jerks",
-      "Includes Release Bearing and Alignment Tool"
-    ]
-  },
-  {
-=======
->>>>>>> origin/master
     "name": "Hydraulic Heavy-Duty 20-Ton Bottle Jack with Case",
     "sku": "SKU-AU-16",
     "slug": "hydraulic-heavy-duty-20-ton-bottle-jack-au-16",
@@ -882,8 +718,6 @@
     ]
   },
   {
-<<<<<<< HEAD
-=======
     "name": "Heavy Duty Ceramic Clutch Plate & Pressure Plate Kit",
     "sku": "SKU-AU-15",
     "slug": "ceramic-clutch-plate-pressure-plate-kit-au-15",
@@ -916,7 +750,6 @@
     ]
   },
   {
->>>>>>> origin/master
     "name": "Heavy Duty HDPE Drip Lateral Tubing 16mm (500m Roll)",
     "sku": "SKU-AG-11",
     "slug": "hdpe-drip-lateral-tubing-16mm-ag-11",
@@ -1329,37 +1162,6 @@
     ]
   },
   {
-<<<<<<< HEAD
-    "name": "Surface Monoblock DC Solar Water Pump 2HP",
-    "sku": "SKU-AG-15",
-    "slug": "surface-monoblock-dc-solar-pump-2hp-ag-15",
-    "categoryName": "Agriculture & Farming",
-    "subcategory": "Solar Pumps",
-    "brand": "SolarAgro",
-    "description": "Open-well surface monoblock centrifugal solar pump designed for canal lifting, pond drainage, and open irrigation channels.",
-    "price": 38000,
-    "mrp": 45000,
-    "discount": 15,
-    "stock": 22,
-    "rating": 4.7,
-    "reviewCount": 20,
-    "image": "https://images.unsplash.com/photo-1509391365360-2e959784a276?auto=format&fit=crop&w=500&q=80",
-    "images": [
-      "https://images.unsplash.com/photo-1509391365360-2e959784a276?auto=format&fit=crop&w=500&q=80",
-      "/images/prod-solar.png"
-    ],
-    "specs": {
-      "Power Output": "2 HP (1.5 kW)",
-      "Suction Lift": "7.5 Meters",
-      "Discharge Output": "24,000 L/Hour",
-      "Impeller": "Non-Corrosive Gunmetal Bronze"
-    },
-    "highlights": [
-      "Cast-Iron Heavy Duty Pump Volute",
-      "Plug-and-Play Solar Array Direct Drive",
-      "Self-Priming Chamber Design",
-      "Low Maintenance Ceramic Shaft Seal"
-=======
     "name": "Heavy Duty 45HP Utility Farm Tractor",
     "sku": "SKU-AG-16",
     "slug": "heavy-duty-farm-tractor-ag-16",
@@ -1389,7 +1191,6 @@
       "Dual Clutch & Power Steering",
       "1500 kg Hydraulic Lift Capacity",
       "1 Year Comprehensive Warranty"
->>>>>>> origin/master
     ]
   },
   {
@@ -1425,37 +1226,6 @@
     ]
   },
   {
-<<<<<<< HEAD
-    "name": "Heavy Duty 45HP Utility Farm Tractor",
-    "sku": "SKU-AG-16",
-    "slug": "heavy-duty-farm-tractor-ag-16",
-    "categoryName": "Agriculture & Farming",
-    "subcategory": "Farm Machinery",
-    "brand": "GROVE AgriMaster",
-    "description": "Commercial 45HP dual-clutch utility tractor with advanced 8F+2R transmission, high ground clearance, and power steering for rigorous farming operations.",
-    "price": 585000,
-    "mrp": 620000,
-    "discount": 5,
-    "stock": 12,
-    "rating": 4.8,
-    "reviewCount": 42,
-    "image": "/images/prod-tractor.png",
-    "images": [
-      "/images/prod-tractor.png",
-      "/images/prod-cultivator.png"
-    ],
-    "specs": {
-      "Horsepower": "45 HP",
-      "Cylinders": "3 Cylinders",
-      "Lifting Capacity": "1500 kg",
-      "Fuel Tank": "50 Liters"
-    },
-    "highlights": [
-      "45 HP Fuel-Efficient Diesel Engine",
-      "Dual Clutch & Power Steering",
-      "1500 kg Hydraulic Lift Capacity",
-      "1 Year Comprehensive Warranty"
-=======
     "name": "Surface Monoblock DC Solar Water Pump 2HP",
     "sku": "SKU-AG-15",
     "slug": "surface-monoblock-dc-solar-pump-2hp-ag-15",
@@ -1485,7 +1255,6 @@
       "Plug-and-Play Solar Array Direct Drive",
       "Self-Priming Chamber Design",
       "Low Maintenance Ceramic Shaft Seal"
->>>>>>> origin/master
     ]
   },
   {
@@ -1585,40 +1354,6 @@
     ]
   },
   {
-<<<<<<< HEAD
-    "name": "Heavy-Duty Multi-Row Rotary Cultivator",
-    "sku": "SKU-AG-17",
-    "slug": "heavy-duty-rotary-cultivator-ag-17",
-    "categoryName": "Agriculture & Farming",
-    "subcategory": "Farm Machinery",
-    "brand": "AgriPower",
-    "description": "Heavy-duty tractor mounted rotary tiller designed for fine seedbed preparation in dry and wet soils with heat-treated boronic steel blades.",
-    "price": 34500,
-    "mrp": 39000,
-    "discount": 11,
-    "stock": 18,
-    "rating": 4.6,
-    "reviewCount": 31,
-    "image": "/images/prod-cultivator.png",
-    "images": [
-      "/images/prod-cultivator.png"
-    ],
-    "specs": {
-      "Working Width": "5 Feet",
-      "Blades Count": "36 Blades",
-      "Tractor Power Required": "35-45 HP",
-      "Drive Type": "Gear Drive"
-    },
-    "highlights": [
-      "High-Tensile Boron Steel L-Type Blades",
-      "Heavy Duty Sealed Gearbox",
-      "Adjustable Depth Skids",
-      "Vibration Dampened Side Shields"
-    ]
-  },
-  {
-=======
->>>>>>> origin/master
     "name": "Self-Propelled 7HP Mini Power Weeder & Tiller",
     "sku": "SKU-AG-18",
     "slug": "self-propelled-power-weeder-tiller-ag-18",
@@ -1651,8 +1386,6 @@
     ]
   },
   {
-<<<<<<< HEAD
-=======
     "name": "Heavy-Duty Multi-Row Rotary Cultivator",
     "sku": "SKU-AG-17",
     "slug": "heavy-duty-rotary-cultivator-ag-17",
@@ -1684,7 +1417,6 @@
     ]
   },
   {
->>>>>>> origin/master
     "name": "Industrial Wireless Noise-Cancelling Field Headset",
     "sku": "SKU-EL-03",
     "slug": "industrial-wireless-noise-cancelling-headset-el-03",
@@ -1748,40 +1480,6 @@
     ]
   },
   {
-<<<<<<< HEAD
-    "name": "GROVE Field Rugged Smartwatch with GPS & Sensor Hub",
-    "sku": "SKU-EL-07",
-    "slug": "grove-field-rugged-smartwatch-el-07",
-    "categoryName": "Electronics & Gadgets",
-    "subcategory": "Wearables & Smartwatches",
-    "brand": "GROVE Tech",
-    "description": "MIL-STD-810H rated outdoor smartwatch with dual-band GPS, barometer, optical pulse oximeter, and 14-day ultra-long battery life.",
-    "price": 4299,
-    "mrp": 5999,
-    "discount": 28,
-    "stock": 40,
-    "rating": 4.7,
-    "reviewCount": 88,
-    "image": "/images/prod-smartwatch.png",
-    "images": [
-      "/images/prod-smartwatch.png"
-    ],
-    "specs": {
-      "Display": "1.43 inch AMOLED Sapphire",
-      "Water Resistance": "5 ATM / 50M",
-      "Battery Life": "Up to 14 Days",
-      "Sensors": "Dual GPS, Altimeter, Barometer, SpO2"
-    },
-    "highlights": [
-      "Military-Grade Shock & Dust Resistance",
-      "Ultra-Bright 1000 nits Outdoor Display",
-      "Real-Time Field Telemetry Tracking",
-      "Bluetooth 5.3 Calling Enabled"
-    ]
-  },
-  {
-=======
->>>>>>> origin/master
     "name": "Industrial Workstation Core i7 Rugged Laptop 32GB",
     "sku": "SKU-EL-05",
     "slug": "industrial-workstation-core-i7-laptop-el-05",
@@ -1814,8 +1512,6 @@
     ]
   },
   {
-<<<<<<< HEAD
-=======
     "name": "GROVE Field Rugged Smartwatch with GPS & Sensor Hub",
     "sku": "SKU-EL-07",
     "slug": "grove-field-rugged-smartwatch-el-07",
@@ -1847,7 +1543,6 @@
     ]
   },
   {
->>>>>>> origin/master
     "name": "Compact Fanless Rugged Mini PC Industrial Controller",
     "sku": "SKU-EL-06",
     "slug": "compact-fanless-rugged-mini-pc-el-06",
@@ -2007,8 +1702,6 @@
     ]
   },
   {
-<<<<<<< HEAD
-=======
     "name": "Ergonomic IP68 Heavy-Duty Industrial Trackball Mouse",
     "sku": "SKU-EL-12",
     "slug": "ergonomic-industrial-trackball-mouse-el-12",
@@ -2041,7 +1734,6 @@
     ]
   },
   {
->>>>>>> origin/master
     "name": "High-Yield Hybrid Basmati Paddy Seeds (10kg)",
     "sku": "SKU-AG-01",
     "slug": "high-yield-hybrid-basmati-paddy-seeds-ag-01",

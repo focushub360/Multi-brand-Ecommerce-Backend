@@ -9,7 +9,7 @@ import { User } from '../src/modules/users/user.model.js';
 import { Order } from '../src/modules/orders/order.model.js';
 import { Address } from '../src/modules/addresses/address.model.js';
 import { CustomerNotification } from '../src/modules/complaints/customerNotification.model.js';
-import { AdminService } from '../src/modules/admin/service/admin.service.js';
+import { AdminService } from '../src/modules/admin/admin.service.js';
 import { NotificationService } from '../src/modules/admin/service/notification.service.js';
 import * as sendEmailModule from '../src/utils/sendEmail.js';
 import { ROLES } from '../src/constants/roles.js';

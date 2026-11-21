@@ -7,7 +7,7 @@ import {
 } from '../src/modules/complaints/complaint.model.js';
 import { Dealer } from '../src/modules/dealers/dealer.model.js';
 import { DealerNotification } from '../src/modules/complaints/dealerNotification.model.js';
-import { AdminService } from '../src/modules/admin/service/admin.service.js';
+import { AdminService } from '../src/modules/admin/admin.service.js';
 import { NotificationService } from '../src/modules/admin/service/notification.service.js';
 import * as sendEmailModule from '../src/utils/sendEmail.js';
 import { ROLES } from '../src/constants/roles.js';

@@ -7,13 +7,9 @@ import { ROLES } from '../../constants/roles.js';
 import {
   createTicketSchema,
   replyTicketSchema,
-<<<<<<< Updated upstream:backend/src/modules/complaints/complaint.routes.js
-  updateTicketStatusSchema
-=======
   updateTicketStatusSchema,
   adminReplySchema,
   reopenTicketSchema
->>>>>>> Stashed changes:src/modules/complaints/complaint.routes.js
 } from './complaint.validation.js';
 
 const router = Router();
