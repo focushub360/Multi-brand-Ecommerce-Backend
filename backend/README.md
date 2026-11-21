@@ -1,106 +1,187 @@
 # GROVE Multi-Brand E-Commerce Backend
 
-Production-ready, modular, and secure backend for the GROVE Multi-Brand Marketplace (Agriculture, Electronics, Automotive, Groceries) built with Node.js, Express.js (ES Modules), MongoDB Atlas, Mongoose, and JWT.
+A modular and secure backend for the GROVE Multi-Brand Marketplace, supporting Agriculture, Electronics, Automotive, and Groceries.
 
----
+Built with Node.js, Express.js, MongoDB, Mongoose, and JWT.
 
 ## Features
-- **Unified Single Login:** One endpoint (`/api/v1/auth/login`) for Super Admin, Dealers, and Customers.
-- **Strict Role-Based Access Control (RBAC):** Server-enforced permissions across 3 distinct personas.
-- **Dealer Onboarding Lifecycle:** 12-character secure temporary password generation with 24-hour expiration and forced first-time password reset.
-- **Category Lockdown:** Dealers can only create products matching their approved primary category.
-- **Multi-Dealer Fulfillment:** Master customer orders are partitioned into independent dealer fulfillment suborders (`DealerOrder`).
-- **Multi-Depot Inventory:** Real-time stock tracking with immutable movement ledger (`InventoryTransaction`).
-- **Geospatial Proximity:** Delivery serviceability checks with MongoDB `2dsphere` index and Haversine distance calculations.
-- **Address Management:** Customer addresses with a strict 5-address limit.
-- **Interactive Documentation:** Swagger UI documentation available at `/api/v1/docs`.
 
----
+- Unified login for Super Admins, Dealers, and Customers.
+- Role-Based Access Control (RBAC).
+- Dealer onboarding and management.
+- Category-based product restrictions.
+- Product catalog management.
+- Multi-depot inventory tracking.
+- Customer cart and wishlist.
+- Customer address management.
+- Geospatial delivery serviceability.
+- Multi-dealer order fulfillment.
+- Payment and settlement documentation.
+- Customer complaints and support.
+- Analytics and reporting.
+- Interactive Swagger API documentation.
 
 ## Technology Stack
-- **Runtime:** Node.js v20+ (ES Modules)
-- **Framework:** Express.js 4.21+
-- **Database:** MongoDB Atlas / Local MongoDB with Mongoose 8.9+
-- **Authentication:** JWT (Access Tokens + Refresh Token Rotation with SHA-256 Hashes)
-- **Password Security:** bcrypt (12 salt rounds)
-- **Email Service:** Nodemailer
-- **Request Validation:** Zod
-- **API Documentation:** Swagger / OpenAPI 3.0
-- **Testing:** Vitest & Supertest
 
----
+| Technology | Purpose |
+|---|---|
+| Node.js | JavaScript runtime |
+| Express.js | Backend framework |
+| MongoDB | Database |
+| Mongoose | Database modeling |
+| JWT | Authentication |
+| bcrypt | Password security |
+| Nodemailer | Email services |
+| Swagger / OpenAPI | API documentation |
+| Vitest | Testing |
+| Supertest | API testing |
 
-## Directory Structure
-```
+## Project Structure
+
+```text
 backend/
+├── data/
+├── docs/
+│   ├── API_DOCUMENTATION.md
+│   ├── DATABASE_SCHEMA.md
+│   └── RBAC_PERMISSION_MATRIX.md
 ├── src/
-│   ├── config/         # Database, env validation, mail, cors, swagger
-│   ├── constants/      # Roles, permissions, order & dealer statuses
-│   ├── middlewares/    # Auth, RBAC, Zod validator, rate limiting, error handler
+│   ├── config/
+│   ├── constants/
+│   ├── middlewares/
 │   ├── modules/
-│   │   ├── auth/
-│   │   ├── users/
-│   │   ├── dealers/
-│   │   ├── categories/
-│   │   ├── products/
-│   │   ├── inventory/
-│   │   ├── cart/
-│   │   ├── wishlist/
 │   │   ├── addresses/
-│   │   ├── dealer-locations/
-│   │   ├── orders/
-│   │   ├── payments/
-│   │   ├── settlements/
-│   │   ├── complaints/
+│   │   ├── admin/
 │   │   ├── analytics/
-│   │   └── admin/
-│   ├── routes/         # Central API route aggregator (/api/v1)
-│   ├── utils/          # ApiError, ApiResponse, asyncHandler, crypto utils
-│   ├── app.js          # Express app configuration
-│   └── server.js       # Server bootstrap & DB connection
-├── docs/               # Architecture, API & Schema Documentation
-├── tests/              # Automated unit and integration test suite
-├── .env                # Local environment variables
-├── .env.example        # Environment variable template
-└── package.json
+│   │   ├── auth/
+│   │   ├── cart/
+│   │   ├── categories/
+│   │   ├── complaints/
+│   │   ├── dealer-locations/
+│   │   ├── dealers/
+│   │   ├── inventory/
+│   │   ├── orders/
+│   │   ├── products/
+│   │   ├── settlements/
+│   │   ├── users/
+│   │   └── wishlist/
+│   ├── routes/
+│   ├── utils/
+│   ├── app.js
+│   └── server.js
+├── tests/
+├── .env.example
+├── package.json
+└── seed.js
 ```
 
----
+## Getting Started
 
-## Quick Start
+### 1. Prerequisites
 
-### 1. Install Dependencies
+- Node.js v20 or later
+- npm
+- MongoDB (Local MongoDB or MongoDB Atlas)
+
+### 2. Install Dependencies
+
+From the repository root:
+
 ```bash
 cd backend
 npm install
 ```
 
-### 2. Configure Environment
-Copy `.env.example` to `.env` and verify your MongoDB URI and JWT secrets:
+### 3. Configure Environment Variables
+
+Create a `.env` file inside the backend folder using `.env.example` as a reference.
+
+Example:
+
 ```env
 PORT=5000
 NODE_ENV=development
 CLIENT_URL=http://localhost:5173
+
 MONGODB_URI=mongodb://127.0.0.1:27017/grove_ecommerce
-JWT_ACCESS_SECRET=your_jwt_access_secret_key_minimum_32_characters_long
-JWT_REFRESH_SECRET=your_jwt_refresh_secret_key_minimum_32_characters_long
-ADMIN_EMAIL=admin@grove.com
-ADMIN_PASSWORD=Admin@123
+
+JWT_ACCESS_SECRET=replace_with_a_secure_secret
+JWT_REFRESH_SECRET=replace_with_another_secure_secret
+
+JWT_ACCESS_EXPIRES_IN=15m
+JWT_REFRESH_EXPIRES_IN=7d
+BCRYPT_SALT_ROUNDS=12
 ```
 
-### 3. Start Development Server
+Configure SMTP credentials if email functionality is required.
+
+**Security:** Use strong private secrets. Never commit your `.env` file or share passwords and secret keys.
+
+### 4. Run Development Server
+
 ```bash
 npm run dev
 ```
 
-### 4. Run Automated Tests
+### 5. Start Production Server
+
+```bash
+npm start
+```
+
+### 6. Run Database Seed
+
+```bash
+npm run seed
+```
+
+### 7. Run Tests
+
 ```bash
 npm test
 ```
 
-### 5. Access Interactive API Documentation
-Open your browser and navigate to:
-```
+## API Documentation
+
+Swagger UI is available when the backend server is running:
+
+```text
 http://localhost:5000/api/v1/docs
 ```
 
+Additional documentation:
+
+- `docs/API_DOCUMENTATION.md`
+- `docs/DATABASE_SCHEMA.md`
+- `docs/RBAC_PERMISSION_MATRIX.md`
+
+## API Base URL
+
+```text
+http://localhost:5000/api/v1
+```
+
+## Available Scripts
+
+| Command | Description |
+|---|---|
+| `npm run dev` | Start development server |
+| `npm start` | Start production server |
+| `npm run seed` | Run database seed script |
+| `npm test` | Run automated tests |
+
+## Security
+
+- JWT authentication.
+- Role-Based Access Control.
+- Password hashing with bcrypt.
+- Request rate limiting.
+- Secure HTTP headers.
+- MongoDB input sanitization.
+- Environment-based configuration.
+
+## Project
+
+**GROVE Multi-Brand E-Commerce Marketplace**
+
+Backend API for managing customers, dealers, administrators, products, inventory, orders, and marketplace operations.
