@@ -45,7 +45,7 @@ export const updateFulfillmentStatus = asyncHandler(async (req, res) => {
 });
 
 export const getGlobalOrders = asyncHandler(async (req, res) => {
-  const result = await OrderService.getAdminOrders(req.query);
+  const result = await OrderService.getGlobalOrders(req.query);
   return res.status(200).json(
     ApiResponse.success(result.orders, 'Global order audit retrieved successfully', 200, result.pagination)
   );

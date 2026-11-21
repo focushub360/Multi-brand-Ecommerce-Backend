@@ -489,6 +489,10 @@ export class OrderService {
     const newStatus = data.orderStatus;
 
     subOrder.orderStatus = newStatus;
+    if (newStatus === 'Delivered') {
+      subOrder.deliveredAt = new Date();
+      subOrder.payoutStatus = 'Settled';
+    }
     if (data.trackingNumber) subOrder.trackingNumber = data.trackingNumber;
     if (data.fulfillmentPartner) subOrder.fulfillmentPartner = data.fulfillmentPartner;
     if (data.estimatedDelivery) subOrder.estimatedDelivery = data.estimatedDelivery;
@@ -505,18 +509,51 @@ export class OrderService {
     // Check if Parent Order should reflect progress
     const allSiblings = await DealerOrder.find({ parentOrder: subOrder.parentOrder });
     const allDelivered = allSiblings.every((s) => s.orderStatus === 'Delivered');
-    const anyShipped = allSiblings.some((s) => s.orderStatus === 'Shipped' || s.orderStatus === 'In Transit');
+    const anyOutForDelivery = allSiblings.some((s) => s.orderStatus === 'Out for Delivery');
+    const anyShipped = allSiblings.some((s) => s.orderStatus === 'Shipped' || s.orderStatus === 'In Transit' || s.orderStatus === 'Dispatched');
+    const anyPacked = allSiblings.some((s) => s.orderStatus === 'Packed');
+    const anyProcessing = allSiblings.some((s) => s.orderStatus === 'Processing');
+    const allCancelled = allSiblings.every((s) => s.orderStatus === 'Cancelled');
+
+    let parentStatus = null;
+    let parentTitle = '';
+    let parentNote = '';
 
     if (allDelivered) {
-      await Order.findByIdAndUpdate(subOrder.parentOrder, {
-        orderStatus: 'Delivered',
-        $push: { timeline: { status: 'Delivered', title: 'Delivered', note: 'All items delivered successfully.', timestamp: new Date() } }
-      });
+      parentStatus = 'Delivered';
+      parentTitle = 'Delivered';
+      parentNote = 'All items delivered successfully.';
+    } else if (anyOutForDelivery) {
+      parentStatus = 'Out for Delivery';
+      parentTitle = 'Out for Delivery';
+      parentNote = 'Consignment is out for delivery with local courier.';
     } else if (anyShipped) {
-      await Order.findByIdAndUpdate(subOrder.parentOrder, {
-        orderStatus: 'Shipped',
-        $push: { timeline: { status: 'Shipped', title: 'Dispatched', note: 'Items in transit with logistics partners.', timestamp: new Date() } }
-      });
+      parentStatus = 'Shipped';
+      parentTitle = 'Dispatched';
+      parentNote = 'Items in transit with logistics partners.';
+    } else if (anyPacked) {
+      parentStatus = 'Packed';
+      parentTitle = 'Order Packed';
+      parentNote = 'Items verified, packed, and labeled for courier pickup.';
+    } else if (anyProcessing) {
+      parentStatus = 'Processing';
+      parentTitle = 'Processing';
+      parentNote = 'Merchant is processing and preparing items.';
+    } else if (allCancelled) {
+      parentStatus = 'Cancelled';
+      parentTitle = 'Cancelled';
+      parentNote = 'Order cancelled by merchant/platform.';
+    }
+
+    if (parentStatus) {
+      const updatePayload = {
+        orderStatus: parentStatus,
+        $push: { timeline: { status: parentStatus, title: parentTitle, note: parentNote, timestamp: new Date() } }
+      };
+      if (parentStatus === 'Delivered') {
+        updatePayload.deliveredAt = new Date();
+      }
+      await Order.findByIdAndUpdate(subOrder.parentOrder, updatePayload);
     }
 
     return subOrder;
@@ -525,18 +562,21 @@ export class OrderService {
   /**
    * Super Admin Global Order Inspection (Read-Only)
    */
-  static async getGlobalOrders({ status = '', search = '', page = 1, limit = 20 }) {
+  static async getGlobalOrders({ status = '', search = '', page = 1, limit = 20 } = {}) {
     const query = {};
     if (status) query.orderStatus = status;
-    if (search) {
+    if (search && search.trim()) {
+      const term = search.trim();
       query.$or = [
-        { orderNumber: { $regex: search, $options: 'i' } },
-        { 'customerSnapshot.name': { $regex: search, $options: 'i' } },
-        { 'customerSnapshot.email': { $regex: search, $options: 'i' } }
+        { orderNumber: { $regex: term, $options: 'i' } },
+        { 'customerSnapshot.name': { $regex: term, $options: 'i' } },
+        { 'customerSnapshot.email': { $regex: term, $options: 'i' } }
       ];
     }
 
-    const skip = (page - 1) * limit;
+    const parsedPage = Math.max(1, parseInt(page, 10) || 1);
+    const parsedLimit = Math.max(1, Math.min(200, parseInt(limit, 10) || 20));
+    const skip = (parsedPage - 1) * parsedLimit;
 
     const [orders, total] = await Promise.all([
       Order.find(query)
@@ -544,7 +584,7 @@ export class OrderService {
         .populate('dealers', 'businessName dealerCode')
         .sort({ createdAt: -1 })
         .skip(skip)
-        .limit(limit)
+        .limit(parsedLimit)
         .lean(),
       Order.countDocuments(query)
     ]);
@@ -552,12 +592,19 @@ export class OrderService {
     return {
       orders,
       pagination: {
-        page,
-        limit,
+        page: parsedPage,
+        limit: parsedLimit,
         total,
-        pages: Math.ceil(total / limit)
+        pages: Math.ceil(total / parsedLimit)
       }
     };
+  }
+
+  /**
+   * Alias for getGlobalOrders
+   */
+  static async getAdminOrders(params) {
+    return this.getGlobalOrders(params);
   }
 
   /**

@@ -7,7 +7,13 @@ import { ROLES } from '../../constants/roles.js';
 import {
   createTicketSchema,
   replyTicketSchema,
+<<<<<<< Updated upstream:backend/src/modules/complaints/complaint.routes.js
   updateTicketStatusSchema
+=======
+  updateTicketStatusSchema,
+  adminReplySchema,
+  reopenTicketSchema
+>>>>>>> Stashed changes:src/modules/complaints/complaint.routes.js
 } from './complaint.validation.js';
 
 const router = Router();
@@ -25,12 +31,22 @@ router.get('/', (req, res, next) => {
 });
 
 /**
+ * In-App Notifications
+ */
+router.get('/dealer/notifications', complaintController.getDealerNotifications);
+router.patch('/dealer/notifications/:id/read', complaintController.markDealerNotificationRead);
+
+router.get('/customer/notifications', complaintController.getCustomerNotifications);
+router.patch('/customer/notifications/:id/read', complaintController.markCustomerNotificationRead);
+
+/**
  * Customer & Dealer Ticket Operations
  */
 router.post('/', validate(createTicketSchema), complaintController.createTicket);
 router.get('/my-tickets', complaintController.getMyTickets);
 router.get('/:ticketId', complaintController.getTicketById);
 router.post('/:ticketId/messages', validate(replyTicketSchema), complaintController.replyToTicket);
+router.post('/:ticketId/reopen', validate(reopenTicketSchema), complaintController.reopenTicket);
 
 /**
  * Super Admin Ticket Governance Endpoints
@@ -49,4 +65,3 @@ router.patch(
 );
 
 export default router;
-

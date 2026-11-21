@@ -9,7 +9,8 @@ export const getAdminAnalytics = asyncHandler(async (_req, res) => {
 
 export const getDealerAnalytics = asyncHandler(async (req, res) => {
   const dealerId = req.dealer.id;
-  const data = await AnalyticsService.getDealerAnalytics(dealerId);
+  const range = req.query.range || '30D';
+  const data = await AnalyticsService.getDealerAnalytics(dealerId, range);
   return res.status(200).json(ApiResponse.success(data, 'Dealer performance analytics retrieved'));
 });
 

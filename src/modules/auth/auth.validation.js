@@ -35,12 +35,37 @@ export const registerSchema = z.object({
   })
 });
 
+export const passwordStrengthRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>/?`~]).{8,}$/;
+
+export const passwordRule = z
+  .string({ required_error: 'Password is required' })
+  .min(8, 'Password must be at least 8 characters long')
+  .regex(/[A-Z]/, 'Password must contain at least one uppercase letter (A-Z)')
+  .regex(/[a-z]/, 'Password must contain at least one lowercase letter (a-z)')
+  .regex(/\d/, 'Password must contain at least one digit (0-9)')
+  .regex(/[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>/?`~]/, 'Password must contain at least one special character');
+
 export const changePasswordSchema = z.object({
   body: z.object({
     currentPassword: z.string({ required_error: 'Current password is required' }),
-    newPassword: z
-      .string({ required_error: 'New password is required' })
-      .min(6, 'New password must be at least 6 characters long')
+    newPassword: passwordRule,
+    confirmPassword: z.string().optional()
+  }).refine((data) => !data.confirmPassword || data.newPassword === data.confirmPassword, {
+    message: 'New password and confirm password must match',
+    path: ['confirmPassword']
+  }).refine((data) => data.newPassword !== data.currentPassword, {
+    message: 'New password cannot be identical to your current password',
+    path: ['newPassword']
+  })
+});
+
+export const firstTimePasswordSchema = z.object({
+  body: z.object({
+    newPassword: passwordRule,
+    confirmPassword: z.string({ required_error: 'Please confirm your new password' })
+  }).refine((data) => data.newPassword === data.confirmPassword, {
+    message: 'New password and confirm password must match',
+    path: ['confirmPassword']
   })
 });
 

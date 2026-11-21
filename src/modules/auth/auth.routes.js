@@ -7,6 +7,7 @@ import {
   loginSchema,
   registerSchema,
   changePasswordSchema,
+  firstTimePasswordSchema,
   initialSetupPasswordSchema
 } from './auth.validation.js';
 
@@ -60,6 +61,17 @@ router.get(
   '/me',
   authenticate,
   authController.getMe
+);
+
+/**
+ * First-Time Password Setup for Authenticated Users (e.g. Approved Dealer first login)
+ * POST /api/v1/auth/first-time-password
+ */
+router.post(
+  '/first-time-password',
+  authenticate,
+  validate(firstTimePasswordSchema),
+  authController.firstTimePassword
 );
 
 /**

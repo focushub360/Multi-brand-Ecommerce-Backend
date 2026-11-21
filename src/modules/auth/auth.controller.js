@@ -115,6 +115,24 @@ export const getMe = asyncHandler(async (req, res) => {
   );
 });
 
+export const firstTimePassword = asyncHandler(async (req, res) => {
+  const { newPassword } = req.body;
+  const result = await AuthService.setFirstTimePassword({
+    userId: req.user.id,
+    newPassword
+  });
+
+  return res.status(200).json(
+    ApiResponse.success(
+      {
+        user: result.user,
+        dealer: result.dealer
+      },
+      result.message
+    )
+  );
+});
+
 export const initialSetupPassword = asyncHandler(async (req, res) => {
   const { email, temporaryPassword, newPassword } = req.body;
   const ipAddress = req.ip || req.headers['x-forwarded-for'] || '';

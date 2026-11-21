@@ -27,11 +27,31 @@ export const dealerApplicationSchema = z.object({
 
 export const dealerStoreSettingsSchema = z.object({
   body: z.object({
+    businessName: z.string().trim().min(2, 'Store name must be at least 2 characters').optional(),
     tagline: z.string().max(200).optional(),
     description: z.string().max(1000).optional(),
     operatingHours: z.string().max(100).optional(),
-    isOpen: z.boolean().optional()
-    // STRICT RULE: No businessName, gstin, primaryCategory, warehouseAddress allowed in this schema!
+    isOpen: z.boolean().optional(),
+    warehouseAddress: z.string().trim().min(5, 'Warehouse address must be at least 5 characters').optional(),
+    city: z.string().trim().min(2).optional(),
+    state: z.string().trim().min(2).optional(),
+    pincode: z.string().trim().length(6, 'Pincode must be 6 digits').optional(),
+    businessAddress: z.object({
+      address: z.string().min(3).optional(),
+      city: z.string().min(2).optional(),
+      state: z.string().min(2).optional(),
+      pincode: z.string().length(6, 'Pincode must be 6 digits').optional()
+    }).optional()
+  })
+});
+
+export const bankVerificationSchema = z.object({
+  body: z.object({
+    bankName: z.string({ required_error: 'Bank name is required' }).trim().min(2, 'Bank name must be at least 2 characters'),
+    accountName: z.string({ required_error: 'Account holder name is required' }).trim().min(2, 'Account holder name must be at least 2 characters'),
+    accountNumber: z.string({ required_error: 'Account number is required' }).trim().regex(/^\d{9,18}$/, 'Account number must be 9 to 18 digits'),
+    ifsc: z.string({ required_error: 'IFSC code is required' }).trim().regex(/^[A-Z]{4}0[A-Z0-9]{6}$/, 'Must be a valid 11-character Indian IFSC code').toUpperCase(),
+    upiId: z.string().trim().regex(/^[\w.-]+@[\w.-]+$/, 'Must be a valid UPI ID (e.g., name@okhdfcbank)').optional().or(z.literal(''))
   })
 });
 

@@ -19,6 +19,24 @@ export const updateStoreSettings = asyncHandler(async (req, res) => {
   return res.status(200).json(ApiResponse.success(result.storeSettings, result.message));
 });
 
+export const verifyBankDetails = asyncHandler(async (req, res) => {
+  const dealerId = req.dealer.id;
+  const result = await DealerService.verifyBankDetails(dealerId, req.body);
+  return res.status(200).json(ApiResponse.success(result, result.message));
+});
+
+export const submitOnboardingBankDetails = asyncHandler(async (req, res) => {
+  const dealerId = req.dealer.id;
+  const result = await DealerService.submitOnboardingBankDetails(dealerId, req.body);
+  return res.status(200).json(ApiResponse.success(result, result.message));
+});
+
+export const verifyKyc = asyncHandler(async (req, res) => {
+  const dealerId = req.params.id;
+  const result = await DealerService.verifyKyc(dealerId, req.user, req.body);
+  return res.status(200).json(ApiResponse.success(result.dealer, result.message));
+});
+
 export const getAllDealers = asyncHandler(async (req, res) => {
   const { status, category, search, page, limit } = req.query;
   const result = await DealerService.getAllDealers(

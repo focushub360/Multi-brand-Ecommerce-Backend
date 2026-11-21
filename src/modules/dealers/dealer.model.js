@@ -1,5 +1,6 @@
 import mongoose, { Schema } from 'mongoose';
 import { DEALER_STATUS, ALL_DEALER_STATUSES } from '../../constants/dealerStatus.js';
+import { hashPassword, comparePassword } from '../../utils/passwordHash.js';
 
 const kycDocumentSchema = new Schema(
   {
@@ -34,8 +35,19 @@ const dealerSchema = new Schema(
     user: {
       type: Schema.Types.ObjectId,
       ref: 'User',
-      required: true,
-      unique: true
+      required: false
+    },
+    password: {
+      type: String,
+      select: false,
+      minlength: [6, 'Password must be at least 6 characters']
+    },
+    mustChangePassword: {
+      type: Boolean,
+      default: false
+    },
+    lastLogin: {
+      type: Date
     },
     dealerCode: {
       type: String,
@@ -124,6 +136,10 @@ const dealerSchema = new Schema(
       default: DEALER_STATUS.PENDING,
       index: true
     },
+    rejectionReason: {
+      type: String,
+      default: ''
+    },
     tier: {
       type: String,
       enum: ['Bronze Tier', 'Silver Tier', 'Gold Tier'],
@@ -146,6 +162,16 @@ const dealerSchema = new Schema(
       bankName: { type: String, default: 'State Bank of India' },
       upiId: { type: String, default: '' }
     },
+    bankVerificationStatus: {
+      type: String,
+      enum: ['PENDING', 'SUBMITTED', 'VERIFIED', 'REJECTED'],
+      default: 'PENDING',
+      index: true
+    },
+    bankVerifiedAt: {
+      type: Date,
+      default: null
+    },
     kycDocuments: [kycDocumentSchema],
     storeSettings: {
       tagline: { type: String, default: '' },
@@ -166,6 +192,19 @@ const dealerSchema = new Schema(
     timestamps: true
   }
 );
+
+// Pre-save hook: Hash password if modified
+dealerSchema.pre('save', async function (next) {
+  if (!this.isModified('password') || !this.password) return next();
+  this.password = await hashPassword(this.password);
+  next();
+});
+
+// Compare password method
+dealerSchema.methods.comparePassword = async function (candidatePassword) {
+  if (!this.password) return false;
+  return await comparePassword(candidatePassword, this.password);
+};
 
 // 2dsphere index for location queries
 dealerSchema.index({ location: '2dsphere' });

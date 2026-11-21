@@ -1,5 +1,6 @@
 [
   {
+<<<<<<< HEAD
     "name": "demo",
     "sku": "SKU-EL-TEST-6927",
     "slug": "demo-1700",
@@ -21,10 +22,34 @@
       "material": "Weatherproof Anodized Stainless Steel & UV-Stabilized ABS",
       "pipeSize": "300 mm Probe Depth",
       "flowRate": "RS485 Modbus RTU / 4G GSM"
+=======
+    "name": "Heavy Duty Multi-Row Ceramic Clutch Plate Assembly 280mm",
+    "sku": "SKU-AU-TEST-5478",
+    "slug": "heavy-duty-multi-row-ceramic-clutch-plate-assembly-280mm-7818",
+    "categoryName": "Automotive & Spare Parts",
+    "subcategory": "Braking Systems",
+    "brand": "GROVE Prime",
+    "description": "High-friction sintered ceramic commercial clutch disc with heavy-duty dual dampener springs engineered for multi-axle agricultural haulers and commercial tractors under maximum continuous load.",
+    "price": 4850,
+    "mrp": 6200,
+    "discount": 22,
+    "stock": 30,
+    "rating": 4.5,
+    "reviewCount": 10,
+    "image": "data:image/jpeg;base64,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rbc16GAYDqLVn0gOVakZZl00p/dr1VQbPidhBrFWGewE1ueu3mz/AJRCNaf9VzrNtUDCU2RAxRhlq9Q5AaNYGTUlgfibIfCX30IK05VXQbn9KrkeO7YMITY1uj/RxpUUt10ft6uY/lq/NbbCnDaTjm4nJxLhmdYQBl1l/tMdvUBG3UPm+rPq557mXL8+kIJ+znfGpM+4uu3KmJ+xsdmsfpCLtXeVDMvWNgRVyMBrk3zLp1F1APSuubDarfaYe1boMeE26e6YAGnqLLv+vlSn5KK8L+GVhwJbY7EJpiRKaZBrtOxQOkfcPPKpVzqRd9a191BEZ+gIiICIiAiIgIiICIiAiIgIiICIiCNY7wjaMY2WtsuzTlSCuqPIZrocYc+IS/6V6a91c1zRj3BuIsH3SG7dIzc2FHlCQPayah3D7LumubR/ZOumvkVV14sElhqQybL7TbjblNJgYahKn10Qce4gusW6uR3bNhS2zZG9ouUB9huO/DbLPUVBLkY/dQvLuXuwNwZwvjmHcXbLcnMOXVhzJyGAdojONkOYlsnXMBz1U5H3h+St3HvArDGIGc7OdbLIb+jAG9bA/gHOlWv93UafZqqaxdwU4vWoJHoiTCvTblM95icTUwdPuzoH+pBFMZ4HxHwvuG7b8c4Xccce2ThsTiF0S+tmtOn/ABW4Zv1+lYNuPaYrfpGHpD1Hh6xrpKg5U93hqowUPEdnmtvYi4cY5nSI/X2k4L0jqEs/pCp71ltvETCTEm82++NXayx7my0y2ZxSaJrSNaEXP66oPmy2G6TLbI9K3O7RpGsT7NFglNJ3UPUVfgHKg1ry6vD5ipjjuzcOsN8ONq/0uNlkS4zXpZmxVEpm8ZepGonXQIlViR+X1LX8J8V4XjXyPYbDOm4jur+6DAMtiRPtj1jnqy6vHn9WS2OFp1nnRcf3nE2GfT91mSuyOWeKfaHWtgZFBdcb/hCOdAqXxZ+9BlwrEarwZwjb8KbfyqcNg3A3xEiiyBfNvc10qOjecDPKhVouheGnDyDhQe3zpFbtiFwK0fnvU+jGv8Nkf4YfdzLz8qUiWB8JynLq5KtNjbhW5ubFBuZK9VuR45BQdhsaZ6SBugU1aaacq9SutAREQEREBERAREQEREBERAREQEREBERAREQEREBERAWJ9hp4cnWm3PxhqWVEGthWWzwH96FaYMZz42WBEv0ovY0y0FT0NAGvmen2lmRAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQf/9k=",
+    "images": [
+      "data:image/jpeg;base64,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rbc16GAYDqLVn0gOVakZZl00p/dr1VQbPidhBrFWGewE1ueu3mz/AJRCNaf9VzrNtUDCU2RAxRhlq9Q5AaNYGTUlgfibIfCX30IK05VXQbn9KrkeO7YMITY1uj/RxpUUt10ft6uY/lq/NbbCnDaTjm4nJxLhmdYQBl1l/tMdvUBG3UPm+rPq557mXL8+kIJ+znfGpM+4uu3KmJ+xsdmsfpCLtXeVDMvWNgRVyMBrk3zLp1F1APSuubDarfaYe1boMeE26e6YAGnqLLv+vlSn5KK8L+GVhwJbY7EJpiRKaZBrtOxQOkfcPPKpVzqRd9a191BEZ+gIiICIiAiIgIiICIiAiIgIiICIiCNY7wjaMY2WtsuzTlSCuqPIZrocYc+IS/6V6a91c1zRj3BuIsH3SG7dIzc2FHlCQPayah3D7LumubR/ZOumvkVV14sElhqQybL7TbjblNJgYahKn10Qce4gusW6uR3bNhS2zZG9ouUB9huO/DbLPUVBLkY/dQvLuXuwNwZwvjmHcXbLcnMOXVhzJyGAdojONkOYlsnXMBz1U5H3h+St3HvArDGIGc7OdbLIb+jAG9bA/gHOlWv93UafZqqaxdwU4vWoJHoiTCvTblM95icTUwdPuzoH+pBFMZ4HxHwvuG7b8c4Xccce2ThsTiF0S+tmtOn/ABW4Zv1+lYNuPaYrfpGHpD1Hh6xrpKg5U93hqowUPEdnmtvYi4cY5nSI/X2k4L0jqEs/pCp71ltvETCTEm82++NXayx7my0y2ZxSaJrSNaEXP66oPmy2G6TLbI9K3O7RpGsT7NFglNJ3UPUVfgHKg1ry6vD5ipjjuzcOsN8ONq/0uNlkS4zXpZmxVEpm8ZepGonXQIlViR+X1LX8J8V4XjXyPYbDOm4jur+6DAMtiRPtj1jnqy6vHn9WS2OFp1nnRcf3nE2GfT91mSuyOWeKfaHWtgZFBdcb/hCOdAqXxZ+9BlwrEarwZwjb8KbfyqcNg3A3xEiiyBfNvc10qOjecDPKhVouheGnDyDhQe3zpFbtiFwK0fnvU+jGv8Nkf4YfdzLz8qUiWB8JynLq5KtNjbhW5ubFBuZK9VuR45BQdhsaZ6SBugU1aaacq9SutAREQEREBERAREQEREBERAREQEREBERAREQEREBERAWJ9hp4cnWm3PxhqWVEGthWWzwH96FaYMZz42WBEv0ovY0y0FT0NAGvmen2lmRAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQf/9k="
+    ],
+    "specs": {
+      "material": "Sintered Ceramic & Forged Manganese Alloy",
+      "pipeSize": "280 mm Diameter, 10 Splines",
+      "flowRate": "Max Torque 750 Nm"
+>>>>>>> origin/master
     },
     "highlights": []
   },
   {
+<<<<<<< HEAD
     "name": "Wireless Soil Moisture & Temperature LoRaWAN Sensor",
     "sku": "SKU-EL-13",
     "slug": "wireless-soil-moisture-lorawan-sensor-el-13",
@@ -87,6 +112,31 @@
       "Resistant to Salt Spray & Oil Splashes",
       "Zero Desktop Surface Drag Needed"
     ]
+=======
+    "name": "demo spare parts",
+    "sku": "SKU-AU-TEST-4230",
+    "slug": "demo-spare-parts-8865",
+    "categoryName": "Automotive & Spare Parts",
+    "subcategory": "Braking Systems",
+    "brand": "GROVE Prime",
+    "description": "High-friction sintered ceramic commercial clutch disc with heavy-duty dual dampener springs engineered for multi-axle agricultural haulers and commercial tractors under maximum continuous load.",
+    "price": 400,
+    "mrp": 1500,
+    "discount": 73,
+    "stock": 1,
+    "rating": 4.5,
+    "reviewCount": 10,
+    "image": "https://images.unsplash.com/photo-1486006920555-c77dce18193b?auto=format&fit=crop&w=500&q=80",
+    "images": [
+      "https://images.unsplash.com/photo-1486006920555-c77dce18193b?auto=format&fit=crop&w=500&q=80"
+    ],
+    "specs": {
+      "material": "Sintered Ceramic & Forged Manganese Alloy",
+      "pipeSize": "280 mm Diameter, 10 Splines",
+      "flowRate": "Max Torque 750 Nm"
+    },
+    "highlights": []
+>>>>>>> origin/master
   },
   {
     "name": "Industrial Weather Station Telemetry Gateway 4G",
@@ -121,6 +171,41 @@
     ]
   },
   {
+<<<<<<< HEAD
+=======
+    "name": "Wireless Soil Moisture & Temperature LoRaWAN Sensor",
+    "sku": "SKU-EL-13",
+    "slug": "wireless-soil-moisture-lorawan-sensor-el-13",
+    "categoryName": "Electronics & Gadgets",
+    "subcategory": "Smart Sensors & IoT",
+    "brand": "AgroSense",
+    "description": "Precision FDR soil probe measuring volumetric water content, soil temperature, and EC salinity transmitting up to 10km via LoRaWAN.",
+    "price": 4800,
+    "mrp": 5900,
+    "discount": 19,
+    "stock": 35,
+    "rating": 4.8,
+    "reviewCount": 31,
+    "image": "https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&fit=crop&w=500&q=80",
+    "images": [
+      "https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&fit=crop&w=500&q=80",
+      "/images/card-electronics.png"
+    ],
+    "specs": {
+      "Wireless Protocol": "LoRaWAN 868/915 MHz",
+      "Battery Life": "5+ Years (19000mAh Li-SOCl2)",
+      "Transmission Range": "Up to 10 km Line of Sight",
+      "Probe Material": "Food-Grade Stainless Steel 316"
+    },
+    "highlights": [
+      "Measures Moisture, Temp & Salinity Simultaneously",
+      "IP68 Underground Enclosure",
+      "Cloud API & MQTT Dashboard Integration",
+      "No Recurring Cellular SIM Fees Required"
+    ]
+  },
+  {
+>>>>>>> origin/master
     "name": "Digital Ultrasonic Wireless Water Tank Depth Monitor",
     "sku": "SKU-EL-15",
     "slug": "digital-ultrasonic-tank-depth-monitor-el-15",
@@ -249,6 +334,40 @@
     ]
   },
   {
+<<<<<<< HEAD
+=======
+    "name": "All-Terrain Commercial Agricultural Radial Rear Tire",
+    "sku": "SKU-AU-01",
+    "slug": "all-terrain-radial-rear-tire-au-01",
+    "categoryName": "Automotive & Spare Parts",
+    "subcategory": "Tires & Wheels",
+    "brand": "Apollo",
+    "description": "Deep-lug agricultural drive wheel tire engineered with dual-angle lug geometry for superior field traction and reduced soil compaction.",
+    "price": 22500,
+    "mrp": 27000,
+    "discount": 16,
+    "stock": 20,
+    "rating": 4.9,
+    "reviewCount": 45,
+    "image": "/images/prod-tyre.png",
+    "images": [
+      "/images/prod-tyre.png"
+    ],
+    "specs": {
+      "Size": "13.6 - 28",
+      "PR (Ply Rating)": "12 Ply",
+      "Load Index": "128 A8",
+      "Tread Depth": "38 mm"
+    },
+    "highlights": [
+      "Self-Cleaning Mud-Shedding Lug Design",
+      "Puncture-Resistant Heavy Sidewall Plies",
+      "Even Footprint Minimizes Soil Compaction",
+      "High Roadability & Wear Resistance"
+    ]
+  },
+  {
+>>>>>>> origin/master
     "name": "Commercial Heavy Truck Front Steer Axle Radial Tire",
     "sku": "SKU-AU-02",
     "slug": "commercial-heavy-truck-steer-tire-au-02",
@@ -281,6 +400,7 @@
     ]
   },
   {
+<<<<<<< HEAD
     "name": "All-Terrain Commercial Agricultural Radial Rear Tire",
     "sku": "SKU-AU-01",
     "slug": "all-terrain-radial-rear-tire-au-01",
@@ -312,6 +432,8 @@
     ]
   },
   {
+=======
+>>>>>>> origin/master
     "name": "Reinforced Heavy Duty Alloy Wheel Rim 16-Inch",
     "sku": "SKU-AU-03",
     "slug": "reinforced-heavy-duty-alloy-wheel-rim-au-03",
@@ -693,6 +815,7 @@
     ]
   },
   {
+<<<<<<< HEAD
     "name": "Heavy Duty Ceramic Clutch Plate & Pressure Plate Kit",
     "sku": "SKU-AU-15",
     "slug": "ceramic-clutch-plate-pressure-plate-kit-au-15",
@@ -725,6 +848,8 @@
     ]
   },
   {
+=======
+>>>>>>> origin/master
     "name": "Hydraulic Heavy-Duty 20-Ton Bottle Jack with Case",
     "sku": "SKU-AU-16",
     "slug": "hydraulic-heavy-duty-20-ton-bottle-jack-au-16",
@@ -757,6 +882,41 @@
     ]
   },
   {
+<<<<<<< HEAD
+=======
+    "name": "Heavy Duty Ceramic Clutch Plate & Pressure Plate Kit",
+    "sku": "SKU-AU-15",
+    "slug": "ceramic-clutch-plate-pressure-plate-kit-au-15",
+    "categoryName": "Automotive & Spare Parts",
+    "subcategory": "Engine & Drivetrain",
+    "brand": "MRF",
+    "description": "Dual-clutch 310mm ceramic paddle friction disc kit engineered for high-torque commercial tractors, tipper trucks, and heavy haulers.",
+    "price": 8900,
+    "mrp": 11200,
+    "discount": 21,
+    "stock": 20,
+    "rating": 4.9,
+    "reviewCount": 33,
+    "image": "https://images.unsplash.com/photo-1517524008697-84bbe3c3fd98?auto=format&fit=crop&w=500&q=80",
+    "images": [
+      "https://images.unsplash.com/photo-1517524008697-84bbe3c3fd98?auto=format&fit=crop&w=500&q=80",
+      "/images/prod-cultivator.png"
+    ],
+    "specs": {
+      "Disc Diameter": "310 mm",
+      "Spline Count": "14 Splines",
+      "Friction Material": "Sintered Ceramic-Metallic Buttons",
+      "Pressure Plate Type": "Diaphragm Spring High-Clamp"
+    },
+    "highlights": [
+      "Eliminates Clutch Slippage Under 5-Ton Loads",
+      "Withstands 600°C High-Thermal Friction Heat",
+      "Damped Hub Springs Reduce Transmission Jerks",
+      "Includes Release Bearing and Alignment Tool"
+    ]
+  },
+  {
+>>>>>>> origin/master
     "name": "Heavy Duty HDPE Drip Lateral Tubing 16mm (500m Roll)",
     "sku": "SKU-AG-11",
     "slug": "hdpe-drip-lateral-tubing-16mm-ag-11",
@@ -1169,6 +1329,7 @@
     ]
   },
   {
+<<<<<<< HEAD
     "name": "Surface Monoblock DC Solar Water Pump 2HP",
     "sku": "SKU-AG-15",
     "slug": "surface-monoblock-dc-solar-pump-2hp-ag-15",
@@ -1198,6 +1359,37 @@
       "Plug-and-Play Solar Array Direct Drive",
       "Self-Priming Chamber Design",
       "Low Maintenance Ceramic Shaft Seal"
+=======
+    "name": "Heavy Duty 45HP Utility Farm Tractor",
+    "sku": "SKU-AG-16",
+    "slug": "heavy-duty-farm-tractor-ag-16",
+    "categoryName": "Agriculture & Farming",
+    "subcategory": "Farm Machinery",
+    "brand": "GROVE AgriMaster",
+    "description": "Commercial 45HP dual-clutch utility tractor with advanced 8F+2R transmission, high ground clearance, and power steering for rigorous farming operations.",
+    "price": 585000,
+    "mrp": 620000,
+    "discount": 5,
+    "stock": 12,
+    "rating": 4.8,
+    "reviewCount": 42,
+    "image": "/images/prod-tractor.png",
+    "images": [
+      "/images/prod-tractor.png",
+      "/images/prod-cultivator.png"
+    ],
+    "specs": {
+      "Horsepower": "45 HP",
+      "Cylinders": "3 Cylinders",
+      "Lifting Capacity": "1500 kg",
+      "Fuel Tank": "50 Liters"
+    },
+    "highlights": [
+      "45 HP Fuel-Efficient Diesel Engine",
+      "Dual Clutch & Power Steering",
+      "1500 kg Hydraulic Lift Capacity",
+      "1 Year Comprehensive Warranty"
+>>>>>>> origin/master
     ]
   },
   {
@@ -1233,6 +1425,7 @@
     ]
   },
   {
+<<<<<<< HEAD
     "name": "Heavy Duty 45HP Utility Farm Tractor",
     "sku": "SKU-AG-16",
     "slug": "heavy-duty-farm-tractor-ag-16",
@@ -1262,6 +1455,37 @@
       "Dual Clutch & Power Steering",
       "1500 kg Hydraulic Lift Capacity",
       "1 Year Comprehensive Warranty"
+=======
+    "name": "Surface Monoblock DC Solar Water Pump 2HP",
+    "sku": "SKU-AG-15",
+    "slug": "surface-monoblock-dc-solar-pump-2hp-ag-15",
+    "categoryName": "Agriculture & Farming",
+    "subcategory": "Solar Pumps",
+    "brand": "SolarAgro",
+    "description": "Open-well surface monoblock centrifugal solar pump designed for canal lifting, pond drainage, and open irrigation channels.",
+    "price": 38000,
+    "mrp": 45000,
+    "discount": 15,
+    "stock": 22,
+    "rating": 4.7,
+    "reviewCount": 20,
+    "image": "https://images.unsplash.com/photo-1509391365360-2e959784a276?auto=format&fit=crop&w=500&q=80",
+    "images": [
+      "https://images.unsplash.com/photo-1509391365360-2e959784a276?auto=format&fit=crop&w=500&q=80",
+      "/images/prod-solar.png"
+    ],
+    "specs": {
+      "Power Output": "2 HP (1.5 kW)",
+      "Suction Lift": "7.5 Meters",
+      "Discharge Output": "24,000 L/Hour",
+      "Impeller": "Non-Corrosive Gunmetal Bronze"
+    },
+    "highlights": [
+      "Cast-Iron Heavy Duty Pump Volute",
+      "Plug-and-Play Solar Array Direct Drive",
+      "Self-Priming Chamber Design",
+      "Low Maintenance Ceramic Shaft Seal"
+>>>>>>> origin/master
     ]
   },
   {
@@ -1361,6 +1585,7 @@
     ]
   },
   {
+<<<<<<< HEAD
     "name": "Heavy-Duty Multi-Row Rotary Cultivator",
     "sku": "SKU-AG-17",
     "slug": "heavy-duty-rotary-cultivator-ag-17",
@@ -1392,6 +1617,8 @@
     ]
   },
   {
+=======
+>>>>>>> origin/master
     "name": "Self-Propelled 7HP Mini Power Weeder & Tiller",
     "sku": "SKU-AG-18",
     "slug": "self-propelled-power-weeder-tiller-ag-18",
@@ -1424,6 +1651,40 @@
     ]
   },
   {
+<<<<<<< HEAD
+=======
+    "name": "Heavy-Duty Multi-Row Rotary Cultivator",
+    "sku": "SKU-AG-17",
+    "slug": "heavy-duty-rotary-cultivator-ag-17",
+    "categoryName": "Agriculture & Farming",
+    "subcategory": "Farm Machinery",
+    "brand": "AgriPower",
+    "description": "Heavy-duty tractor mounted rotary tiller designed for fine seedbed preparation in dry and wet soils with heat-treated boronic steel blades.",
+    "price": 34500,
+    "mrp": 39000,
+    "discount": 11,
+    "stock": 18,
+    "rating": 4.6,
+    "reviewCount": 31,
+    "image": "/images/prod-cultivator.png",
+    "images": [
+      "/images/prod-cultivator.png"
+    ],
+    "specs": {
+      "Working Width": "5 Feet",
+      "Blades Count": "36 Blades",
+      "Tractor Power Required": "35-45 HP",
+      "Drive Type": "Gear Drive"
+    },
+    "highlights": [
+      "High-Tensile Boron Steel L-Type Blades",
+      "Heavy Duty Sealed Gearbox",
+      "Adjustable Depth Skids",
+      "Vibration Dampened Side Shields"
+    ]
+  },
+  {
+>>>>>>> origin/master
     "name": "Industrial Wireless Noise-Cancelling Field Headset",
     "sku": "SKU-EL-03",
     "slug": "industrial-wireless-noise-cancelling-headset-el-03",
@@ -1487,6 +1748,7 @@
     ]
   },
   {
+<<<<<<< HEAD
     "name": "GROVE Field Rugged Smartwatch with GPS & Sensor Hub",
     "sku": "SKU-EL-07",
     "slug": "grove-field-rugged-smartwatch-el-07",
@@ -1518,6 +1780,8 @@
     ]
   },
   {
+=======
+>>>>>>> origin/master
     "name": "Industrial Workstation Core i7 Rugged Laptop 32GB",
     "sku": "SKU-EL-05",
     "slug": "industrial-workstation-core-i7-laptop-el-05",
@@ -1550,6 +1814,40 @@
     ]
   },
   {
+<<<<<<< HEAD
+=======
+    "name": "GROVE Field Rugged Smartwatch with GPS & Sensor Hub",
+    "sku": "SKU-EL-07",
+    "slug": "grove-field-rugged-smartwatch-el-07",
+    "categoryName": "Electronics & Gadgets",
+    "subcategory": "Wearables & Smartwatches",
+    "brand": "GROVE Tech",
+    "description": "MIL-STD-810H rated outdoor smartwatch with dual-band GPS, barometer, optical pulse oximeter, and 14-day ultra-long battery life.",
+    "price": 4299,
+    "mrp": 5999,
+    "discount": 28,
+    "stock": 40,
+    "rating": 4.7,
+    "reviewCount": 88,
+    "image": "/images/prod-smartwatch.png",
+    "images": [
+      "/images/prod-smartwatch.png"
+    ],
+    "specs": {
+      "Display": "1.43 inch AMOLED Sapphire",
+      "Water Resistance": "5 ATM / 50M",
+      "Battery Life": "Up to 14 Days",
+      "Sensors": "Dual GPS, Altimeter, Barometer, SpO2"
+    },
+    "highlights": [
+      "Military-Grade Shock & Dust Resistance",
+      "Ultra-Bright 1000 nits Outdoor Display",
+      "Real-Time Field Telemetry Tracking",
+      "Bluetooth 5.3 Calling Enabled"
+    ]
+  },
+  {
+>>>>>>> origin/master
     "name": "Compact Fanless Rugged Mini PC Industrial Controller",
     "sku": "SKU-EL-06",
     "slug": "compact-fanless-rugged-mini-pc-el-06",
@@ -1709,6 +2007,41 @@
     ]
   },
   {
+<<<<<<< HEAD
+=======
+    "name": "Ergonomic IP68 Heavy-Duty Industrial Trackball Mouse",
+    "sku": "SKU-EL-12",
+    "slug": "ergonomic-industrial-trackball-mouse-el-12",
+    "categoryName": "Electronics & Gadgets",
+    "subcategory": "Keyboards & Accessories",
+    "brand": "GROVE Tech",
+    "description": "Fully sealed optical laser trackball mouse with water-washable stainless steel ball and chemical-resistant housing for control room consoles.",
+    "price": 2699,
+    "mrp": 3499,
+    "discount": 23,
+    "stock": 32,
+    "rating": 4.6,
+    "reviewCount": 18,
+    "image": "https://images.unsplash.com/photo-1615663245857-ac93bb7c39e7?auto=format&fit=crop&w=500&q=80",
+    "images": [
+      "https://images.unsplash.com/photo-1615663245857-ac93bb7c39e7?auto=format&fit=crop&w=500&q=80",
+      "/images/prod-keyboard.png"
+    ],
+    "specs": {
+      "Tracking Technology": "Optical Laser 1200 DPI",
+      "Ball Diameter": "38 mm Solid Steel",
+      "Ingress Rating": "IP68 Washable",
+      "Interface": "USB Plug & Play"
+    },
+    "highlights": [
+      "No Moving Mechanical Friction Parts",
+      "Functions Reliably with Thick Work Gloves",
+      "Resistant to Salt Spray & Oil Splashes",
+      "Zero Desktop Surface Drag Needed"
+    ]
+  },
+  {
+>>>>>>> origin/master
     "name": "High-Yield Hybrid Basmati Paddy Seeds (10kg)",
     "sku": "SKU-AG-01",
     "slug": "high-yield-hybrid-basmati-paddy-seeds-ag-01",

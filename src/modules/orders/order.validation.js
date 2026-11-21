@@ -30,7 +30,7 @@ export const checkoutSchema = z.object({
 
 export const updateFulfillmentStatusSchema = z.object({
   body: z.object({
-    orderStatus: z.enum(['Placed', 'Confirmed', 'Processing', 'Packed', 'Dispatched', 'Shipped', 'In Transit', 'Delivered', 'Cancelled']),
+    orderStatus: z.enum(['Placed', 'Confirmed', 'Processing', 'Packed', 'Dispatched', 'Shipped', 'In Transit', 'Out for Delivery', 'Delivered', 'Cancelled']),
     trackingNumber: z.string().optional(),
     fulfillmentPartner: z.string().optional(),
     estimatedDelivery: z.string().optional(),

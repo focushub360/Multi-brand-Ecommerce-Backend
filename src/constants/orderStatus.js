@@ -4,6 +4,7 @@ export const ORDER_STATUS = Object.freeze({
   PROCESSING: 'Processing',
   PACKED: 'Packed',
   SHIPPED: 'Shipped',
+  OUT_FOR_DELIVERY: 'Out for Delivery',
   DELIVERED: 'Delivered',
   CANCELLED: 'Cancelled'
 });

@@ -3,10 +3,12 @@ import { verifyAccessToken } from '../utils/generateTokens.js';
 import { User } from '../modules/users/user.model.js';
 import { Dealer } from '../modules/dealers/dealer.model.js';
 import { ROLES } from '../constants/roles.js';
+import { DEALER_STATUS } from '../constants/dealerStatus.js';
 
 /**
  * Authentication Middleware
- * Validates JWT access token, checks user active status, and populates req.user (and req.dealer if applicable).
+ * Validates JWT access token, checks active status, and populates req.user and req.dealer.
+ * Dealers authenticate directly against Dealer collection; customers/admins against User collection.
  */
 export const authenticate = async (req, _res, next) => {
   try {
@@ -36,7 +38,39 @@ export const authenticate = async (req, _res, next) => {
       return next(ApiError.unauthorized('Invalid authentication token.'));
     }
 
-    // 4. Fetch User from DB
+    // 4. Role-based Identity Retrieval
+    if (decoded.role === ROLES.DEALER) {
+      const dealer = await Dealer.findById(decoded.id);
+      if (!dealer) {
+        return next(ApiError.unauthorized('Dealer account no longer exists.'));
+      }
+
+      if (dealer.status === DEALER_STATUS.SUSPENDED || dealer.status === DEALER_STATUS.REJECTED) {
+        return next(ApiError.forbidden(`Your dealership account is currently ${dealer.status.toLowerCase()}. Please contact GROVE administration.`));
+      }
+
+      req.user = {
+        id: dealer._id.toString(),
+        name: dealer.ownerName,
+        email: dealer.officialEmail,
+        role: ROLES.DEALER,
+        mustChangePassword: dealer.mustChangePassword
+      };
+
+      req.dealer = {
+        id: dealer._id.toString(),
+        dealerCode: dealer.dealerCode,
+        businessName: dealer.businessName,
+        status: dealer.status,
+        primaryCategory: dealer.primaryCategory?.toString() || '',
+        primaryCategoryName: dealer.primaryCategoryName,
+        payoutHold: dealer.payoutHold
+      };
+
+      return next();
+    }
+
+    // Non-dealer accounts (Customers, Admins)
     const user = await User.findById(decoded.id).select('+password');
     if (!user) {
       return next(ApiError.unauthorized('User account no longer exists.'));
@@ -53,23 +87,6 @@ export const authenticate = async (req, _res, next) => {
       role: user.role,
       mustChangePassword: user.mustChangePassword
     };
-
-    // 5. If role is DEALER, populate req.dealer
-    if (user.role === ROLES.DEALER) {
-      const dealer = await Dealer.findOne({ user: user._id });
-      if (!dealer) {
-        return next(ApiError.forbidden('Dealer profile not found for this account.'));
-      }
-      req.dealer = {
-        id: dealer._id.toString(),
-        dealerCode: dealer.dealerCode,
-        businessName: dealer.businessName,
-        status: dealer.status,
-        primaryCategory: dealer.primaryCategory.toString(),
-        primaryCategoryName: dealer.primaryCategoryName,
-        payoutHold: dealer.payoutHold
-      };
-    }
 
     next();
   } catch (err) {
