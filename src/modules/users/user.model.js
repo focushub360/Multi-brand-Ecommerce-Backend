@@ -36,6 +36,17 @@ const userSchema = new Schema(
       trim: true,
       default: ''
     },
+    buyerType: {
+  type: String,
+  enum: [
+    'INDIVIDUAL_FARMER',
+    'FPO',
+    'COMMERCIAL_AGRITECH'
+  ],
+  default: 'INDIVIDUAL_FARMER',
+  index: true
+},
+  
     avatar: {
       type: String,
       default: ''

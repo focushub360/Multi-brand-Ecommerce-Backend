@@ -15,8 +15,11 @@ router.get('/', authenticate, (req, res, next) => {
   if (req.user?.role === ROLES.SUPER_ADMIN) {
     return inventoryController.getGlobalInventory(req, res, next);
   }
-  return inventoryController.getMyInventory(req, res, next);
-});
+  if (req.user?.role !== ROLES.DEALER) {
+    return res.status(403).json({ success: false, message: 'Dealer or Super Admin access required.' });
+  }
+  return requireApprovedDealer(req, res, next);
+}, inventoryController.getMyInventory);
 
 /**
  * Dealer Inventory Routes
@@ -25,7 +28,15 @@ router.get(
   '/my-inventory',
   authenticate,
   authorize(ROLES.DEALER),
+  requireApprovedDealer,
   inventoryController.getMyInventory
+);
+
+router.get(
+  '/admin/transactions',
+  authenticate,
+  authorize(ROLES.SUPER_ADMIN),
+  inventoryController.getGlobalTransactions
 );
 
 router.patch(
@@ -52,6 +63,14 @@ router.get(
   authenticate,
   authorize(ROLES.SUPER_ADMIN),
   inventoryController.getGlobalInventory
+);
+
+router.patch(
+  '/admin/:productId/stock',
+  authenticate,
+  authorize(ROLES.SUPER_ADMIN),
+  validate(adjustStockSchema),
+  inventoryController.adjustGlobalStock
 );
 
 export default router;

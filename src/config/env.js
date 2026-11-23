@@ -7,15 +7,39 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 // Load .env file from backend root or current working directory
-dotenv.config({ path: path.resolve(__dirname, '../../.env') });
-dotenv.config();
+const envPath = path.resolve(__dirname, '../../.env');
+
+const result = dotenv.config({ path: envPath });
+
+if (result.error) {
+  console.error('Failed to load backend .env:', result.error.message);
+}
 
 const envSchema = z.object({
   PORT: z.string().default('5000').transform((val) => parseInt(val, 10)),
   NODE_ENV: z.enum(['development', 'production', 'test']).default('development'),
   CLIENT_URL: z.string().default('http://localhost:5173'),
 
-  MONGODB_URI: z.string().default('mongodb://127.0.0.1:27017/grove_ecommerce'),
+  
+MONGODB_URI: z.string()
+  .min(1, 'MONGODB_URI is required')
+  .refine(
+    (uri) => {
+      try {
+        const parsed = new URL(uri);
+
+        if (parsed.protocol === 'mongodb+srv:') {
+          return !parsed.port;
+        }
+
+        return parsed.protocol === 'mongodb:';
+      } catch {
+        return false;
+      }
+    },
+    'Invalid MongoDB URI or port configuration'
+  ),
+
 
   JWT_ACCESS_SECRET: z.string().min(16, 'JWT_ACCESS_SECRET must be at least 16 characters long'),
   JWT_REFRESH_SECRET: z.string().min(16, 'JWT_REFRESH_SECRET must be at least 16 characters long'),

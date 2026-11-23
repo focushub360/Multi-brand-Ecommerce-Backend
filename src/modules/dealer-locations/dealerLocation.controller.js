@@ -24,17 +24,20 @@ export const getAllLocations = asyncHandler(async (req, res) => {
 });
 
 export const createLocation = asyncHandler(async (req, res) => {
-  const location = await DealerLocationService.createLocation(req.body);
+  const actor = { ...req.user, ipAddress: req.ip, userAgent: req.get('user-agent') };
+  const location = await DealerLocationService.createLocation(req.body, actor);
   return res.status(201).json(ApiResponse.created(location, 'Hub location registered successfully'));
 });
 
 export const updateLocation = asyncHandler(async (req, res) => {
-  const location = await DealerLocationService.updateLocation(req.params.id, req.body);
+  const actor = { ...req.user, ipAddress: req.ip, userAgent: req.get('user-agent') };
+  const location = await DealerLocationService.updateLocation(req.params.id, req.body, actor);
   return res.status(200).json(ApiResponse.success(location, 'Hub location updated successfully'));
 });
 
 export const deleteLocation = asyncHandler(async (req, res) => {
-  const result = await DealerLocationService.deleteLocation(req.params.id);
+  const actor = { ...req.user, ipAddress: req.ip, userAgent: req.get('user-agent') };
+  const result = await DealerLocationService.deleteLocation(req.params.id, actor);
   return res.status(200).json(ApiResponse.success(null, result.message));
 });
 

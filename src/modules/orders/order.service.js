@@ -319,7 +319,7 @@ export class OrderService {
     const order = await Order.findOne(query);
     if (!order) throw ApiError.notFound('Order not found.');
 
-    if (order.orderStatus === 'Shipped' || order.orderStatus === 'Delivered') {
+    if (order.orderStatus === 'Shipped' || order.orderStatus === 'Out for Delivery' || order.orderStatus === 'Delivered') {
       throw ApiError.badRequest('Orders that have already been dispatched or delivered cannot be cancelled online.');
     }
 
@@ -378,15 +378,35 @@ export class OrderService {
   }
 
   /**
+   * Helper to safely build dealer ownership query preventing Mongoose CastError on string dealer codes
+   */
+  static _buildDealerFilter(dealerIdent) {
+    const dealerId = typeof dealerIdent === 'object' && dealerIdent !== null ? dealerIdent.dealerId : dealerIdent;
+    const dealerCode = typeof dealerIdent === 'object' && dealerIdent !== null ? dealerIdent.dealerCode : undefined;
+
+    const conditions = [];
+    if (dealerId && String(dealerId).match(/^[0-9a-fA-F]{24}$/)) {
+      conditions.push({ dealer: dealerId });
+    }
+    if (dealerCode) {
+      conditions.push({ dealerCode });
+    } else if (dealerId && !String(dealerId).match(/^[0-9a-fA-F]{24}$/)) {
+      conditions.push({ dealerCode: String(dealerId) });
+    }
+
+    if (conditions.length === 0) {
+      throw ApiError.unauthorized('Invalid dealer credentials provided.');
+    }
+
+    return conditions.length === 1 ? conditions[0] : { $or: conditions };
+  }
+
+  /**
    * Get Dealer Suborders
    */
-  static async getDealerSubOrders(dealerId, { status = '', page = 1, limit = 20 }) {
-    const query = {
-      $or: [
-        { dealer: dealerId },
-        { dealerCode: typeof dealerId === 'string' ? dealerId : undefined }
-      ].filter((c) => Object.values(c)[0] !== undefined)
-    };
+  static async getDealerSubOrders(dealerIdent, { status = '', page = 1, limit = 20 }) {
+    const dealerFilter = OrderService._buildDealerFilter(dealerIdent);
+    const query = { ...dealerFilter };
     if (status) query.orderStatus = status;
 
     const skip = (page - 1) * limit;
@@ -416,7 +436,8 @@ export class OrderService {
   /**
    * Get Dealer Suborder Details
    */
-  static async getDealerSubOrderById(dealerId, subOrderId) {
+  static async getDealerSubOrderById(dealerIdent, subOrderId) {
+    const dealerFilter = OrderService._buildDealerFilter(dealerIdent);
     const cleanId = String(subOrderId || '').replace(/^#/, '').trim();
     const isHex = String(cleanId).match(/^[0-9a-fA-F]{24}$/);
 
@@ -431,27 +452,15 @@ export class OrderService {
 
     const query = {
       $and: [
-        {
-          $or: [
-            { dealer: dealerId },
-            { dealerCode: typeof dealerId === 'string' ? dealerId : undefined }
-          ].filter((c) => Object.values(c)[0] !== undefined)
-        },
+        dealerFilter,
         { $or: conditions }
       ]
     };
 
-    let order = await DealerOrder.findOne(query)
+    const order = await DealerOrder.findOne(query)
       .populate('items.product', 'name sku category categoryName subcategory images primaryImage mrp price')
       .populate('parentOrder')
       .lean();
-
-    if (!order) {
-      order = await DealerOrder.findOne({ $or: conditions })
-        .populate('items.product', 'name sku category categoryName subcategory images primaryImage mrp price')
-        .populate('parentOrder')
-        .lean();
-    }
 
     if (!order) throw ApiError.notFound('Suborder not found for your dealership.');
     return order;
@@ -460,7 +469,8 @@ export class OrderService {
   /**
    * Update Dealer Fulfillment Status
    */
-  static async updateDealerFulfillmentStatus(dealerId, subOrderId, data) {
+  static async updateDealerFulfillmentStatus(dealerIdent, subOrderId, data) {
+    const dealerFilter = OrderService._buildDealerFilter(dealerIdent);
     const cleanId = String(subOrderId || '').replace(/^#/, '').trim();
     const isHex = String(cleanId).match(/^[0-9a-fA-F]{24}$/);
     const conditions = [];
@@ -469,30 +479,18 @@ export class OrderService {
 
     const query = {
       $and: [
-        {
-          $or: [
-            { dealer: dealerId },
-            { dealerCode: typeof dealerId === 'string' ? dealerId : undefined }
-          ].filter((c) => Object.values(c)[0] !== undefined)
-        },
+        dealerFilter,
         { $or: conditions }
       ]
     };
 
-    let subOrder = await DealerOrder.findOne(query);
-    if (!subOrder) {
-      subOrder = await DealerOrder.findOne({ $or: conditions });
-    }
-    if (!subOrder) throw ApiError.notFound('Suborder not found.');
+    const subOrder = await DealerOrder.findOne(query);
+    if (!subOrder) throw ApiError.notFound('Suborder not found for your dealership.');
 
     const oldStatus = subOrder.orderStatus;
     const newStatus = data.orderStatus;
 
     subOrder.orderStatus = newStatus;
-    if (newStatus === 'Delivered') {
-      subOrder.deliveredAt = new Date();
-      subOrder.payoutStatus = 'Settled';
-    }
     if (data.trackingNumber) subOrder.trackingNumber = data.trackingNumber;
     if (data.fulfillmentPartner) subOrder.fulfillmentPartner = data.fulfillmentPartner;
     if (data.estimatedDelivery) subOrder.estimatedDelivery = data.estimatedDelivery;
@@ -510,50 +508,23 @@ export class OrderService {
     const allSiblings = await DealerOrder.find({ parentOrder: subOrder.parentOrder });
     const allDelivered = allSiblings.every((s) => s.orderStatus === 'Delivered');
     const anyOutForDelivery = allSiblings.some((s) => s.orderStatus === 'Out for Delivery');
-    const anyShipped = allSiblings.some((s) => s.orderStatus === 'Shipped' || s.orderStatus === 'In Transit' || s.orderStatus === 'Dispatched');
-    const anyPacked = allSiblings.some((s) => s.orderStatus === 'Packed');
-    const anyProcessing = allSiblings.some((s) => s.orderStatus === 'Processing');
-    const allCancelled = allSiblings.every((s) => s.orderStatus === 'Cancelled');
-
-    let parentStatus = null;
-    let parentTitle = '';
-    let parentNote = '';
+    const anyShipped = allSiblings.some((s) => s.orderStatus === 'Shipped' || s.orderStatus === 'In Transit');
 
     if (allDelivered) {
-      parentStatus = 'Delivered';
-      parentTitle = 'Delivered';
-      parentNote = 'All items delivered successfully.';
+      await Order.findByIdAndUpdate(subOrder.parentOrder, {
+        orderStatus: 'Delivered',
+        $push: { timeline: { status: 'Delivered', title: 'Delivered', note: 'All items delivered successfully.', timestamp: new Date() } }
+      });
     } else if (anyOutForDelivery) {
-      parentStatus = 'Out for Delivery';
-      parentTitle = 'Out for Delivery';
-      parentNote = 'Consignment is out for delivery with local courier.';
+      await Order.findByIdAndUpdate(subOrder.parentOrder, {
+        orderStatus: 'Out for Delivery',
+        $push: { timeline: { status: 'Out for Delivery', title: 'Out for Delivery', note: 'Items are out for delivery to destination.', timestamp: new Date() } }
+      });
     } else if (anyShipped) {
-      parentStatus = 'Shipped';
-      parentTitle = 'Dispatched';
-      parentNote = 'Items in transit with logistics partners.';
-    } else if (anyPacked) {
-      parentStatus = 'Packed';
-      parentTitle = 'Order Packed';
-      parentNote = 'Items verified, packed, and labeled for courier pickup.';
-    } else if (anyProcessing) {
-      parentStatus = 'Processing';
-      parentTitle = 'Processing';
-      parentNote = 'Merchant is processing and preparing items.';
-    } else if (allCancelled) {
-      parentStatus = 'Cancelled';
-      parentTitle = 'Cancelled';
-      parentNote = 'Order cancelled by merchant/platform.';
-    }
-
-    if (parentStatus) {
-      const updatePayload = {
-        orderStatus: parentStatus,
-        $push: { timeline: { status: parentStatus, title: parentTitle, note: parentNote, timestamp: new Date() } }
-      };
-      if (parentStatus === 'Delivered') {
-        updatePayload.deliveredAt = new Date();
-      }
-      await Order.findByIdAndUpdate(subOrder.parentOrder, updatePayload);
+      await Order.findByIdAndUpdate(subOrder.parentOrder, {
+        orderStatus: 'Shipped',
+        $push: { timeline: { status: 'Shipped', title: 'Dispatched', note: 'Items in transit with logistics partners.', timestamp: new Date() } }
+      });
     }
 
     return subOrder;
@@ -562,21 +533,18 @@ export class OrderService {
   /**
    * Super Admin Global Order Inspection (Read-Only)
    */
-  static async getGlobalOrders({ status = '', search = '', page = 1, limit = 20 } = {}) {
+  static async getGlobalOrders({ status = '', search = '', page = 1, limit = 20 }) {
     const query = {};
     if (status) query.orderStatus = status;
-    if (search && search.trim()) {
-      const term = search.trim();
+    if (search) {
       query.$or = [
-        { orderNumber: { $regex: term, $options: 'i' } },
-        { 'customerSnapshot.name': { $regex: term, $options: 'i' } },
-        { 'customerSnapshot.email': { $regex: term, $options: 'i' } }
+        { orderNumber: { $regex: search, $options: 'i' } },
+        { 'customerSnapshot.name': { $regex: search, $options: 'i' } },
+        { 'customerSnapshot.email': { $regex: search, $options: 'i' } }
       ];
     }
 
-    const parsedPage = Math.max(1, parseInt(page, 10) || 1);
-    const parsedLimit = Math.max(1, Math.min(200, parseInt(limit, 10) || 20));
-    const skip = (parsedPage - 1) * parsedLimit;
+    const skip = (page - 1) * limit;
 
     const [orders, total] = await Promise.all([
       Order.find(query)
@@ -584,7 +552,7 @@ export class OrderService {
         .populate('dealers', 'businessName dealerCode')
         .sort({ createdAt: -1 })
         .skip(skip)
-        .limit(parsedLimit)
+        .limit(limit)
         .lean(),
       Order.countDocuments(query)
     ]);
@@ -592,19 +560,12 @@ export class OrderService {
     return {
       orders,
       pagination: {
-        page: parsedPage,
-        limit: parsedLimit,
+        page,
+        limit,
         total,
-        pages: Math.ceil(total / parsedLimit)
+        pages: Math.ceil(total / limit)
       }
     };
-  }
-
-  /**
-   * Alias for getGlobalOrders
-   */
-  static async getAdminOrders(params) {
-    return this.getGlobalOrders(params);
   }
 
   /**

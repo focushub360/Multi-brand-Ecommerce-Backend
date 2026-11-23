@@ -7,7 +7,8 @@ import { ROLES } from '../../constants/roles.js';
 import {
   createProductSchema,
   updateProductSchema,
-  queryProductSchema
+  queryProductSchema,
+  adminProductIdParamsSchema
 } from './product.validation.js';
 
 const router = Router();
@@ -60,10 +61,18 @@ router.delete(
 /**
  * Super Admin Moderation Endpoints
  */
+router.get(
+  '/admin',
+  authenticate,
+  authorize(ROLES.SUPER_ADMIN),
+  productController.getAdminProducts
+);
+
 router.put(
   '/admin/:id',
   authenticate,
   authorize(ROLES.SUPER_ADMIN),
+  validate(adminProductIdParamsSchema),
   validate(updateProductSchema),
   productController.adminUpdateProduct
 );
@@ -72,6 +81,7 @@ router.delete(
   '/admin/:id',
   authenticate,
   authorize(ROLES.SUPER_ADMIN),
+  validate(adminProductIdParamsSchema),
   productController.adminDeleteProduct
 );
 

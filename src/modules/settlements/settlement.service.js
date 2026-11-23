@@ -1,6 +1,4 @@
 import { Settlement } from './settlement.model.js';
-import { DealerOrder } from '../orders/dealerOrder.model.js';
-import { ApiError } from '../../utils/ApiError.js';
 
 export class SettlementService {
   /**
@@ -36,31 +34,5 @@ export class SettlementService {
     return await Settlement.find({ dealer: dealerId }).sort({ createdAt: -1 }).lean();
   }
 
-  /**
-   * Super Admin Release Escrow Settlement to Dealer
-   */
-  static async releaseSettlement(settlementId, adminUser) {
-    const settlement = await Settlement.findById(settlementId);
-    if (!settlement) throw ApiError.notFound('Settlement record not found.');
-
-    if (settlement.status === 'SETTLED') {
-      throw ApiError.badRequest('Settlement payout has already been processed.');
-    }
-
-    settlement.status = 'SETTLED';
-    settlement.bankRef = `BANK_REF_${Date.now()}`;
-    settlement.settledAt = new Date();
-    await settlement.save();
-
-    // Mark associated suborders as Settled
-    if (settlement.dealerOrders?.length) {
-      await DealerOrder.updateMany(
-        { _id: { $in: settlement.dealerOrders } },
-        { payoutStatus: 'Settled' }
-      );
-    }
-
-    return settlement;
-  }
 }
 

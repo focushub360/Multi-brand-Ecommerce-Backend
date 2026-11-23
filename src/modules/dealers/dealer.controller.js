@@ -16,25 +16,7 @@ export const getProfile = asyncHandler(async (req, res) => {
 export const updateStoreSettings = asyncHandler(async (req, res) => {
   const dealerId = req.dealer.id;
   const result = await DealerService.updateStoreSettings(dealerId, req.body);
-  return res.status(200).json(ApiResponse.success(result.storeSettings, result.message));
-});
-
-export const verifyBankDetails = asyncHandler(async (req, res) => {
-  const dealerId = req.dealer.id;
-  const result = await DealerService.verifyBankDetails(dealerId, req.body);
-  return res.status(200).json(ApiResponse.success(result, result.message));
-});
-
-export const submitOnboardingBankDetails = asyncHandler(async (req, res) => {
-  const dealerId = req.dealer.id;
-  const result = await DealerService.submitOnboardingBankDetails(dealerId, req.body);
-  return res.status(200).json(ApiResponse.success(result, result.message));
-});
-
-export const verifyKyc = asyncHandler(async (req, res) => {
-  const dealerId = req.params.id;
-  const result = await DealerService.verifyKyc(dealerId, req.user, req.body);
-  return res.status(200).json(ApiResponse.success(result.dealer, result.message));
+  return res.status(200).json(ApiResponse.success({ ...result.storeSettings, dealer: result.dealer }, result.message));
 });
 
 export const getAllDealers = asyncHandler(async (req, res) => {
@@ -45,6 +27,13 @@ export const getAllDealers = asyncHandler(async (req, res) => {
   );
   return res.status(200).json(
     ApiResponse.success(result.dealers, 'Dealers retrieved successfully', 200, result.pagination)
+  );
+});
+
+export const getPublicDealers = asyncHandler(async (req, res) => {
+  const result = await DealerService.getPublicDealers(req.query);
+  return res.status(200).json(
+    ApiResponse.success(result.dealers, 'Public dealer directory retrieved successfully', 200, result.pagination)
   );
 });
 
@@ -66,6 +55,30 @@ export const rejectDealer = asyncHandler(async (req, res) => {
 export const toggleDealerStatus = asyncHandler(async (req, res) => {
   const { status, reason } = req.body;
   const result = await DealerService.toggleStatus(req.params.id, req.user, status, reason);
+  return res.status(200).json(ApiResponse.success(result.dealer, result.message));
+});
+
+export const updateAdminDealerDetails = asyncHandler(async (req, res) => {
+  const actor = { ...req.user, ipAddress: req.ip, userAgent: req.get('user-agent') };
+  const dealer = await DealerService.updateAdminDealerDetails(req.params.id, req.body, actor);
+  return res.status(200).json(ApiResponse.success(dealer, 'Dealer information updated successfully.'));
+});
+
+export const resetDealerCredentials = asyncHandler(async (req, res) => {
+  const actor = { ...req.user, ipAddress: req.ip, userAgent: req.get('user-agent') };
+  const result = await DealerService.resetDealerCredentials(req.params.id, actor);
+  return res.status(200).json(ApiResponse.success(result, result.message));
+});
+
+export const submitOnboardingBankDetails = asyncHandler(async (req, res) => {
+  const dealerId = req.user?.id || req.dealer?.id;
+  const result = await DealerService.submitOnboardingBankDetails(dealerId, req.body);
+  return res.status(200).json(ApiResponse.success(result, result.message));
+});
+
+export const verifyDealerKyc = asyncHandler(async (req, res) => {
+  const actor = { ...req.user, ipAddress: req.ip, userAgent: req.get('user-agent') };
+  const result = await DealerService.verifyKyc(req.params.id, actor, req.body || {});
   return res.status(200).json(ApiResponse.success(result.dealer, result.message));
 });
 

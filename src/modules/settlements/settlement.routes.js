@@ -12,7 +12,7 @@ router.use(authenticate);
  * Dealer Payout History
  */
 router.get(
-  '/my-settlements',
+  '/my-settlements', 
   authorize(ROLES.DEALER),
   settlementController.getMySettlements
 );
@@ -24,12 +24,6 @@ router.get(
   '/',
   authorize(ROLES.SUPER_ADMIN),
   settlementController.getSettlements
-);
-
-router.post(
-  '/:id/release',
-  authorize(ROLES.SUPER_ADMIN),
-  settlementController.releaseSettlement
 );
 
 export default router;

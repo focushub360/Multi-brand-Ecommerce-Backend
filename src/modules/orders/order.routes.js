@@ -21,12 +21,12 @@ router.get('/', (req, res, next) => {
   return orderController.getMyOrders(req, res, next);
 });
 
-router.post('/', validate(checkoutSchema), orderController.checkout);
+router.post('/', authorize(ROLES.USER), validate(checkoutSchema), orderController.checkout);
 
 /**
  * Customer Shopping & Order Lifecycle Endpoints
  */
-router.post('/checkout', validate(checkoutSchema), orderController.checkout);
+router.post('/checkout', authorize(ROLES.USER), validate(checkoutSchema), orderController.checkout);
 router.get('/my-orders', orderController.getMyOrders);
 router.get('/my-orders/:orderId', orderController.getMyOrderById);
 router.post('/my-orders/:orderId/cancel', orderController.cancelMyOrder);

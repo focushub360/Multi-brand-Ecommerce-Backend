@@ -3,11 +3,20 @@ import { env } from './env.js';
 
 let isConnected = false;
 
+
 export const connectDB = async () => {
   if (isConnected) {
     console.log('MongoDB already connected.');
     return;
   }
+  const parsed = new URL(env.MONGODB_URI);
+
+console.log('MongoDB URI Check:', {
+  protocol: parsed.protocol,
+  hostname: parsed.hostname,
+  port: parsed.port || 'Default',
+  database: parsed.pathname
+});
 
   try {
     const conn = await mongoose.connect(env.MONGODB_URI, {

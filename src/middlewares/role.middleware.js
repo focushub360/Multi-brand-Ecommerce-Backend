@@ -31,7 +31,7 @@ export const requireApprovedDealer = (req, _res, next) => {
     return next(ApiError.forbidden('Dealer identity required.'));
   }
 
-  if (req.dealer.status !== 'APPROVED' && req.dealer.status !== 'PENDING_KYC') {
+  if (req.dealer.status !== 'APPROVED') {
     return next(
       ApiError.forbidden(
         `Dealer account status is currently '${req.dealer.status}'. Operations are restricted until KYC approval.`

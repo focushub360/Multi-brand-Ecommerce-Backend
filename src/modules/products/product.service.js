@@ -7,12 +7,32 @@ import { Dealer } from '../dealers/dealer.model.js';
 import { Inventory } from '../inventory/inventory.model.js';
 import { InventoryTransaction } from '../inventory/inventoryTransaction.model.js';
 import { ApiError } from '../../utils/ApiError.js';
+import { AdminService } from '../admin/service/admin.service.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 const SEED_PRODUCTS_FILE = path.resolve(__dirname, '../../../data/seed-products.json');
 
 export class ProductService {
+  static async getAdminProducts({ q = '', page = 1, limit = 50 } = {}) {
+    page = Math.max(1, Number(page) || 1);
+    limit = Math.min(100, Math.max(1, Number(limit) || 50));
+    const query = {};
+    if (q.trim()) {
+      const escaped = q.trim().replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+      query.$or = [
+        { name: { $regex: escaped, $options: 'i' } },
+        { sku: { $regex: escaped, $options: 'i' } },
+        { dealerName: { $regex: escaped, $options: 'i' } }
+      ];
+    }
+    const [products, total] = await Promise.all([
+      Product.find(query).populate('dealer', 'businessName dealerCode').populate('category', 'name slug').sort({ createdAt: -1 }).skip((page - 1) * limit).limit(limit).lean(),
+      Product.countDocuments(query)
+    ]);
+    return { products, pagination: { page, limit, total, pages: Math.ceil(total / limit) } };
+  }
+
   /**
    * Helper: Synchronize active products from MongoDB with seed-products.json
    */
@@ -175,6 +195,8 @@ export class ProductService {
     // Update safe fields
     if (updateData.name) product.name = updateData.name.trim();
     if (updateData.description) product.description = updateData.description.trim();
+    if (updateData.category) product.categoryName = updateData.category;
+    if (updateData.subcategory) product.subcategory = updateData.subcategory.trim();
     if (updateData.price !== undefined) {
       product.price = Number(updateData.price);
       if (product.mrp > product.price) {
@@ -219,6 +241,7 @@ export class ProductService {
     if (updateData.image) product.image = updateData.image;
     if (updateData.images) product.images = updateData.images;
     if (updateData.specs) product.specs = updateData.specs;
+    if (updateData.specifications) product.specs = updateData.specifications;
     if (updateData.highlights) product.highlights = updateData.highlights;
     if (updateData.warranty) product.warranty = updateData.warranty;
 
@@ -242,6 +265,17 @@ export class ProductService {
 
     product.status = 'Archived';
     await product.save();
+
+    // Also archive associated inventory record
+    try {
+      await Inventory.findOneAndUpdate(
+        { product: product._id },
+        { status: 'Archived', currentStock: 0 }
+      );
+    } catch (e) {
+      console.warn('Inventory archive warning on product delete:', e.message);
+    }
+
     ProductService.syncProductsJson().catch(() => {});
 
     return { message: `Product '${product.name}' archived successfully.` };
@@ -252,7 +286,11 @@ export class ProductService {
    */
   static async getDealerProducts(dealerId, { page = 1, limit = 20, status = '' }) {
     const filter = { dealer: dealerId };
-    if (status) filter.status = status;
+    if (status) {
+      filter.status = status;
+    } else {
+      filter.status = { $ne: 'Archived' };
+    }
 
     const skip = (page - 1) * limit;
     const [products, total] = await Promise.all([
@@ -383,22 +421,53 @@ export class ProductService {
   /**
    * Admin Update Product
    */
-  static async adminUpdateProduct(productId, updateData) {
-    const product = await Product.findByIdAndUpdate(productId, updateData, { new: true });
+  static async adminUpdateProduct(productId, updateData, adminUser) {
+    const before = await Product.findById(productId).lean();
+    if (!before) throw ApiError.notFound('Product not found.');
+    if (updateData.sku && updateData.sku !== before.sku) {
+      const duplicateSku = await Product.exists({ sku: updateData.sku, _id: { $ne: before._id } });
+      if (duplicateSku) throw ApiError.conflict('That SKU is already assigned to another product.');
+    }
+    const effectivePrice = updateData.price ?? before.price;
+    const effectiveMrp = updateData.mrp ?? before.mrp;
+    if (effectiveMrp < effectivePrice) throw ApiError.badRequest('MRP cannot be lower than the selling price.');
+    if (updateData.category) {
+      const categoryQuery = /^[0-9a-fA-F]{24}$/.test(updateData.category)
+        ? { _id: updateData.category }
+        : { name: updateData.category };
+      const category = await Category.findOne(categoryQuery);
+      if (!category) throw ApiError.badRequest('Selected category does not exist.');
+      updateData.category = category._id;
+      updateData.categoryName = category.name;
+    }
+    const product = await Product.findByIdAndUpdate(productId, updateData, { new: true, runValidators: true });
     if (!product) {
       throw ApiError.notFound('Product not found.');
     }
+    await AdminService.recordAuditLog({
+      action: 'PRODUCT_UPDATED', actor: adminUser.id, actorRole: adminUser.role,
+      targetEntity: 'Product', targetId: productId,
+      details: `Product updated. Before: ${JSON.stringify(before)}; after: ${JSON.stringify(product.toObject())}`,
+      ipAddress: adminUser.ipAddress || '', userAgent: adminUser.userAgent || ''
+    });
     return product;
   }
 
   /**
    * Admin Delete Product
    */
-  static async adminDeleteProduct(productId) {
-    const product = await Product.findByIdAndDelete(productId);
+  static async adminDeleteProduct(productId, adminUser) {
+    const product = await Product.findById(productId);
     if (!product) {
       throw ApiError.notFound('Product not found.');
     }
+    await AdminService.recordAuditLog({
+      action: 'PRODUCT_DELETED', actor: adminUser.id, actorRole: adminUser.role,
+      targetEntity: 'Product', targetId: productId,
+      details: `Product '${product.name}' deleted by admin.`,
+      ipAddress: adminUser.ipAddress || '', userAgent: adminUser.userAgent || ''
+    });
+    await product.deleteOne();
     await Inventory.findOneAndDelete({ product: productId });
     return { message: `Product '${product.name}' permanently deleted by admin.` };
   }

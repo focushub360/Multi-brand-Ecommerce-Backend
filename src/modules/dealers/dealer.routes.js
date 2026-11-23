@@ -4,7 +4,7 @@ import { validate } from '../../middlewares/validate.middleware.js';
 import { authenticate } from '../../middlewares/auth.middleware.js';
 import { authorize, requireApprovedDealer } from '../../middlewares/role.middleware.js';
 import { ROLES } from '../../constants/roles.js';
-import { dealerApplicationSchema, dealerStoreSettingsSchema, bankVerificationSchema } from './dealer.validation.js';
+import { dealerApplicationSchema, dealerStoreSettingsSchema, dealerBankDetailsSchema } from './dealer.validation.js';
 
 const router = Router();
 
@@ -19,6 +19,18 @@ router.post(
 );
 
 /**
+ * Submit Dealer Settlement Bank Details During Onboarding
+ * PUT /api/v1/dealers/onboarding/bank-details
+ */
+router.put(
+  '/onboarding/bank-details',
+  authenticate,
+  authorize(ROLES.DEALER),
+  validate(dealerBankDetailsSchema),
+  dealerController.submitOnboardingBankDetails
+);
+
+/**
  * Get Authenticated Dealer Profile
  * GET /api/v1/dealers/profile
  */
@@ -30,7 +42,7 @@ router.get(
 );
 
 /**
- * Update Dealer Store Settings
+ * Update Dealer Store Settings (Description & Hours only)
  * PUT /api/v1/dealers/store-settings
  */
 router.put(
@@ -43,46 +55,9 @@ router.put(
 );
 
 /**
- * Submit Dealer Settlement Bank Details During Onboarding Wizard
- * PUT /api/v1/dealers/onboarding/bank-details
- */
-router.put(
-  '/onboarding/bank-details',
-  authenticate,
-  authorize(ROLES.DEALER),
-  validate(bankVerificationSchema),
-  dealerController.submitOnboardingBankDetails
-);
-
-/**
- * Super Admin Verifies Dealer KYC & Settlement Bank Account
- * PATCH /api/v1/dealers/:id/verify-kyc
- */
-router.patch(
-  '/:id/verify-kyc',
-  authenticate,
-  authorize(ROLES.SUPER_ADMIN),
-  dealerController.verifyKyc
-);
-
-/**
- * Verify & Lock Dealer Settlement Bank Details
- * PUT /api/v1/dealers/bank-details/verify
- */
-router.put(
-  '/bank-details/verify',
-  authenticate,
-  authorize(ROLES.DEALER),
-  requireApprovedDealer,
-  validate(bankVerificationSchema),
-  dealerController.verifyBankDetails
-);
-
-/**
  * Public dealer directory (approved dealers only; sensitive fields are excluded).
  */
-router.get('/', dealerController.getAllDealers);
-router.get('/:id', dealerController.getDealerById);
+router.get('/', dealerController.getPublicDealers);
 router.patch(
   '/:id/approve',
   authenticate,

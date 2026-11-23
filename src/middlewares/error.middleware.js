@@ -41,6 +41,13 @@ export const errorHandler = (err, req, res, _next) => {
   else if (err.name === 'TokenExpiredError') {
     error = new ApiError(401, 'Authentication token has expired. Please refresh your session.', [], 'TOKEN_EXPIRED');
   }
+  // Handle database connectivity failures without reporting them as generic server errors.
+  else if (
+    ['MongooseServerSelectionError', 'MongoServerSelectionError', 'MongoNetworkError'].includes(err.name) ||
+    (err.name === 'MongooseError' && /buffering timed out/i.test(err.message || ''))
+  ) {
+    error = new ApiError(503, 'Database is temporarily unavailable. Check the MongoDB connection and retry.', [], 'DATABASE_UNAVAILABLE');
+  }
   // Fallback to standard ApiError if not already an instance
   else if (!(error instanceof ApiError)) {
     const statusCode = error.statusCode || 500;

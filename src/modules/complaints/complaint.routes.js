@@ -27,7 +27,7 @@ router.get('/', (req, res, next) => {
 });
 
 /**
- * In-App Notifications
+ * In-App Notifications (MUST BE REGISTERED BEFORE /:ticketId)
  */
 router.get('/dealer/notifications', complaintController.getDealerNotifications);
 router.patch('/dealer/notifications/:id/read', complaintController.markDealerNotificationRead);
@@ -40,9 +40,9 @@ router.patch('/customer/notifications/:id/read', complaintController.markCustome
  */
 router.post('/', validate(createTicketSchema), complaintController.createTicket);
 router.get('/my-tickets', complaintController.getMyTickets);
-router.get('/:ticketId', complaintController.getTicketById);
-router.post('/:ticketId/messages', validate(replyTicketSchema), complaintController.replyToTicket);
 router.post('/:ticketId/reopen', validate(reopenTicketSchema), complaintController.reopenTicket);
+router.post('/:ticketId/messages', validate(replyTicketSchema), complaintController.replyToTicket);
+router.get('/:ticketId', complaintController.getTicketById);
 
 /**
  * Super Admin Ticket Governance Endpoints
@@ -58,6 +58,13 @@ router.patch(
   authorize(ROLES.SUPER_ADMIN),
   validate(updateTicketStatusSchema),
   complaintController.updateTicketStatus
+);
+
+router.post(
+  '/admin/:ticketId/replies',
+  authorize(ROLES.SUPER_ADMIN),
+  validate(adminReplySchema),
+  complaintController.addAdminReply
 );
 
 export default router;

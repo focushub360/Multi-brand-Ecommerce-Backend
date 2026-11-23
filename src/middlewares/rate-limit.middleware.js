@@ -3,7 +3,7 @@ import { ApiError } from '../utils/ApiError.js';
 
 export const globalLimiter = rateLimit({
   windowMs: 15 * 60 * 1000, // 15 minutes
-  max: process.env.NODE_ENV === 'production' ? 3000 : 10000, // Generous limit allowing SPA multi-tab navigation
+  max: 500, // Limit each IP to 500 requests per windowMs
   standardHeaders: true,
   legacyHeaders: false,
   handler: (_req, _res, next) => {
@@ -13,7 +13,7 @@ export const globalLimiter = rateLimit({
 
 export const authLimiter = rateLimit({
   windowMs: 15 * 60 * 1000, // 15 minutes
-  max: process.env.NODE_ENV === 'production' ? 30 : 100, // Prevent lockout during active testing
+  max: 15, // Limit each IP to 15 authentication attempts per windowMs
   standardHeaders: true,
   legacyHeaders: false,
   handler: (_req, _res, next) => {

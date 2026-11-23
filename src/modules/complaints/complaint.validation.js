@@ -1,7 +1,7 @@
 import { z } from 'zod';
 import { TICKET_CATEGORIES, TICKET_STATUSES } from './complaint.model.js';
 
-const attachmentSchema = z.object({
+export const attachmentSchema = z.object({
   name: z.string().min(1),
   type: z.string().min(1),
   size: z.number().optional().default(0),
@@ -14,6 +14,7 @@ export const createTicketSchema = z.object({
     category: z.enum(TICKET_CATEGORIES, {
       errorMap: () => ({ message: 'Please select a valid category from the list.' })
     }),
+    priority: z.enum(['Low', 'Medium', 'High', 'Urgent']).optional(),
     description: z.string().trim().min(3).optional(),
     message: z.string().trim().min(3).optional(),
     concernedDealer: z.string().optional(),
@@ -37,6 +38,7 @@ export const updateTicketStatusSchema = z.object({
     status: z.enum(TICKET_STATUSES, {
       errorMap: () => ({ message: 'Please select a valid ticket status.' })
     }),
+    priority: z.enum(['Low', 'Medium', 'High', 'Urgent']).optional(),
     note: z.string().trim().max(2000).optional(),
     reason: z.string().trim().max(1000).optional()
   }).strict()

@@ -9,7 +9,7 @@ import { hashPassword } from '../../utils/passwordHash.js';
 import { sendDealerApprovalEmail, sendDealerRejectionEmail } from '../../utils/sendEmail.js';
 import { NotificationService } from '../admin/service/notification.service.js';
 import { AdminNotification } from '../admin/models/adminNotification.model.js';
-import { AdminService } from '../admin/admin.service.js';
+import { AdminService } from '../admin/service/admin.service.js';
 
 export class DealerService {
   /**
@@ -24,10 +24,10 @@ export class DealerService {
       $or: [{ officialEmail: cleanEmail }, { gstin: cleanGstin }]
     });
     if (existingDealer) {
-      if (existingDealer.officialEmail === cleanEmail) {
-        throw ApiError.conflict('An account with this official email already exists on GROVE.');
+      if (existingDealer.officialEmail.toLowerCase() === cleanEmail) {
+        throw ApiError.conflict('Dealer email already exists.');
       }
-      if (existingDealer.gstin === cleanGstin) {
+      if (existingDealer.gstin.toUpperCase() === cleanGstin) {
         throw ApiError.conflict('A dealership with this GSTIN is already registered.');
       }
     }
@@ -37,7 +37,7 @@ export class DealerService {
       if (existingUser.role === ROLES.DEALER) {
         await User.deleteOne({ _id: existingUser._id });
       } else {
-        throw ApiError.conflict('An account with this official email already exists on GROVE.');
+        throw ApiError.conflict('Dealer email already exists.');
       }
     }
 
@@ -55,9 +55,13 @@ export class DealerService {
       throw ApiError.badRequest(`Selected primary category '${data.primaryCategory}' is invalid.`);
     }
 
-    // 3. Generate sequential Dealer Code (e.g. DEALER_001)
+    // 3. Generate sequential collision-safe Dealer Code (e.g. DEALER_001)
     const count = await Dealer.countDocuments();
-    const dealerCode = `DEALER_${String(count + 1).padStart(3, '0')}`;
+    let nextNum = count + 1;
+    while (await Dealer.exists({ dealerCode: `DEALER_${String(nextNum).padStart(3, '0')}` })) {
+      nextNum++;
+    }
+    const dealerCode = `DEALER_${String(nextNum).padStart(3, '0')}`;
 
     // 4. Create autonomous Dealer record (No User record created)
     const initialPlaceholderPassword = generateSecurePassword(16);

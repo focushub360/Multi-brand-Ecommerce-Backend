@@ -15,8 +15,4 @@ export const getMySettlements = asyncHandler(async (req, res) => {
   return res.status(200).json(ApiResponse.success(settlements, 'Dealer payouts retrieved successfully'));
 });
 
-export const releaseSettlement = asyncHandler(async (req, res) => {
-  const settlement = await SettlementService.releaseSettlement(req.params.id, req.user);
-  return res.status(200).json(ApiResponse.success(settlement, 'Escrow hold released and settlement disbursed'));
-});
 

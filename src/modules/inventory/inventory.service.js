@@ -49,7 +49,7 @@ export class InventoryService {
   /**
    * Adjust Stock with Immutable Ledger Recording
    */
-  static async adjustStock({ dealerId, productId, quantityChange, reason, referenceId = '', performedBy }) {
+  static async adjustStock({ dealerId, productId, quantityChange, reason, referenceId = '', performedBy, transactionType }) {
     let inventory = await Inventory.findOne({ product: productId, dealer: dealerId });
     if (!inventory) {
       // Self-heal inventory entry from product if not already initialized
@@ -81,7 +81,7 @@ export class InventoryService {
     const transaction = await InventoryTransaction.create({
       product: productId,
       dealer: dealerId,
-      type: quantityChange >= 0 ? 'PURCHASE_RESTOCK' : 'MANUAL_ADJUSTMENT',
+      type: transactionType || (quantityChange >= 0 ? 'PURCHASE_RESTOCK' : 'MANUAL_ADJUSTMENT'),
       quantityChange,
       balanceAfter: newStock,
       referenceId: referenceId || inventory.sku,

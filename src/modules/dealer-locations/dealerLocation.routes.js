@@ -6,6 +6,8 @@ import { validate } from '../../middlewares/validate.middleware.js';
 import { ROLES } from '../../constants/roles.js';
 import {
   createLocationSchema,
+  updateLocationSchema,
+  locationIdParamsSchema,
   serviceabilityCheckSchema
 } from './dealerLocation.validation.js';
 
@@ -43,6 +45,8 @@ router.put(
   '/:id',
   authenticate,
   authorize(ROLES.SUPER_ADMIN),
+  validate(locationIdParamsSchema),
+  validate(updateLocationSchema),
   dealerLocationController.updateLocation
 );
 
@@ -50,6 +54,7 @@ router.delete(
   '/:id',
   authenticate,
   authorize(ROLES.SUPER_ADMIN),
+  validate(locationIdParamsSchema),
   dealerLocationController.deleteLocation
 );
 

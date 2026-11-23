@@ -37,9 +37,9 @@ export const getAllTickets = asyncHandler(async (req, res) => {
 });
 
 export const updateTicketStatus = asyncHandler(async (req, res) => {
-  const { status, note, reason } = req.body;
+  const { status, priority, note, reason } = req.body;
   const actor = { ...req.user, ipAddress: req.ip, userAgent: req.get('user-agent') };
-  const ticket = await ComplaintService.updateTicketStatus(req.params.ticketId, actor, status, note, reason);
+  const ticket = await ComplaintService.updateTicketStatus(req.params.ticketId, actor, status, note, reason, priority);
   return res.status(200).json(ApiResponse.success(ticket, 'Ticket status updated successfully'));
 });
 

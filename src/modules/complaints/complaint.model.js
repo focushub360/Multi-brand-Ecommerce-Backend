@@ -23,8 +23,16 @@ export const CUSTOMER_TICKET_CATEGORIES = [
   'Other / General'
 ];
 
+export const LEGACY_TICKET_CATEGORIES = [
+  'Logistics & Courier',
+  'Billing & Tax',
+  'Product Defect',
+  'Account & KYC',
+  'General'
+];
+
 export const ALL_TICKET_CATEGORIES = Array.from(
-  new Set([...DEALER_TICKET_CATEGORIES, ...CUSTOMER_TICKET_CATEGORIES])
+  new Set([...DEALER_TICKET_CATEGORIES, ...CUSTOMER_TICKET_CATEGORIES, ...LEGACY_TICKET_CATEGORIES])
 );
 
 // Backward-compatible alias
@@ -54,6 +62,7 @@ export const TICKET_STATUSES = [
   'In Progress',
   'Waiting for Dealer',
   'Waiting for Customer',
+  'Escalated',
   'Resolved',
   'Closed'
 ];
@@ -178,6 +187,11 @@ const complaintSchema = new Schema(
       enum: ALL_TICKET_CATEGORIES,
       required: true,
       default: 'Other / General'
+    },
+    priority: {
+      type: String,
+      enum: ['Low', 'Medium', 'High', 'Urgent'],
+      default: 'Medium'
     },
     status: {
       type: String,

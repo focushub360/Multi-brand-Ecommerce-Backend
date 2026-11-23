@@ -9,6 +9,11 @@ export const queryProducts = asyncHandler(async (req, res) => {
   );
 });
 
+export const getAdminProducts = asyncHandler(async (req, res) => {
+  const result = await ProductService.getAdminProducts(req.query);
+  return res.status(200).json(ApiResponse.success(result.products, 'Admin catalog retrieved.', 200, result.pagination));
+});
+
 export const getProductById = asyncHandler(async (req, res) => {
   const product = await ProductService.getProductByIdOrSlug(req.params.id);
   return res.status(200).json(ApiResponse.success(product, 'Product details retrieved successfully'));
@@ -41,12 +46,16 @@ export const deleteDealerProduct = asyncHandler(async (req, res) => {
 });
 
 export const adminUpdateProduct = asyncHandler(async (req, res) => {
-  const product = await ProductService.adminUpdateProduct(req.params.id, req.body);
+  const safeUpdate = { ...req.body };
+  delete safeUpdate.stock;
+  const actor = { ...req.user, ipAddress: req.ip, userAgent: req.get('user-agent') };
+  const product = await ProductService.adminUpdateProduct(req.params.id, safeUpdate, actor);
   return res.status(200).json(ApiResponse.success(product, 'Product updated by admin successfully'));
 });
 
 export const adminDeleteProduct = asyncHandler(async (req, res) => {
-  const result = await ProductService.adminDeleteProduct(req.params.id);
+  const actor = { ...req.user, ipAddress: req.ip, userAgent: req.get('user-agent') };
+  const result = await ProductService.adminDeleteProduct(req.params.id, actor);
   return res.status(200).json(ApiResponse.success(null, result.message));
 });
 

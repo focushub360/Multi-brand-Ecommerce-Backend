@@ -7,7 +7,7 @@ import { Order } from '../orders/order.model.js';
 import { Address } from '../addresses/address.model.js';
 import { ROLES } from '../../constants/roles.js';
 import { ApiError } from '../../utils/ApiError.js';
-import { AdminService } from '../admin/admin.service.js';
+import { AdminService } from '../admin/service/admin.service.js';
 import { NotificationService } from '../admin/service/notification.service.js';
 import {
   sendTicketCreatedNotification,

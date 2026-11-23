@@ -1,52 +1,43 @@
 import nodemailer from 'nodemailer';
 import { env } from './env.js';
 
-let transporter = null;
-
+// Do NOT cache — always build fresh from current env values
 export const getMailTransporter = async () => {
-  if (transporter) return transporter;
-
-  if (env.SMTP_USER && env.SMTP_PASSWORD) {
-    transporter = nodemailer.createTransport({
-      host: env.SMTP_HOST,
-      port: env.SMTP_PORT,
-      secure: env.SMTP_SECURE,
-      auth: {
-        user: env.SMTP_USER,
-        pass: env.SMTP_PASSWORD
+  if (!env.SMTP_USER || !env.SMTP_PASSWORD) {
+    console.warn('⚠️  SMTP credentials missing — falling back to mock email logger.');
+    return {
+      sendMail: async (options) => {
+        console.log('\n📧 [Mock Email — No SMTP Configured]');
+        console.log('  To:', options.to);
+        console.log('  Subject:', options.subject);
+        return { messageId: 'mock-no-smtp-' + Date.now() };
       }
-    });
-    console.log(`📧 Nodemailer configured with SMTP host: ${env.SMTP_HOST}`);
-  } else {
-    // Development fallback: Create Ethereal test account or logging transporter
-    try {
-      const testAccount = await nodemailer.createTestAccount();
-      transporter = nodemailer.createTransport({
-        host: 'smtp.ethereal.email',
-        port: 587,
-        secure: false,
-        auth: {
-          user: testAccount.user,
-          pass: testAccount.pass
-        }
-      });
-      console.log(`📧 Nodemailer initialized with Ethereal Test Account: ${testAccount.user}`);
-    } catch {
-      // Safe logger mock if external network is unavailable
-      transporter = {
-        sendMail: async (options) => {
-          console.log('📧 [Mock Email Dispatcher]:', {
-            to: options.to,
-            subject: options.subject,
-            preview: options.text || options.html
-          });
-          return { messageId: 'mock-mail-id-12345' };
-        }
-      };
-      console.log('📧 Nodemailer running in local mock logging mode.');
+    };
+  }
+
+  const transporter = nodemailer.createTransport({
+    host: env.SMTP_HOST,
+    port: env.SMTP_PORT,
+    secure: env.SMTP_SECURE, // true = SSL on port 465
+    auth: {
+      user: env.SMTP_USER,
+      pass: env.SMTP_PASSWORD
+    },
+    tls: {
+      rejectUnauthorized: false // Allow self-signed certs in dev
     }
+  });
+
+  // Verify connection — throw immediately if credentials are wrong
+  try {
+    await transporter.verify();
+    console.log(`✅ SMTP connected: ${env.SMTP_HOST}:${env.SMTP_PORT} as ${env.SMTP_USER}`);
+  } catch (verifyErr) {
+    console.error(`❌ SMTP connection FAILED: ${verifyErr.message}`);
+    console.error('   Check SMTP_HOST, SMTP_PORT, SMTP_USER, SMTP_PASSWORD in .env');
+    // Still throw so the caller knows email will not work
+    throw new Error(`SMTP verification failed: ${verifyErr.message}`);
   }
 
   return transporter;
 };
-

@@ -20,7 +20,7 @@ const approvalHistorySchema = new Schema(
   {
     action: {
       type: String,
-      enum: ['APPROVED', 'REJECTED', 'SUSPENDED', 'REACTIVATED'],
+      enum: ['APPROVED', 'REJECTED', 'SUSPENDED', 'REACTIVATED', 'DETAILS_UPDATED'],
       required: true
     },
     actionBy: { type: Schema.Types.ObjectId, ref: 'User' },

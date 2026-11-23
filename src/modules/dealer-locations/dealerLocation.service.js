@@ -1,6 +1,7 @@
 import { DealerLocation } from './dealerLocation.model.js';
 import { Dealer } from '../dealers/dealer.model.js';
 import { ApiError } from '../../utils/ApiError.js';
+import { AdminService } from '../admin/service/admin.service.js';
 
 // Haversine distance helper (km)
 const calculateHaversineKm = (lat1, lon1, lat2, lon2) => {
@@ -96,7 +97,7 @@ export class DealerLocationService {
   /**
    * Admin Create Dealer Location Depot
    */
-  static async createLocation(data) {
+  static async createLocation(data, actor) {
     const dealer = await Dealer.findById(data.dealer);
     if (!dealer) throw ApiError.notFound('Dealer not found.');
 
@@ -123,10 +124,16 @@ export class DealerLocationService {
         type: 'Point',
         coordinates: [data.coordinates.lng, data.coordinates.lat]
       },
-      status: 'Operational'
+      status: data.status || 'Operational'
     });
 
     await location.save();
+    await AdminService.recordAuditLog({
+      action: 'DEALER_LOCATION_CREATED', actor: actor.id, actorRole: actor.role,
+      targetEntity: 'DealerLocation', targetId: location._id.toString(),
+      details: `Created logistics location ${location.hubCode} for dealer ${dealer.businessName}.`,
+      ipAddress: actor.ipAddress || '', userAgent: actor.userAgent || ''
+    });
     return location;
   }
 
@@ -140,18 +147,46 @@ export class DealerLocationService {
   /**
    * Update Location
    */
-  static async updateLocation(id, data) {
-    const location = await DealerLocation.findByIdAndUpdate(id, data, { new: true });
+  static async updateLocation(id, data, actor) {
+    const location = await DealerLocation.findById(id);
     if (!location) throw ApiError.notFound('Location not found.');
+    if (data.hubCode && data.hubCode.toUpperCase() !== location.hubCode) {
+      const duplicate = await DealerLocation.findOne({ hubCode: data.hubCode.toUpperCase(), _id: { $ne: location._id } });
+      if (duplicate) throw ApiError.conflict(`Hub code '${data.hubCode}' already exists.`);
+      location.hubCode = data.hubCode.toUpperCase();
+    }
+    if (data.dealer) {
+      const dealer = await Dealer.findById(data.dealer);
+      if (!dealer) throw ApiError.notFound('Dealer not found.');
+      location.dealer = dealer._id;
+      location.dealerName = dealer.businessName;
+    }
+    for (const key of ['hubType', 'city', 'state', 'pincode', 'address', 'contactPhone', 'capacityTons', 'serviceRadiusKm', 'activePincodes', 'status']) {
+      if (data[key] !== undefined) location[key] = data[key];
+    }
+    if (data.coordinates) location.location.coordinates = [data.coordinates.lng, data.coordinates.lat];
+    await location.save();
+    await AdminService.recordAuditLog({
+      action: 'DEALER_LOCATION_UPDATED', actor: actor.id, actorRole: actor.role,
+      targetEntity: 'DealerLocation', targetId: location._id.toString(),
+      details: `Updated logistics location ${location.hubCode}.`,
+      ipAddress: actor.ipAddress || '', userAgent: actor.userAgent || ''
+    });
     return location;
   }
 
   /**
    * Delete Location
    */
-  static async deleteLocation(id) {
+  static async deleteLocation(id, actor) {
     const location = await DealerLocation.findByIdAndDelete(id);
     if (!location) throw ApiError.notFound('Location not found.');
+    await AdminService.recordAuditLog({
+      action: 'DEALER_LOCATION_DELETED', actor: actor.id, actorRole: actor.role,
+      targetEntity: 'DealerLocation', targetId: location._id.toString(),
+      details: `Deleted logistics location ${location.hubCode}.`,
+      ipAddress: actor.ipAddress || '', userAgent: actor.userAgent || ''
+    });
     return { message: `Hub '${location.hubCode}' removed successfully.` };
   }
 }
